@@ -9,7 +9,7 @@
     "client": "cd client && npm start",
     "server": "nodemon server/server.js",
     "dev": "concurrently \"nodemon server/server.js\" \"cd client && npm run start\"",
-    "build": "cd client && npm build",
+    "build": "cd client && npm run build",
     "start": "node server/server.js",
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
