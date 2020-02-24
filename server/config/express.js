@@ -1,32 +1,26 @@
-const path = require("path"),
-  express = require("express"),
-  mongoose = require("mongoose"),
-  morgan = require("morgan"),
-  bodyParser = require("body-parser"),
-  userRoutes = require("../routes/UserRoutes.js");
+require("../auth/passport");
+const path = require("path")
+const express = require("express")
+const mongoose = require("mongoose")
+const morgan = require("morgan")
+const bodyParser = require("body-parser")
+const userRoutes = require("../routes/UserRoutes.js")
+const authRoutes = require("../routes/AuthRoutes.js")
 
 module.exports.init = () => {
-  /*
-        connect to database
-        - reference README for db uri
-    */
   mongoose.connect(process.env.DB_URI || require("./config").db.uri, {
     useNewUrlParser: true
   });
   mongoose.set("useCreateIndex", true);
   mongoose.set("useFindAndModify", false);
 
-  // initialize app
   const app = express();
 
-  // enable request logging for development debugging
   app.use(morgan("dev"));
-
-  // body parsing middleware
   app.use(bodyParser.json());
 
-  // add a router
   app.use("/user", userRoutes);
+  app.use("/auth", authRoutes);
 
   if (process.env.NODE_ENV === "production") {
     // Serve any static files
