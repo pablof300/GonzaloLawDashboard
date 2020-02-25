@@ -7,6 +7,7 @@ const bodyParser = require("body-parser")
 const userRoutes = require("../routes/UserRoutes.js")
 const authRoutes = require("../routes/AuthRoutes.js")
 const configUtil = require("./configUtil.js")
+const cors = require('cors')
 
 module.exports.init = () => {
   mongoose.connect(configUtil.getDatabaseUri(), {
@@ -19,6 +20,7 @@ module.exports.init = () => {
 
   app.use(morgan("dev"));
   app.use(bodyParser.json());
+  app.use(cors())
 
   app.use("/user", userRoutes);
   app.use("/auth", authRoutes);
