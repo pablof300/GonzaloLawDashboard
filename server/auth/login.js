@@ -3,7 +3,6 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const authUtil = require("../util/authUtil");
 const passport = require("passport");
-const config = require("../config/config");
 
 exports.authenticate = (req, res, next) => {
     passport.authenticate('login', {session: false}, (err, user, info) => {
