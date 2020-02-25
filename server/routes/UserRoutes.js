@@ -1,7 +1,12 @@
-const userController = require("../controllers/userController.js");
+const userController = require("../Controllers/UserController");
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 
-router.route("/").get(userController.hello);
+router.get("/", passport.authenticate("loggedIn", { session: false }), userController.getAll);
+router.get("/:id", passport.authenticate("loggedIn", { session: false }), userController.get);
+router.put("/:id", passport.authenticate("loggedIn", { session: false }),  userController.update);
+router.post("/", userController.create);
+router.delete("/:id", passport.authenticate("loggedIn", { session: false }), userController.delete);
 
 module.exports = router;

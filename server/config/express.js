@@ -6,9 +6,10 @@ const morgan = require("morgan")
 const bodyParser = require("body-parser")
 const userRoutes = require("../routes/UserRoutes.js")
 const authRoutes = require("../routes/AuthRoutes.js")
+const configUtil = require("./configUtil.js")
 
 module.exports.init = () => {
-  mongoose.connect(process.env.DB_URI || require("./config").db.uri, {
+  mongoose.connect(configUtil.getDatabaseUri(), {
     useNewUrlParser: true
   });
   mongoose.set("useCreateIndex", true);
