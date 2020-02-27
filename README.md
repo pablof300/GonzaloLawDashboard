@@ -18,3 +18,10 @@ This will format your code to use proper Javascript/HTML styling. Also, do any d
 ## Frontend
 
 I added Semantic UI to the Frontend, a CSS styling library. This will help you make your frontend components a lot more stylish. Please read the documentation to learn how to use it in React: https://react.semantic-ui.com/
+
+Github flow:
+1. Clone repository
+2. Create new branch
+3. Push branch to remote
+4. Create pull request
+5. I will review your code and add it to master
