@@ -15,7 +15,6 @@ const App = () => {
       <NavBar />
       <Switch>
         <Route exact path="/Login" component={Login} />
-        <Route exact path="/Test" component={ClientDashboard} />
         <Route exact path="/">
           <Redirect to="/Login" />
         </Route>
