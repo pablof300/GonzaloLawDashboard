@@ -7,12 +7,10 @@
 
 }
 
-.ac{
+.autoMargin{
     margin: auto;
 }
-.ex{
-    margin: 600vh;
-}
+
 .hidden{
     display: none;
 }
@@ -20,9 +18,15 @@
     width: 100vh;
 
 }
+.keepbottom{
+    bottom: 0;
+    vertical-align: bottom;
+}
 .tableWrapper {
-    width: auto;
-    bottom: 0px;
+    width: 100%;
+    bottom: 0;
+    padding: 1rem 0;
+    
     
 }
 

@@ -1,15 +1,18 @@
 import React from "react";
-import Stuffs from './fileComponent'
+import FileComponent from './fileComponent'
 
 
 const Files = () => {
   
   return (
     <div>
-      <div className='ex'>
+      <div >
 
       </div>
-      <Stuffs/>
+      <div >
+      <FileComponent/>
+      </div>
+      
     </div>
   );
 };

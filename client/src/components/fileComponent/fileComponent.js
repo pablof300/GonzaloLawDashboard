@@ -6,46 +6,49 @@ import {
   Icon,
   Menu,
   Pagination,
-  Popup
+  Popup,
+  Grid
 } from "semantic-ui-react";
 import "./fileComp.css";
 import FileUpload from "./fileUpload";
-import DeleteFile from './delete'
+import DeleteFile from "./delete";
 
-const stuffs = [
+const listOfStuffs = [
   "colors",
   "phones",
-  "oranhe",
-  "banaa",
-  "banaba",
+  "orange",
+  "banana",
+  "apple",
   "hover",
   "yeah",
   "here",
   "hover",
   "yeah",
-  "hover",
-  "yeah",
-  "hover",
-  "yeah",
-  "hover",
-  "yeah",
-  "hover",
-  "yeah",
-  "hover",
-  "yeah",
-  "hover",
-  "yeah"
+  "mango",
+  "pear",
+  "fruits",
+  "orange123",
+  "headphones",
+  "book",
+  "paper",
+  "pen",
+  "tvs",
+  "charges",
+  "umbrella",
+  "water"
 ];
 
 const FileComponent = () => {
-    var endPoint;
   const [filter, setFilter] = useState("");
-  const [list, setList] = useState(stuffs);
+  const [list, setList] = useState(listOfStuffs);
   const [page, setPage] = useState(1);
-  const [fileID, setFileID] = useState('')
-  const [openDialog, setOpenDialog] = useState(false)
-  let itemsPerPage = 5, totalPages, divisible, remainder, startPoint;
-
+  const [fileID, setFileID] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  let itemsPerPage = 5,
+    totalPages,
+    divisible,
+    remainder,
+    startPoint, endPoint;
 
   useEffect(() => {
     let results = list.filter(items => {
@@ -58,55 +61,46 @@ const FileComponent = () => {
     if (results.length > 0) {
       setList(results);
     } else {
-      setList(stuffs);
+      setList(listOfStuffs);
     }
   }, [filter]);
-
-  // console.log(list)
-
-  const flat = num => {
-    let n = 0;
-    for (; n < num - 1; n++) {}
-    return n;
-  };
 
   if (list.length % itemsPerPage === 0) {
     totalPages = list.length / itemsPerPage;
   } else {
-    totalPages = list.length / itemsPerPage + 1;
-    totalPages = flat(totalPages);
+    totalPages = parseInt(list.length / itemsPerPage) + 1;
+    
   }
 
   const setPageChange = (e, { activePage }) => {
     setPage(activePage);
   };
 
-  divisible = parseInt(list.length / itemsPerPage)
-  remainder = list.length % itemsPerPage
+  divisible = parseInt(list.length / itemsPerPage);
+  remainder = list.length % itemsPerPage;
 
-  let all = [];
+  let allListinPagination = [];
   let realPage = page - 1;
   startPoint = realPage * itemsPerPage;
-  endPoint = divisible * itemsPerPage
- // console.log("endpoint before" + endPoint)
-  if(endPoint === (realPage * itemsPerPage)){
-    endPoint+=remainder;
-  }else{
+  endPoint = divisible * itemsPerPage;
+  // console.log("endpoint before" + endPoint)
+  if (endPoint === realPage * itemsPerPage) {
+    endPoint += remainder;
+  } else {
     endPoint = realPage * itemsPerPage + itemsPerPage;
   }
   //console.log("endpoint after" + endPoint)
   for (let i = startPoint; i < endPoint; i++) {
-    all.push(list[i]);
-    
+    allListinPagination.push(list[i]);
   }
   //console.log(all.length)
 
-  const buildingList = all.map(directory => {
+  const fileList = allListinPagination.map(list => {
     return (
       <Table.Body>
         <Table.Row>
-          <Table.Cell>{directory}</Table.Cell>
-          <Table.Cell>{directory}</Table.Cell>
+          <Table.Cell>{list}</Table.Cell>
+          <Table.Cell>{list}</Table.Cell>
           <Table.Cell>
             <Button icon labelPosition="left" primary>
               {" "}
@@ -122,78 +116,86 @@ const FileComponent = () => {
       </Table.Body>
     );
   });
+  const styles = {
+    marginLeft: 40,
+    marginRight: 40
+  };
   return (
-    <div className="tableWrapper">
-      <div className="container">
-        <Table attached="bottom" fixed>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Size</Table.HeaderCell>
-              <Table.HeaderCell>
-                <div className="actions">
-                  <div className="ac">
-                    <Input
-                      type="text"
-                      icon="search"
-                      actionPosition="left"
-                      placeholder="Search..."
-                      onChange={e => setFilter(e.target.value)}
-                    ></Input>
+    <div>
+      <Grid container stackable verticalAlign="bottom">
+        <Grid.Column verticalAlign="bottom" width={20}>
+          <Table fixed>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Size</Table.HeaderCell>
+                <Table.HeaderCell>
+                  <div className="actions">
+                    <div className="autoMargin">
+                      <Input
+                        type="text"
+                        icon="search"
+                        actionPosition="left"
+                        placeholder="Search..."
+                        onChange={e => setFilter(e.target.value)}
+                      ></Input>
+                    </div>
+                    <div>
+                      <Popup
+                        content="Add supporting files"
+                        trigger={
+                          <Button
+                            floated="right"
+                            icon
+                            labelPosition="left"
+                            primary
+                            size="small"
+                            onClick={() => setOpenModal(true)}
+                          >
+                            <Icon name="add" /> Add File
+                          </Button>
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FileUpload
+                        setOpenModal={setOpenModal}
+                        openModal={openModal}
+                        setList={setList}
+                        list={list}
+                      />
+                    </div>
+                    <div>
+                      <DeleteFile
+                        fileID={fileID}
+                        setList={setList}
+                        list={list}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Popup
-                      content="Add supporting files"
-                      trigger={
-                        <Button
-                          floated="right"
-                          icon
-                          labelPosition="left"
-                          primary
-                          size="small"
-                          onClick={() => setOpenDialog(true)}
-                        >
-                          <Icon name="add" /> Add File
-                        </Button>
-                      }
-                    />
-                  </div>
-                  <div>
-                      <FileUpload 
-                      setOpenDialog={setOpenDialog}
-                      openDialog={openDialog}
-                      setList={setList}
-                      list={list} />
-                  </div>
-                  <div>
-                      <DeleteFile 
-                      fileID={fileID}
-                      setList={setList}
-                      list={list} />
-                  </div>
-                </div>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          {buildingList}
-          <Table.Footer>
-            <Table.Row>
-              <Table.HeaderCell colSpan="3">
-                <Menu floated="right" pagination>
-                  <Pagination
-                    defaultActivePage={1}
-                    pointing
-                    secondary
-                    activePage={page}
-                    totalPages={totalPages}
-                    onPageChange={setPageChange}
-                  ></Pagination>
-                </Menu>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
-        </Table>
-      </div>
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            {fileList}
+            <Table.Footer>
+              <Table.Row>
+                <Table.HeaderCell colSpan="3">
+                  <Menu floated="right" pagination>
+                    <Pagination
+                      defaultActivePage={1}
+                      pointing
+                      secondary
+                      activePage={page}
+                      totalPages={totalPages}
+                      onPageChange={setPageChange}
+                    ></Pagination>
+                  </Menu>
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Footer>
+          </Table>
+        </Grid.Column>
+      </Grid>
     </div>
   );
 };
