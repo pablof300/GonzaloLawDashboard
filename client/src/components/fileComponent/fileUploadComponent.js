@@ -9,7 +9,7 @@ import {
   GridRow
 } from "semantic-ui-react";
 
-const FileUpload = props => {
+const FileUploadComponent = props => {
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("");
   const [showProgress, setShowProgress] = useState("hidden");
@@ -22,13 +22,13 @@ const FileUpload = props => {
 
   const Upload = () => {
     setShowProgress("");
-    let mfiles = [];
+    let mfilesCopy = [];
     if (file) {
-      if (props.list.length === 0) {
-        mfiles.push(fileName);
+      if (props.listOfFiles.length === 0) {
+        mfilesCopy.push(fileName);
       } else {
-        mfiles = props.list;
-        mfiles.unshift(fileName);
+        mfilesCopy = props.listOfFiles;
+        mfilesCopy.unshift(fileName);
       }
       let n = 0,
         m = 0,
@@ -49,7 +49,7 @@ const FileUpload = props => {
       }
 
       if (percent === 100) {
-        props.setList(mfiles);
+        props.setListOfFiles(mfilesCopy);
         props.setOpenModal(false);
       }
     }
@@ -101,4 +101,4 @@ const FileUpload = props => {
   );
 };
 
-export default FileUpload;
+export default FileUploadComponent;

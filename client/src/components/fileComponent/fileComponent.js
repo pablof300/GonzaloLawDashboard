@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Table,
@@ -9,11 +9,11 @@ import {
   Popup,
   Grid
 } from "semantic-ui-react";
-import "./fileComp.css";
-import FileUpload from "./fileUpload";
-import DeleteFile from "./delete";
+import "./fileComponent.css";
+import FileUploadComponent from "./fileUploadComponent";
+import DeleteFileComponent from "./deleteFileComponent";
 
-const listOfStuffs = [
+const testFileNamesData = [
   "colors",
   "phones",
   "orange",
@@ -39,68 +39,70 @@ const listOfStuffs = [
 ];
 
 const FileComponent = () => {
-  const [filter, setFilter] = useState("");
-  const [list, setList] = useState(listOfStuffs);
-  const [page, setPage] = useState(1);
-  const [fileID, setFileID] = useState("");
+  const [listOfFiles, setListOfFiles] = useState(testFileNamesData);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [fileID, setFileID] = useState(""); //need the id to locate on database to pass as prop
   const [openModal, setOpenModal] = useState(false);
   let itemsPerPage = 5,
     totalPages,
     divisible,
     remainder,
-    startPoint, endPoint;
+    startIndex,
+    endIndex,
+    allFileListInPagination = [];
 
-  useEffect(() => {
-    let results = list.filter(items => {
+  const filterFilesByText = e => {
+    let results = listOfFiles.filter(fileName => {
       return (
-        filter.length > 0 &&
-        items.toLowerCase().indexOf(filter.toLowerCase().trim()) !== -1
+        e.target.value.length > 0 &&
+        fileName.toLowerCase().indexOf(e.target.value.toLowerCase().trim()) !==
+          -1
       );
     });
 
     if (results.length > 0) {
-      setList(results);
+      setListOfFiles(results);
     } else {
-      setList(listOfStuffs);
+      setListOfFiles(testFileNamesData);
     }
-  }, [filter]);
-
-  if (list.length % itemsPerPage === 0) {
-    totalPages = list.length / itemsPerPage;
-  } else {
-    totalPages = parseInt(list.length / itemsPerPage) + 1;
-    
-  }
-
-  const setPageChange = (e, { activePage }) => {
-    setPage(activePage);
   };
 
-  divisible = parseInt(list.length / itemsPerPage);
-  remainder = list.length % itemsPerPage;
+  const setPageChange = (e, { activePage }) => {
+    setCurrentPage(activePage);
+  };
 
-  let allListinPagination = [];
-  let realPage = page - 1;
-  startPoint = realPage * itemsPerPage;
-  endPoint = divisible * itemsPerPage;
-  // console.log("endpoint before" + endPoint)
-  if (endPoint === realPage * itemsPerPage) {
-    endPoint += remainder;
-  } else {
-    endPoint = realPage * itemsPerPage + itemsPerPage;
-  }
-  //console.log("endpoint after" + endPoint)
-  for (let i = startPoint; i < endPoint; i++) {
-    allListinPagination.push(list[i]);
-  }
-  //console.log(all.length)
+  const FilesPagination = () => {
+    if (listOfFiles.length % itemsPerPage === 0) {
+      totalPages = listOfFiles.length / itemsPerPage;
+    } else {
+      totalPages = parseInt(listOfFiles.length / itemsPerPage) + 1;
+    }
 
-  const fileList = allListinPagination.map(list => {
+    divisible = parseInt(listOfFiles.length / itemsPerPage);
+    remainder = listOfFiles.length % itemsPerPage;
+
+    startIndex = (currentPage - 1) * itemsPerPage;
+    endIndex = divisible * itemsPerPage;
+
+    if (endIndex === (currentPage - 1) * itemsPerPage) {
+      endIndex += remainder;
+    } else {
+      endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
+    }
+
+    for (let i = startIndex; i < endIndex; i++) {
+      allFileListInPagination.push(listOfFiles[i]);
+    }
+  };
+
+  FilesPagination();
+
+  const fileLists = allFileListInPagination.map(file => {
     return (
       <Table.Body>
         <Table.Row>
-          <Table.Cell>{list}</Table.Cell>
-          <Table.Cell>{list}</Table.Cell>
+          <Table.Cell>{file}</Table.Cell>
+          <Table.Cell>20mb</Table.Cell>
           <Table.Cell>
             <Button icon labelPosition="left" primary>
               {" "}
@@ -137,7 +139,7 @@ const FileComponent = () => {
                         icon="search"
                         actionPosition="left"
                         placeholder="Search..."
-                        onChange={e => setFilter(e.target.value)}
+                        onChange={filterFilesByText}
                       ></Input>
                     </div>
                     <div>
@@ -158,25 +160,25 @@ const FileComponent = () => {
                       />
                     </div>
                     <div>
-                      <FileUpload
+                      <FileUploadComponent
                         setOpenModal={setOpenModal}
                         openModal={openModal}
-                        setList={setList}
-                        list={list}
+                        setListOfFiles={setListOfFiles}
+                        listOfFiles={listOfFiles}
                       />
                     </div>
                     <div>
-                      <DeleteFile
+                      <DeleteFileComponent
                         fileID={fileID}
-                        setList={setList}
-                        list={list}
+                        setListOfFiles={setListOfFiles}
+                        listOfFiles={listOfFiles}
                       />
                     </div>
                   </div>
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
-            {fileList}
+            {fileLists}
             <Table.Footer>
               <Table.Row>
                 <Table.HeaderCell colSpan="3">
@@ -185,7 +187,7 @@ const FileComponent = () => {
                       defaultActivePage={1}
                       pointing
                       secondary
-                      activePage={page}
+                      activePage={currentPage}
                       totalPages={totalPages}
                       onPageChange={setPageChange}
                     ></Pagination>
