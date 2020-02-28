@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../../assets/logo.svg";
 import "./Login.css";
+import FileComp from '../../components/fileComponent/fileComponent'
 import {
   Grid,
   Segment,
@@ -14,7 +15,7 @@ import {
 
 function Login() {
   return (
-    <>
+    <div>
       <Grid stackable className="container">
         <Grid.Column width={4} />
         <Grid.Column width={8} >
@@ -50,7 +51,12 @@ function Login() {
           </Segment>
         </Grid.Column>
       </Grid>
-    </>
+
+    <div className='container'>
+    <FileComp/>
+    </div>
+     
+    </div>
   );
 }
 

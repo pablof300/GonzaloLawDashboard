@@ -4,13 +4,14 @@ import Home from "./views/Home/Home";
 import Login from "./views/Login/Login";
 import NotFound from "./views/NotFound";
 import NavBar from "./components/Header/NavBar";
+import FileComp from "./components/fileComponent/files"
 
 const App = () => {
   return (
     <div>
       <NavBar />
       <Switch>
-        <Route exact path="/Login" component={Login} />
+        <Route exact path="/Login" component={FileComp} />
         <Route exact path="/">
           <Redirect to="/Login" />
         </Route>

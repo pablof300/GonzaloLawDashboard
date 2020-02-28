@@ -1,0 +1,28 @@
+
+
+.actions{
+    display: flex;
+    justify-content: space-between;
+    align-content: space-between;
+
+}
+
+.ac{
+    margin: auto;
+}
+.ex{
+    margin: 600vh;
+}
+.hidden{
+    display: none;
+}
+.progress{
+    width: 100vh;
+
+}
+.tableWrapper {
+    width: auto;
+    bottom: 0px;
+    
+}
+
