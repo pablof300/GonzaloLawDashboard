@@ -9,7 +9,8 @@ import {
   Popup,
   Grid,
   Card,
-  Search
+  Search,
+  Reveal
 } from "semantic-ui-react";
 import "./fileComponent.css";
 import FileUploadComponent from "./fileUploadComponent";
@@ -54,11 +55,11 @@ const FileComponent = () => {
     endIndex,
     allFileListInPagination = [];
 
-  const filterFilesByText = (e, {value}) => {
-    if(value.length > 0){
-      setIsLoading(true)
+  const filterFilesByText = (e, { value }) => {
+    if (value.length > 0) {
+      setIsLoading(true);
     }
-    
+
     let results = listOfFiles.filter(fileName => {
       return (
         e.target.value.length > 0 &&
@@ -68,17 +69,14 @@ const FileComponent = () => {
     });
 
     setTimeout(() => {
-      setIsLoading(!results ? true : false)
-    }, 900)
+      setIsLoading(!results ? true : false);
+    }, 900);
     if (results.length > 0) {
       setListOfFiles(results);
     } else {
       setListOfFiles(testFileNamesData);
     }
-    
   };
-
-  
 
   const setPageChange = (e, { activePage }) => {
     setCurrentPage(activePage);
@@ -97,11 +95,12 @@ const FileComponent = () => {
     startIndex = (currentPage - 1) * itemsPerPage;
     endIndex = divisible * itemsPerPage;
 
-    if (endIndex === (currentPage - 1) * itemsPerPage) {
+    /*if (endIndex === (currentPage - 1) * itemsPerPage) {
       endIndex += remainder;
     } else {
       endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
-    }
+    }*/
+    endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
 
     for (let i = startIndex; i < endIndex; i++) {
       allFileListInPagination.push(listOfFiles[i]);
@@ -113,16 +112,14 @@ const FileComponent = () => {
   const fileLists = allFileListInPagination.map(file => {
     return (
       <Table.Body>
-        <Table.Row>
+        <Table.Row className={!file ? 'invisible':''}>
           <Table.Cell singleLine>{file}</Table.Cell>
           <Table.Cell singleLine>20mb</Table.Cell>
           <Table.Cell singleLine>
-            <Button icon labelPosition="left" primary>
-              {" "}
+            <Button icon inverted color="red" labelPosition="left">
               <Icon name="delete" /> Delete
             </Button>
-            <Button primary icon labelPosition="left" primary>
-              {" "}
+            <Button inverted color="violet" icon labelPosition="left">
               <Icon name="eye" />
               View
             </Button>
@@ -131,19 +128,15 @@ const FileComponent = () => {
       </Table.Body>
     );
   });
- 
+
   return (
     <div>
       <div className="keepbottom container">
-        <Card fluid centered>
+        <Card unstackable fluid centered raised>
           <div className="center">
             <h2 align="center">Files Upload</h2>
           </div>
-
-          <Table attached="bottom" 
-          size="small" padded='very'
-          stackable 
-          singleLine fixed >
+          <Table attached="bottom" size="small" unstackable singleLine fixed>
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
@@ -152,9 +145,9 @@ const FileComponent = () => {
                   <div className="actions">
                     <div className="autoMargin">
                       <Search
-                      loading={isLoading}
-                        type="text"
-                        
+                        loading={isLoading}
+                        input="text"
+                        showNoResults={false}
                         actionPosition="left"
                         placeholder="Search..."
                         onSearchChange={filterFilesByText}
@@ -167,8 +160,9 @@ const FileComponent = () => {
                           <Button
                             floated="right"
                             icon
+                            inverted
                             labelPosition="left"
-                            primary
+                            color="blue"
                             size="small"
                             onClick={() => setOpenModal(true)}
                           >

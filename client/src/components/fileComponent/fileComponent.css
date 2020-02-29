@@ -14,9 +14,15 @@
 .hidden{
     display: none;
 }
+.invisible{
+    visibility:hidden
+}
 .progress{
     width: 100vh;
 
+}
+.height{
+    height: 2vh !important;
 }
 .center{
     margin: auto;
