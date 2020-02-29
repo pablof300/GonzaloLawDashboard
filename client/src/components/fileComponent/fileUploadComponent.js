@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -6,14 +6,17 @@ import {
   Input,
   Progress,
   Grid,
-  GridRow
+  GridRow,
+  Segment,
+  TransitionablePortal
 } from "semantic-ui-react";
 
 const FileUploadComponent = props => {
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("");
-  const [showProgress, setShowProgress] = useState("hidden");
-  const [percent, setpercent] = useState(0);
+  const [showProgress, setShowProgress] = useState(false);
+  const [percent, setPercent] = useState(0);
+  const [btnColor, setBtnColor] = useState(["red", "Cancel", "Uploading File. Please wait..."]);
 
   const getFile = e => {
     setFile(e.target.files[0]);
@@ -21,38 +24,31 @@ const FileUploadComponent = props => {
   };
 
   const Upload = () => {
-    setShowProgress("");
-    let mfilesCopy = [];
     if (file) {
+      setShowProgress(true);
       if (props.listOfFiles.length === 0) {
-        mfilesCopy.push(fileName);
+        props.listOfFiles.push(fileName);
       } else {
-        mfilesCopy = props.listOfFiles;
-        mfilesCopy.unshift(fileName);
+        props.listOfFiles.unshift(fileName);
+        
       }
-      let n = 0,
-        m = 0,
-        o = 0,
-        p = 1;
-      while (n < 3000000) {
-        while (m < 300000000) {
-          while (o < 30000000) {
-            o++;
-          }
-          m++;
-        }
-        n++;
-        if (n === 30000 * p) {
-          p++;
-          setpercent(p);
-        }
-      }
-
-      if (percent === 100) {
-        props.setListOfFiles(mfilesCopy);
-        props.setOpenModal(false);
-      }
+      setPercent(100)   
     }
+  };
+
+  useEffect(() => {
+    if (percent === 100) {
+      setBtnColor(["green", "Done!", "Uploaded Successfully"]);
+    }
+  }, [percent])
+
+  const onCompleteListener = () => {
+    setShowProgress(false);
+    props.setOpenModal(false);
+  };
+
+  const closePortal = () => {
+    setShowProgress(false);
   };
 
   return (
@@ -74,27 +70,54 @@ const FileUploadComponent = props => {
                 >
                   Cancel
                 </Button>
-                <Button color="green" inverted onClick={Upload}>
+                <Button basic color="green" inverted onClick={Upload}>
                   Upload
                 </Button>
               </div>
             </Grid.Row>
-            <Grid.Row style={{ marginTop: 20 }}>
-              <div className={showProgress ? "hidden" : ""}>
-                <Progress
-                  className="progress"
-                  size="medium"
-                  color="blue"
-                  autoSuccess
-                  active
-                  percent={percent}
-                  indicating
-                  inverted
-                  progress
-                />
-              </div>
-            </Grid.Row>
           </Grid>
+
+          <TransitionablePortal
+            onClose={closePortal}
+            className="center"
+            open={showProgress}>
+            <Segment inverted
+              style={{
+                left: "20%",
+                position: "fixed",
+                top: "50%",
+                zIndex: 1000,
+              }}
+            >
+              <div>
+                <div className="center">
+                  <h3 align="center">{btnColor[2]}</h3>
+                </div>
+
+                <div>
+                  <Progress
+                    className="progress"
+                    size="medium"
+                    color="blue"
+                    autoSuccess
+                    active
+                    inverted
+                    percent={percent}
+                    indicating                    
+                    progress
+                  />
+
+                  <Button              
+                    color={btnColor[0]}
+                     inverted
+                    floated='right'           
+                    onClick={closePortal}>
+                    {btnColor[1]} 
+                  </Button>
+                </div>
+              </div>
+            </Segment>
+          </TransitionablePortal>
         </Modal.Actions>
       </Modal>
     </div>

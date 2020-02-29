@@ -7,7 +7,9 @@ import {
   Menu,
   Pagination,
   Popup,
-  Grid
+  Grid,
+  Card,
+  Search
 } from "semantic-ui-react";
 import "./fileComponent.css";
 import FileUploadComponent from "./fileUploadComponent";
@@ -43,6 +45,7 @@ const FileComponent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [fileID, setFileID] = useState(""); //need the id to locate on database to pass as prop
   const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   let itemsPerPage = 5,
     totalPages,
     divisible,
@@ -51,7 +54,11 @@ const FileComponent = () => {
     endIndex,
     allFileListInPagination = [];
 
-  const filterFilesByText = e => {
+  const filterFilesByText = (e, {value}) => {
+    if(value.length > 0){
+      setIsLoading(true)
+    }
+    
     let results = listOfFiles.filter(fileName => {
       return (
         e.target.value.length > 0 &&
@@ -60,18 +67,24 @@ const FileComponent = () => {
       );
     });
 
+    setTimeout(() => {
+      setIsLoading(!results ? true : false)
+    }, 900)
     if (results.length > 0) {
       setListOfFiles(results);
     } else {
       setListOfFiles(testFileNamesData);
     }
+    
   };
+
+  
 
   const setPageChange = (e, { activePage }) => {
     setCurrentPage(activePage);
   };
 
-  const FilesPagination = () => {
+  const performFilesPagination = () => {
     if (listOfFiles.length % itemsPerPage === 0) {
       totalPages = listOfFiles.length / itemsPerPage;
     } else {
@@ -95,15 +108,15 @@ const FileComponent = () => {
     }
   };
 
-  FilesPagination();
+  performFilesPagination();
 
   const fileLists = allFileListInPagination.map(file => {
     return (
       <Table.Body>
         <Table.Row>
-          <Table.Cell>{file}</Table.Cell>
-          <Table.Cell>20mb</Table.Cell>
-          <Table.Cell>
+          <Table.Cell singleLine>{file}</Table.Cell>
+          <Table.Cell singleLine>20mb</Table.Cell>
+          <Table.Cell singleLine>
             <Button icon labelPosition="left" primary>
               {" "}
               <Icon name="delete" /> Delete
@@ -118,15 +131,19 @@ const FileComponent = () => {
       </Table.Body>
     );
   });
-  const styles = {
-    marginLeft: 40,
-    marginRight: 40
-  };
+ 
   return (
     <div>
-      <Grid container stackable verticalAlign="bottom">
-        <Grid.Column verticalAlign="bottom" width={20}>
-          <Table fixed>
+      <div className="keepbottom container">
+        <Card fluid centered>
+          <div className="center">
+            <h2 align="center">Files Upload</h2>
+          </div>
+
+          <Table attached="bottom" 
+          size="small" padded='very'
+          stackable 
+          singleLine fixed >
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
@@ -134,13 +151,14 @@ const FileComponent = () => {
                 <Table.HeaderCell>
                   <div className="actions">
                     <div className="autoMargin">
-                      <Input
+                      <Search
+                      loading={isLoading}
                         type="text"
-                        icon="search"
+                        
                         actionPosition="left"
                         placeholder="Search..."
-                        onChange={filterFilesByText}
-                      ></Input>
+                        onSearchChange={filterFilesByText}
+                      ></Search>
                     </div>
                     <div>
                       <Popup
@@ -196,8 +214,8 @@ const FileComponent = () => {
               </Table.Row>
             </Table.Footer>
           </Table>
-        </Grid.Column>
-      </Grid>
+        </Card>
+      </div>
     </div>
   );
 };

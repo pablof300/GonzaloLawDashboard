@@ -18,13 +18,26 @@
     width: 100vh;
 
 }
+.center{
+    margin: auto;
+    width: auto;
+    padding: 10px;
+    text-align: center;
+}
+.parent{
+    display: flex;
+  height: 100%;
+}
 .keepbottom{
-    bottom: 0;
-    vertical-align: bottom;
+    position: absolute;
+    bottom:0;
+    margin-left: 7vh;
+    margin-right: 7vh;
+    margin-bottom: 5vh;
+    
 }
 .tableWrapper {
-    width: 100%;
-    bottom: 0;
+    margin: 10vh;
     padding: 1rem 0;
     
     
