@@ -1,0 +1,33 @@
+#content {
+  display: inline-block;
+  font-size: larger;
+  vertical-align: -0.7rem!important;
+  width: auto;
+}
+
+.AdminList {
+  border:
+}
+
+.Calendar {
+  width: 80%;
+}
+
+.ContainerPaddingCorrection {
+  padding-top: 3vh!important;
+}
+
+.FormContainer {
+  border-radius: 1rem;
+  box-sizing: inherit;
+  padding-top: 9px!important;
+  padding: 9px;
+}
+
+.List-Header {
+  background: #ffffff;
+}
+
+.Text {
+  font-size: 1.28571429rem;
+}
