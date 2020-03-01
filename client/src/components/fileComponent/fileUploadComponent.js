@@ -14,9 +14,13 @@ import {
 const FileUploadComponent = props => {
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("");
-  const [showProgress, setShowProgress] = useState(false);
+  const [showUploadProgress, setShowUploadProgress] = useState(false);
   const [percent, setPercent] = useState(0);
-  const [btnColor, setBtnColor] = useState(["red", "Cancel", "Uploading File. Please wait..."]);
+  const [portalProp, setPortalProp] = useState([
+    "red",
+    "Cancel",
+    "Uploading File. Please wait..."
+  ]);
 
   const getFile = e => {
     setFile(e.target.files[0]);
@@ -25,30 +29,24 @@ const FileUploadComponent = props => {
 
   const Upload = () => {
     if (file) {
-      setShowProgress(true);
+      setShowUploadProgress(true);
       if (props.listOfFiles.length === 0) {
         props.listOfFiles.push(fileName);
       } else {
         props.listOfFiles.unshift(fileName);
-        
       }
-      setPercent(100)   
+      setPercent(100);
     }
   };
 
   useEffect(() => {
     if (percent === 100) {
-      setBtnColor(["green", "Done!", "Uploaded Successfully"]);
+      setPortalProp(["green", "Done!", "Uploaded Successfully"]);
     }
-  }, [percent])
-
-  const onCompleteListener = () => {
-    setShowProgress(false);
-    props.setOpenModal(false);
-  };
+  }, [percent]);
 
   const closePortal = () => {
-    setShowProgress(false);
+    setShowUploadProgress(false);
   };
 
   return (
@@ -80,18 +78,20 @@ const FileUploadComponent = props => {
           <TransitionablePortal
             onClose={closePortal}
             className="center"
-            open={showProgress}>
-            <Segment inverted
+            open={showUploadProgress}
+          >
+            <Segment
+              inverted
               style={{
                 left: "20%",
                 position: "fixed",
                 top: "50%",
-                zIndex: 1000,
+                zIndex: 1000
               }}
             >
               <div>
                 <div className="center">
-                  <h3 align="center">{btnColor[2]}</h3>
+                  <h3 align="center">{portalProp[2]}</h3>
                 </div>
 
                 <div>
@@ -103,16 +103,17 @@ const FileUploadComponent = props => {
                     active
                     inverted
                     percent={percent}
-                    indicating                    
+                    indicating
                     progress
                   />
 
-                  <Button              
-                    color={btnColor[0]}
-                     inverted
-                    floated='right'           
-                    onClick={closePortal}>
-                    {btnColor[1]} 
+                  <Button
+                    color={portalProp[0]}
+                    inverted
+                    floated="right"
+                    onClick={closePortal}
+                  >
+                    {portalProp[1]}
                   </Button>
                 </div>
               </div>

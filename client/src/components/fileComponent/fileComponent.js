@@ -10,11 +10,11 @@ import {
   Grid,
   Card,
   Search,
-  Reveal
+  Reveal,
+  Confirm
 } from "semantic-ui-react";
 import "./fileComponent.css";
 import FileUploadComponent from "./fileUploadComponent";
-import DeleteFileComponent from "./deleteFileComponent";
 
 const testFileNamesData = [
   "colors",
@@ -47,6 +47,7 @@ const FileComponent = () => {
   const [fileID, setFileID] = useState(""); //need the id to locate on database to pass as prop
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [confirmDeletion, setConfirmDeletion] = useState([false, null]);
   let itemsPerPage = 5,
     totalPages,
     divisible,
@@ -56,15 +57,12 @@ const FileComponent = () => {
     allFileListInPagination = [];
 
   const filterFilesByText = (e, { value }) => {
-    if (value.length > 0) {
-      setIsLoading(true);
-    }
+    setIsLoading(true);
 
     let results = listOfFiles.filter(fileName => {
       return (
-        e.target.value.length > 0 &&
-        fileName.toLowerCase().indexOf(e.target.value.toLowerCase().trim()) !==
-          -1
+        value.length > 0 &&
+        fileName.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
       );
     });
 
@@ -109,16 +107,49 @@ const FileComponent = () => {
 
   performFilesPagination();
 
+  const handleCancel = () => {
+    setConfirmDeletion([false, null]);
+  };
+
+  const DeleteFile = () => {
+    let files = [];
+    let file = confirmDeletion[1];
+    listOfFiles.forEach(element => {
+      if (element !== file) {
+        files.push(element);
+      }
+    });
+    setListOfFiles(files);
+    setConfirmDeletion([false, null]);
+  };
+
+  let deleteWarning =
+    'Are you sure you want to delete "' + confirmDeletion[1] + '"?';
+
   const fileLists = allFileListInPagination.map(file => {
     return (
       <Table.Body>
-        <Table.Row className={!file ? 'invisible':''}>
+        <Table.Row className={!file ? "invisible" : ""}>
           <Table.Cell singleLine>{file}</Table.Cell>
           <Table.Cell singleLine>20mb</Table.Cell>
           <Table.Cell singleLine>
-            <Button icon inverted color="red" labelPosition="left">
+            <Button
+              onClick={() => setConfirmDeletion([true, file])}
+              icon
+              inverted
+              color="red"
+              labelPosition="left"
+            >
               <Icon name="delete" /> Delete
             </Button>
+            <Confirm
+              open={confirmDeletion[0]}
+              header="Delete File"
+              content={deleteWarning}
+              confirmButton="Yes"
+              onCancel={handleCancel}
+              onConfirm={DeleteFile}
+            />
             <Button inverted color="violet" icon labelPosition="left">
               <Icon name="eye" />
               View
@@ -175,13 +206,6 @@ const FileComponent = () => {
                       <FileUploadComponent
                         setOpenModal={setOpenModal}
                         openModal={openModal}
-                        setListOfFiles={setListOfFiles}
-                        listOfFiles={listOfFiles}
-                      />
-                    </div>
-                    <div>
-                      <DeleteFileComponent
-                        fileID={fileID}
                         setListOfFiles={setListOfFiles}
                         listOfFiles={listOfFiles}
                       />
