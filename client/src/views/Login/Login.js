@@ -40,7 +40,6 @@ function Login() {
   }
 
   return (
-    <>
       <Grid stackable className="container">
         <Grid.Column width={4} />
         <Grid.Column width={8}>
@@ -79,7 +78,6 @@ function Login() {
           </Segment>
         </Grid.Column>
       </Grid>
-    </>
   );
 }
 

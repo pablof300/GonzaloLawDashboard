@@ -1,0 +1,43 @@
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
+}
+
+.autoMargin {
+  margin: auto;
+}
+
+.hidden {
+  display: none;
+}
+.invisible {
+  visibility: hidden;
+}
+.progress {
+  width: 100vh;
+}
+.height {
+  height: 2vh !important;
+}
+.center {
+  margin: auto;
+  width: auto;
+  padding: 10px;
+  text-align: center;
+}
+.parent {
+  display: flex;
+  height: 100%;
+}
+.keepbottom {
+  position: absolute;
+  bottom: 0;
+  margin-left: 7vh;
+  margin-right: 7vh;
+  margin-bottom: 5vh;
+}
+.tableWrapper {
+  margin: 10vh;
+  padding: 1rem 0;
+}
