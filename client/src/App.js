@@ -11,9 +11,10 @@ const App = () => {
     <div>
       <NavBar />
       <Switch>
+        <Route exact path="/Login" component={Login} />
         <Route exact path="/File" component={FileComponent} />
         <Route exact path="/">
-          <Redirect to="/File" />
+          <Redirect to="/Login" />
         </Route>
         <Route component={NotFound} />
       </Switch>

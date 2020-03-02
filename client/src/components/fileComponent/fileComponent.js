@@ -41,20 +41,27 @@ const testFileNamesData = [
   "water"
 ];
 
+// TODO:
+// - Refactor confirmDeletion to be by fileId not testFileNamesData
+
 const FileComponent = () => {
   const [listOfFiles, setListOfFiles] = useState(testFileNamesData);
   const [currentPage, setCurrentPage] = useState(1);
   const [fileID, setFileID] = useState(""); //need the id to locate on database to pass as prop
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [confirmDeletion, setConfirmDeletion] = useState([false, null]);
-  let itemsPerPage = 5,
-    totalPages,
-    divisible,
-    remainder,
-    startIndex,
-    endIndex,
-    allFileListInPagination = [];
+  const [confirmDeletion, setConfirmDeletion] = useState({
+    enabled: false,
+    fileName: null
+  });
+
+  let itemsPerPage = 5;
+  let totalPages;
+  let divisible;
+  let remainder;
+  let startIndex;
+  let endIndex;
+  let allFileListInPagination = [];
 
   const filterFilesByText = (e, { value }) => {
     setIsLoading(true);
@@ -92,12 +99,6 @@ const FileComponent = () => {
 
     startIndex = (currentPage - 1) * itemsPerPage;
     endIndex = divisible * itemsPerPage;
-
-    /*if (endIndex === (currentPage - 1) * itemsPerPage) {
-      endIndex += remainder;
-    } else {
-      endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
-    }*/
     endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
 
     for (let i = startIndex; i < endIndex; i++) {
@@ -108,23 +109,23 @@ const FileComponent = () => {
   performFilesPagination();
 
   const handleCancel = () => {
-    setConfirmDeletion([false, null]);
+    setConfirmDeletion({ enabled: false, fileName: null });
   };
 
-  const DeleteFile = () => {
+  const deleteFile = () => {
     let files = [];
-    let file = confirmDeletion[1];
+    let file = confirmDeletion["fileName"];
     listOfFiles.forEach(element => {
       if (element !== file) {
         files.push(element);
       }
     });
     setListOfFiles(files);
-    setConfirmDeletion([false, null]);
+    setConfirmDeletion({ enabled: false, fileName: null });
   };
 
   let deleteWarning =
-    'Are you sure you want to delete "' + confirmDeletion[1] + '"?';
+    'Are you sure you want to delete "' + confirmDeletion["fileName"] + '"?';
 
   const fileLists = allFileListInPagination.map(file => {
     return (
@@ -134,7 +135,9 @@ const FileComponent = () => {
           <Table.Cell singleLine>20mb</Table.Cell>
           <Table.Cell singleLine>
             <Button
-              onClick={() => setConfirmDeletion([true, file])}
+              onClick={() =>
+                setConfirmDeletion({ enabled: true, fileName: file })
+              }
               icon
               inverted
               color="red"
@@ -143,12 +146,12 @@ const FileComponent = () => {
               <Icon name="delete" /> Delete
             </Button>
             <Confirm
-              open={confirmDeletion[0]}
+              open={confirmDeletion["enabled"]}
               header="Delete File"
               content={deleteWarning}
               confirmButton="Yes"
               onCancel={handleCancel}
-              onConfirm={DeleteFile}
+              onConfirm={deleteFile}
             />
             <Button inverted color="violet" icon labelPosition="left">
               <Icon name="eye" />

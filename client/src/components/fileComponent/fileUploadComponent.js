@@ -16,18 +16,18 @@ const FileUploadComponent = props => {
   const [fileName, setFileName] = useState("");
   const [showUploadProgress, setShowUploadProgress] = useState(false);
   const [percent, setPercent] = useState(0);
-  const [portalProp, setPortalProp] = useState([
-    "red",
-    "Cancel",
-    "Uploading File. Please wait..."
-  ]);
+  const [portalProp, setPortalProp] = useState({
+    color: "red",
+    buttonText: "Cancel",
+    text: "Uploading File. Please wait..."
+  });
 
   const getFile = e => {
     setFile(e.target.files[0]);
     setFileName(e.target.files[0].name);
   };
 
-  const Upload = () => {
+  const upload = () => {
     if (file) {
       setShowUploadProgress(true);
       if (props.listOfFiles.length === 0) {
@@ -41,7 +41,11 @@ const FileUploadComponent = props => {
 
   useEffect(() => {
     if (percent === 100) {
-      setPortalProp(["green", "Done!", "Uploaded Successfully"]);
+      setPortalProp({
+        color: "green",
+        buttonText: "Done!",
+        text: "Uploaded Successfully"
+      });
     }
   }, [percent]);
 
@@ -68,7 +72,7 @@ const FileUploadComponent = props => {
                 >
                   Cancel
                 </Button>
-                <Button basic color="green" inverted onClick={Upload}>
+                <Button basic color="green" inverted onClick={upload}>
                   Upload
                 </Button>
               </div>
@@ -91,7 +95,7 @@ const FileUploadComponent = props => {
             >
               <div>
                 <div className="center">
-                  <h3 align="center">{portalProp[2]}</h3>
+                  <h3 align="center">{portalProp["text"]}</h3>
                 </div>
 
                 <div>
@@ -108,12 +112,12 @@ const FileUploadComponent = props => {
                   />
 
                   <Button
-                    color={portalProp[0]}
+                    color={portalProp["color"]}
                     inverted
                     floated="right"
                     onClick={closePortal}
                   >
-                    {portalProp[1]}
+                    {portalProp["buttonText"]}
                   </Button>
                 </div>
               </div>
