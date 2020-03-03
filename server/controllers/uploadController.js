@@ -7,28 +7,54 @@ const bluebird = require("bluebird");
 const multiparty = require("multiparty");
 require("dotenv").config();
 
-AWS.config.update({
+/*AWS.config.update({
+  region: 'us-east-1',
   accessKeyId: process.env.AWSAccessKeyId,
   secretAccessKey: process.env.AWSSecretKey
+});*/
+
+
+AWS.config.update({
+  region: 'us-east-1',
+  accessKeyId: "AKIAJVC36NXPVWJLHJPQ",
+  secretAccessKey: "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"
 });
 
+
 // configure AWS to work with promises
-exports.upload = (buffer, name, type) => {
-  AWS.config.setPromisesDependency(bluebird);
+//AWS.config.setPromisesDependency(bluebird);
+const S3_BUCKET = "gonza99"
+
+exports.sign_s3 = (req, res) => {
+  
   const s3 = new AWS.S3();
+  const fileName = req.body.fileName;
+  const fileType = req.body.fileType;
   const s3Params = {
     ACL: "public-read",
-    Body: buffer,
-    Bucket: process.env.Bucket,
-    ContentType: type.mime,
-    Key: `${name}.${type.ext}`
+    Bucket: S3_BUCKET,
+    ContentType: fileType,
+    Key: fileName,
+    Expires: 500
   };
 
-  return s3.upload(s3Params).promise();
+  //return s3.upload(s3Params).promise();
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.error(err);
+      res.json({success: false, error: err})
+    }
+
+    const returnData = {
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+    }
+    res.json({success:true, data:{returnData}})
+  })
   
 };
 
-app.post("/fileUpload", (request, response) => {
+/*app.post("/fileUpload", (request, response) => {
   const form = new multiparty.Form();
   form.parse(request, async (error, fields, files) => {
     if (error) throw new Error(error);
@@ -45,4 +71,4 @@ app.post("/fileUpload", (request, response) => {
       return response.status(400).send(error);
     }
   });
-});
+});*/

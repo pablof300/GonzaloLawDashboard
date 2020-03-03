@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 
-router.post("/", fileUploadController.upload);
+router.post("/", fileUploadController.sign_s3);
 
 
 module.exports = router;

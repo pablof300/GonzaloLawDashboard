@@ -4,8 +4,8 @@ const Schema = new mongoose.Schema(
 {
   url: { type: String, required: true },
   name: { type: String, required: true },
-  userID: {type: String, required: true},
-  fileSize: {type: Number},
+  type: {type : String},
+  fileSize: {type: String},
   key:{type: Number}
 });
 

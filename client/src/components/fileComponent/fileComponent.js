@@ -16,38 +16,14 @@ import {
 import "./fileComponent.css";
 import FileUploadComponent from "./fileUploadComponent";
 
-const testFileNamesData = [
-  "colors",
-  "phones",
-  "orange",
-  "banana",
-  "apple",
-  "hover",
-  "yeah",
-  "here",
-  "hover",
-  "yeah",
-  "mango",
-  "pear",
-  "fruits",
-  "orange123",
-  "headphones",
-  "book",
-  "paper",
-  "pen",
-  "tvs",
-  "charges",
-  "umbrella",
-  "water"
-];
 
 // TODO:
 // - Refactor confirmDeletion to be by fileId not testFileNamesData
 
 const FileComponent = () => {
-  const [listOfFiles, setListOfFiles] = useState(testFileNamesData);
+  const [listOfFiles, setListOfFiles] = useState([]);
+  const [tempFiles, setTempFiles] = useState([])
   const [currentPage, setCurrentPage] = useState(1);
-  const [fileID, setFileID] = useState(""); //need the id to locate on database to pass as prop
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmDeletion, setConfirmDeletion] = useState({
@@ -63,13 +39,17 @@ const FileComponent = () => {
   let endIndex;
   let allFileListInPagination = [];
 
+  const getFilesFromDatabaseToPopulate = () => {
+    //populate the files in database into listOfFiles
+  }
+
   const filterFilesByText = (e, { value }) => {
     setIsLoading(true);
 
-    let results = listOfFiles.filter(fileName => {
+    let results = listOfFiles.filter(file => {
       return (
         value.length > 0 &&
-        fileName.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
+        file.name.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
       );
     });
 
@@ -77,9 +57,11 @@ const FileComponent = () => {
       setIsLoading(!results ? true : false);
     }, 900);
     if (results.length > 0) {
+      setTempFiles(listOfFiles)
       setListOfFiles(results);
     } else {
-      setListOfFiles(testFileNamesData);
+      setListOfFiles(tempFiles);
+      setTempFiles([])
     }
   };
 
@@ -114,15 +96,20 @@ const FileComponent = () => {
 
   const deleteFile = () => {
     let files = [];
-    let file = confirmDeletion["fileName"];
+    let fileName = confirmDeletion["fileName"];
     listOfFiles.forEach(element => {
-      if (element !== file) {
+      if (element.name !== fileName) {
         files.push(element);
       }
     });
     setListOfFiles(files);
     setConfirmDeletion({ enabled: false, fileName: null });
   };
+
+  const openFile = (url) => {
+    window.open(url, '_blank');
+   // win.focus();
+  }
 
   let deleteWarning =
     'Are you sure you want to delete "' + confirmDeletion["fileName"] + '"?';
@@ -131,12 +118,12 @@ const FileComponent = () => {
     return (
       <Table.Body>
         <Table.Row className={!file ? "invisible" : ""}>
-          <Table.Cell singleLine>{file}</Table.Cell>
-          <Table.Cell singleLine>20mb</Table.Cell>
+          <Table.Cell singleLine>{!file ? "" :file.name}</Table.Cell>
+          <Table.Cell singleLine>{!file ? "" :file.size}</Table.Cell>
           <Table.Cell singleLine>
             <Button
               onClick={() =>
-                setConfirmDeletion({ enabled: true, fileName: file })
+                setConfirmDeletion({ enabled: true, fileName: file.name })
               }
               icon
               inverted
@@ -153,7 +140,7 @@ const FileComponent = () => {
               onCancel={handleCancel}
               onConfirm={deleteFile}
             />
-            <Button inverted color="violet" icon labelPosition="left">
+            <Button onClick={()=> openFile(file.url)} inverted color="violet" icon labelPosition="left">
               <Icon name="eye" />
               View
             </Button>
