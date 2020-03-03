@@ -10,10 +10,14 @@ import {
   Segment,
   TransitionablePortal
 } from "semantic-ui-react";
+import axios from 'axios';
 
 const FileUploadComponent = props => {
   const [file, setFile] = useState("");
-  const [fileName, setFileName] = useState("");
+  const [fileAttr, setFileAttr] = useState({
+    fileName: "",
+    fileType:""
+  });
   const [showUploadProgress, setShowUploadProgress] = useState(false);
   const [percent, setPercent] = useState(0);
   const [portalProp, setPortalProp] = useState({
@@ -21,33 +25,67 @@ const FileUploadComponent = props => {
     buttonText: "Cancel",
     text: "Uploading File. Please wait..."
   });
+  const [onCompleteListener, setOnCompleteListener] = useState({
+    success: false,
+    url: ""
+  });
 
   const getFile = e => {
+    e.preventDefault();
     setFile(e.target.files[0]);
-    setFileName(e.target.files[0].name);
+    let fileParts = e.target.files[0].name.split(".");
+    setFileAttr({
+      fileName: fileParts[0],
+      fileType: fileParts[1]
+    })
   };
 
   const upload = () => {
     if (file) {
       setShowUploadProgress(true);
-      if (props.listOfFiles.length === 0) {
-        props.listOfFiles.push(fileName);
-      } else {
-        props.listOfFiles.unshift(fileName);
-      }
-      setPercent(100);
+      axios.post("/fileUpload", file, {
+        headers: {
+          'Content-Type': fileAttr["fileType"]
+        },
+        onUploadProgress : progressEvent => {
+          setPercent(parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total)))
+        } 
+      })
+      .then(response => {
+        let returnData = response.data;
+        console.log(returnData)
+        let url = returnData.url;
+
+        setOnCompleteListener({
+          success: true, 
+          url: url
+        });
+
+        console.log(url)
+       
+      })
+      .catch(error => {
+        alert(JSON.stringify(error));
+      });
+ 
     }
   };
 
   useEffect(() => {
-    if (percent === 100) {
+    if (onCompleteListener["success"]) {
+      if (props.listOfFiles.length === 0) {
+        props.listOfFiles.push(fileAttr["fileName"]);
+        console.log(fileAttr["fileName"])
+      } else {
+        props.listOfFiles.unshift(fileAttr["fileName"]);
+      }
       setPortalProp({
         color: "green",
         buttonText: "Done!",
         text: "Uploaded Successfully"
       });
     }
-  }, [percent]);
+  }, [onCompleteListener["success"]]);
 
   const closePortal = () => {
     setShowUploadProgress(false);
