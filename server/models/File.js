@@ -5,8 +5,7 @@ const Schema = new mongoose.Schema(
   url: { type: String, required: true },
   name: { type: String, required: true },
   type: {type : String},
-  fileSize: {type: String},
-  key:{type: Number}
+  size: {type: String}
 });
 
-exports.Model = mongoose.model("Files", Schema);
+exports.Model = mongoose.model("files", Schema);
