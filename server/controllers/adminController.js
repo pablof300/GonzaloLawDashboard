@@ -26,7 +26,7 @@ exports.delete = async (req, res) =>
 		return adminDAO.delete(req.userId);
 	});
 
-/*exports.getClient = async (req, res) =>
+exports.getClient = async (req, res) =>
 	catchErrors(res, async () => {
 		return adminDAO.getClient(req.userId, req.body);
 	});
@@ -39,4 +39,4 @@ exports.removeClient = async (req, res) =>
 exports.addClient = async (req, res) =>
 	catchErrors(res, async () => {
 		return adminDAO.addClient(req.userId, req.body);
-	});*/
+	});

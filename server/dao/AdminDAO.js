@@ -2,7 +2,7 @@ const Admin = require("../models/Admin.js").Model;
 const { NotFoundError } = require("../util/exceptions");
 
 exports.create = async adminParams => {
-	if (await User.exists({ username: adminParams.username })) {
+	if (await Admin.exists({ username: adminParams.username })) {
 		throw Error("username already taken");
 	}
 
@@ -47,7 +47,7 @@ exports.deleteAll = async () => {
 	await Admin.deleteMany();
 };
 
-/*exports.removeClient = async (id, client) => {
+exports.removeClient = async (id, client) => {
 	//check if this is correct
 	const admin = await Admin.findById(id);
 	if (!admin) throw new NotFoundError();

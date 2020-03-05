@@ -4,7 +4,7 @@ const Schema = new mongoose.Schema({
 	username: { type: String, required: true },
 	password: { type: String, required: true },
 	clients: {
-		type: [], //also consider storing an array of ids and hashing a list of clients
+		type: [{ type: mongoose.Schema.Types.ObjectId }], //also consider storing an array of ids and hashing a list of clients
 		required: false
 	} //might want to populate later with ref
 	//calendar: figure out outlook integration

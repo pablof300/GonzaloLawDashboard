@@ -5,42 +5,42 @@ const passport = require("passport");
 
 router.get(
 	"/",
-	passport.authenticate("loggedIn", { session: false }),
+	passport.authenticate("adminLoggedIn", { session: false }),
 	adminController.getAll
 );
 router.get(
 	"/:id",
-	passport.authenticate("loggedIn", { session: false }),
+	passport.authenticate("adminLoggedIn", { session: false }),
 	adminController.get
 );
 router.put(
 	"/:id",
-	passport.authenticate("loggedIn", { session: false }),
+	passport.authenticate("adminLoggedIn", { session: false }),
 	adminController.update
 );
-router.post("/", userController.create);
+router.post("/", adminController.create); //add some sort of key admins need to create a new admin account so users cannot
 router.delete(
 	"/:id",
-	passport.authenticate("loggedIn", { session: false }),
+	passport.authenticate("adminLoggedIn", { session: false }),
 	adminController.delete
 );
 
-/*router.get(
+router.get(
 	"/:id/:clientId",
-	passport.authenticate("loggedIn", { session: false }),
+	passport.authenticate("adminLoggedIn", { session: false }),
 	adminController.getClient
-);*/
+);
 
 router.put(
 	"/:id/remove/:clientId",
-	passport.authenticate("loggedIn", { session: false }),
-	adminController.update
+	passport.authenticate("adminLoggedIn", { session: false }),
+	adminController.removeClient
 );
 
 router.put(
 	"/:id/add/:clientId",
-	passport.authenticate("loggedIn", { session: false }),
-	adminController.update
+	passport.authenticate("adminLoggedIn", { session: false }),
+	adminController.addClient
 );
 
 module.exports = router;
