@@ -2,16 +2,14 @@ import React, { useState } from "react";
 import {
   Button,
   Table,
-  Input,
   Icon,
   Menu,
   Pagination,
   Popup,
-  Grid,
   Card,
   Search,
-  Reveal,
-  Confirm
+  TransitionablePortal, 
+  Segment
 } from "semantic-ui-react";
 import "./fileComponent.css";
 import FileUploadComponent from "./fileUploadComponent";
@@ -163,14 +161,50 @@ const FileComponent = () => {
             >
               <Icon name="delete" /> Delete
             </Button>
-            <Confirm
-              open={confirmDeletion["enabled"]}
-              header="Delete File"
-              content={deleteWarning}
-              confirmButton="Yes"
-              onCancel={handleCancel}
-              onConfirm={deleteFile}
-            />
+
+            <TransitionablePortal
+            onClose={handleCancel}
+            open={confirmDeletion["enabled"]}
+          >
+            <Segment
+              
+              style={{
+                left: "30%",
+                position: "fixed",
+                top: "50%",
+                zIndex: 1000
+              }}
+            >
+              <div style={{width:500}}>
+
+                <div className="center">
+                  <h3 align="center">Delete File</h3>
+                </div>
+
+                <div className="center">
+                  {deleteWarning}
+                </div>
+
+                <div>
+                <Button
+                    color='green'                
+                    floated="right"
+                    onClick={deleteFile}
+                  >
+                    Yes
+                  </Button>
+
+                  <Button
+                    color='black'              
+                    floated="right"
+                    onClick={handleCancel}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </Segment>
+          </TransitionablePortal>     
             <Button
               onClick={() => openFile(file.url)}
               inverted

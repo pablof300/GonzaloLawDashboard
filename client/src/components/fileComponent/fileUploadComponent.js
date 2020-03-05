@@ -13,12 +13,7 @@ import {
 import axios from "axios";
 
 const FileUploadComponent = props => {
-  const [file, setFile] = useState("");
-  const [fileAttr, setFileAttr] = useState({
-    fileName: null,
-    fileType: null,
-    fileSize: null
-  });
+  const [file, setFile] = useState(null);
   const [showUploadProgress, setShowUploadProgress] = useState(false);
   const [percent, setPercent] = useState(0);
   const [portalProp, setPortalProp] = useState({
@@ -29,15 +24,7 @@ const FileUploadComponent = props => {
 
   const getFile = e => {
     e.preventDefault();
-    setFile(e.target.files[0]);
-    let fileParts = e.target.files[0].name.split(".");
-    let size = e.target.files[0].size;
-    // console.log("name: " + fileParts[0] + " type: " + fileParts[1])
-    setFileAttr({
-      fileName: fileParts[0],
-      fileType: fileParts[1],
-      fileSize: getFileSize(size)
-    });
+    setFile(e.target.files);
   };
 
   const getFileSize = fileSize => {
@@ -60,11 +47,23 @@ const FileUploadComponent = props => {
   const upload = () => {
     if (file) {
       setShowUploadProgress(true);
+      const i = 0;
+      let fileParts = file[i].name.split(".");
+      let size = file[i].size;
+      const fileName = fileParts[0];
+      const fileType = fileParts[1];
+      const fileSize = getFileSize(size);
+      
+      setPortalProp({
+        color: "red",
+        buttonText: "Cancel",
+        text: `Uploading "${fileName}". Please wait...`
+      });
       console.log("Preparing to upload file");
       axios
         .post("http://localhost:5000/fileAws", {
-          fileName: fileAttr["fileName"],
-          fileType: fileAttr["fileType"]
+          fileName: fileName,
+          fileType: fileType
         })
         .then(response => {
           let returnData = response.data.data.returnData;
@@ -72,10 +71,10 @@ const FileUploadComponent = props => {
           //console.log(returnData)
           const url = returnData.url;
           //console.log("Received signed request " + signedRequest)
-
+  
           let options = {
             headers: {
-              "Content-Type": fileAttr["fileType"]
+              "Content-Type": fileType
             },
             onUploadProgress: progressEvent => {
               setPercent(
@@ -85,22 +84,24 @@ const FileUploadComponent = props => {
               );
             }
           };
-
+  
           axios
-            .put(signedRequest, file, options)
+            .put(signedRequest, file[i], options)
             .then(result => {
               console.log("We got response from s3");
-
-              let fileToStore = {
-                name: fileAttr["fileName"],
-                type: fileAttr["fileType"],
-                size: fileAttr["fileSize"],
+  
+              const fileToStore = {
+                name: fileName,
+                type: fileType,
+                size: fileSize,
                 url: url
               };
-
+  
+              
               axios
                 .post("http://localhost:5000/files/", fileToStore)
                 .then(res => {
+                  
                   setPortalProp({
                     color: "green",
                     buttonText: "Done!",
@@ -116,8 +117,10 @@ const FileUploadComponent = props => {
         .catch(error => {
           alert(JSON.stringify(error));
         });
+     
     }
   };
+
 
   const closePortal = () => {
     setShowUploadProgress(false);
@@ -134,7 +137,12 @@ const FileUploadComponent = props => {
       <Modal open={props.openModal} basic size="small">
         <Header icon="upload" content="Upload a new file" />
         <Modal.Content>
-          <Input icon type="file" id="fileUpload" onChange={getFile}></Input>
+          <Input
+            icon
+            type="file"
+            id="fileUpload"
+            onChange={getFile}
+          ></Input>
         </Modal.Content>
         <Modal.Actions>
           <Grid columns={1}>
