@@ -1,14 +1,13 @@
 require("../auth/passport");
-const path = require("path");
-const express = require("express");
-const mongoose = require("mongoose");
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
-const userRoutes = require("../routes/UserRoutes.js");
-const adminRoutes = require("../routes/AdminRoutes.js");
-const authRoutes = require("../routes/AuthRoutes.js");
-const configUtil = require("./configUtil.js");
-const cors = require("cors");
+const path = require("path")
+const express = require("express")
+const mongoose = require("mongoose")
+const morgan = require("morgan")
+const bodyParser = require("body-parser")
+const userRoutes = require("../routes/UserRoutes.js")
+const authRoutes = require("../routes/AuthRoutes.js")
+const configUtil = require("./configUtil.js")
+const cors = require("cors")
 
 module.exports.init = () => {
 	mongoose.connect(configUtil.getDatabaseUri(), {
@@ -21,7 +20,7 @@ module.exports.init = () => {
 
 	app.use(morgan("dev"));
 	app.use(bodyParser.json());
-	app.use(cors());
+	app.use(cors())
 
 	app.use("/user", userRoutes);
 	app.use("/admin", adminRoutes);
@@ -32,7 +31,7 @@ module.exports.init = () => {
 		app.use(express.static(path.join(__dirname, "../../client/build")));
 
 		// Handle React routing, return all requests to React app
-		app.get("*", function(req, res) {
+		app.get("*", function (req, res) {
 			res.sendFile(path.join(__dirname, "../../client/build", "index.html"));
 		});
 	}
