@@ -8,7 +8,7 @@ import {
   Popup,
   Card,
   Search,
-  TransitionablePortal, 
+  TransitionablePortal,
   Segment
 } from "semantic-ui-react";
 import "./fileComponent.css";
@@ -42,11 +42,11 @@ const FileComponent = () => {
   const loadFiles = async () => {
     const res = await axios.get("http://localhost:5000/files");
     const data = res.data.data;
-    let tempfiles = []
+    let tempfiles = [];
     data.forEach(element => {
-      tempfiles.unshift(element)
+      tempfiles.unshift(element);
     });
-    setListOfFiles(tempfiles)
+    setListOfFiles(tempfiles);
     setIsFilesPopulated(true);
   };
 
@@ -57,7 +57,7 @@ const FileComponent = () => {
   const filterFilesByText = async (e, { value }) => {
     setIsLoading(true);
 
-    const results =  await listOfFiles.filter(file => {
+    const results = await listOfFiles.filter(file => {
       return (
         value.length > 0 &&
         file.name.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
@@ -71,7 +71,7 @@ const FileComponent = () => {
     if (results.length > 0) {
       setListOfFiles(results);
     } else {
-      setIsFilesPopulated(false)
+      setIsFilesPopulated(false);
     }
   };
 
@@ -107,8 +107,9 @@ const FileComponent = () => {
   const deleteFile = () => {
     const id = confirmDeletion["fileID"];
     const fileName = confirmDeletion["fileName"];
-    
-    axios.delete(`http://localhost:5000/fileAws/${fileName}`)
+
+    axios
+      .delete(`http://localhost:5000/fileAws/${fileName}`)
       .then(res => {
         if (res.data.success) {
           const deleteFromDB = async () => {
@@ -116,15 +117,20 @@ const FileComponent = () => {
             if (res.data.ok) {
               console.log("file deleted");
               setIsFilesPopulated(false);
-              setConfirmDeletion({ enabled: false, fileID: null, fileName: null });
+              setConfirmDeletion({
+                enabled: false,
+                fileID: null,
+                fileName: null
+              });
             }
           };
 
           deleteFromDB();
         }
-      }).catch(error => {
-        alert("DELETE ERROR: " + JSON.stringify(error))
       })
+      .catch(error => {
+        alert("DELETE ERROR: " + JSON.stringify(error));
+      });
   };
 
   const openFile = url => {
@@ -163,48 +169,40 @@ const FileComponent = () => {
             </Button>
 
             <TransitionablePortal
-            onClose={handleCancel}
-            open={confirmDeletion["enabled"]}
-          >
-            <Segment
-              
-              style={{
-                left: "30%",
-                position: "fixed",
-                top: "50%",
-                zIndex: 1000
-              }}
+              onClose={handleCancel}
+              open={confirmDeletion["enabled"]}
             >
-              <div style={{width:500}}>
+              <Segment
+                style={{
+                  left: "30%",
+                  position: "fixed",
+                  top: "50%",
+                  zIndex: 1000
+                }}
+              >
+                <div style={{ width: 500 }}>
+                  <div className="center">
+                    <h3 align="center">Delete File</h3>
+                  </div>
 
-                <div className="center">
-                  <h3 align="center">Delete File</h3>
+                  <div className="center">{deleteWarning}</div>
+
+                  <div>
+                    <Button color="green" floated="right" onClick={deleteFile}>
+                      Yes
+                    </Button>
+
+                    <Button
+                      color="black"
+                      floated="right"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </div>
-
-                <div className="center">
-                  {deleteWarning}
-                </div>
-
-                <div>
-                <Button
-                    color='green'                
-                    floated="right"
-                    onClick={deleteFile}
-                  >
-                    Yes
-                  </Button>
-
-                  <Button
-                    color='black'              
-                    floated="right"
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </Segment>
-          </TransitionablePortal>     
+              </Segment>
+            </TransitionablePortal>
             <Button
               onClick={() => openFile(file.url)}
               inverted

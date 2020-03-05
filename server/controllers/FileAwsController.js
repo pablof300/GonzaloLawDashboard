@@ -1,7 +1,5 @@
-const config = require('../config/config')
+const config = require("../config/config");
 const AWS = require("aws-sdk");
-
-
 
 /*AWS.config.update({
   region: 'us-east-1',
@@ -38,7 +36,7 @@ exports.sign_s3 = (req, res) => {
       res.json({ success: false, error: err });
     }
     //const id = fileName + '_' + (Math.floor((Math.random() * 100000)))
-    
+
     const returnData = {
       signedRequest: data,
       url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`

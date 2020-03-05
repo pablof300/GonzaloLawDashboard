@@ -53,7 +53,7 @@ const FileUploadComponent = props => {
       const fileName = fileParts[0];
       const fileType = fileParts[1];
       const fileSize = getFileSize(size);
-      
+
       setPortalProp({
         color: "red",
         buttonText: "Cancel",
@@ -71,7 +71,7 @@ const FileUploadComponent = props => {
           //console.log(returnData)
           const url = returnData.url;
           //console.log("Received signed request " + signedRequest)
-  
+
           let options = {
             headers: {
               "Content-Type": fileType
@@ -84,24 +84,22 @@ const FileUploadComponent = props => {
               );
             }
           };
-  
+
           axios
             .put(signedRequest, file[i], options)
             .then(result => {
               console.log("We got response from s3");
-  
+
               const fileToStore = {
                 name: fileName,
                 type: fileType,
                 size: fileSize,
                 url: url
               };
-  
-              
+
               axios
                 .post("http://localhost:5000/files/", fileToStore)
                 .then(res => {
-                  
                   setPortalProp({
                     color: "green",
                     buttonText: "Done!",
@@ -117,10 +115,8 @@ const FileUploadComponent = props => {
         .catch(error => {
           alert(JSON.stringify(error));
         });
-     
     }
   };
-
 
   const closePortal = () => {
     setShowUploadProgress(false);
@@ -137,12 +133,7 @@ const FileUploadComponent = props => {
       <Modal open={props.openModal} basic size="small">
         <Header icon="upload" content="Upload a new file" />
         <Modal.Content>
-          <Input
-            icon
-            type="file"
-            id="fileUpload"
-            onChange={getFile}
-          ></Input>
+          <Input icon type="file" id="fileUpload" onChange={getFile}></Input>
         </Modal.Content>
         <Modal.Actions>
           <Grid columns={1}>
