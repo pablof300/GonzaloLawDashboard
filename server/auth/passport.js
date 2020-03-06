@@ -4,7 +4,7 @@ const userDAO = require("../dao/UserDAO.js");
 const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-const config = require("../config/config");
+const configUtil = require("../config/configUtil.js")
 
 passport.use(
   "login",
@@ -45,7 +45,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: config.jwtSecret,
+      secretOrKey: configUtil.getDatabaseUri(),
       passReqToCallback: true
     },
     async (req, jwtPayload, done) => {

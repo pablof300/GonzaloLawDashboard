@@ -6,9 +6,11 @@ const morgan = require("morgan")
 const bodyParser = require("body-parser")
 const userRoutes = require("../routes/UserRoutes.js")
 const authRoutes = require("../routes/AuthRoutes.js")
+const configUtil = require("./configUtil.js")
+const cors = require('cors')
 
 module.exports.init = () => {
-  mongoose.connect(process.env.DB_URI || require("./config").db.uri, {
+  mongoose.connect(configUtil.getDatabaseUri(), {
     useNewUrlParser: true
   });
   mongoose.set("useCreateIndex", true);
@@ -18,6 +20,7 @@ module.exports.init = () => {
 
   app.use(morgan("dev"));
   app.use(bodyParser.json());
+  app.use(cors())
 
   app.use("/user", userRoutes);
   app.use("/auth", authRoutes);
