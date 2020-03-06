@@ -4,7 +4,6 @@ import Home from "./views/Home/Home";
 import Login from "./views/Login/Login";
 import NotFound from "./views/NotFound";
 import NavBar from "./components/Header/NavBar";
-import Container from "./components/AdminComponents/Container"
 import AdminDashboard from "./components/AdminComponents/AdminDashboard"
 
 const App = () => {
