@@ -1,5 +1,6 @@
 import React from 'react'
-import { Dropdown, Icon, Menu, Segment } from 'semantic-ui-react'
+import { Dropdown, Icon, Image, Menu, Segment } from 'semantic-ui-react'
+import logo from "../../assets/LogoCropped.png";
 
 // TODO: Update <Search> usage after its will be implemented
 
@@ -23,6 +24,9 @@ const AdminNav = () => (
           <Dropdown.Item>Sign Out</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
+      <div className='Test'>
+        <Image className='Logo' src={logo} align='right'/>
+      </div>
     </Menu>
   </div>
 )

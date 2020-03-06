@@ -12,7 +12,7 @@ import {
 const options = [
   { key: 'c', text: 'Contract Analysis', value: 'contractAnalysis' },
   { key: 'i', text: 'Intl. Corporate Law', value: 'intlCL' },
-  { key: 'p', text: 'Intellectual Property', value: 'ip' },
+  { key: 'n', text: 'Intellectual Property', value: 'ip' },
   { key: 'p', text: 'Private & Emerging Business', value: 'peb' },
   { key: 't', text: 'Tax-Exemption', value: 'tex' },
 ]

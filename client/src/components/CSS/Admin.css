@@ -9,11 +9,36 @@
   border:
 }
 
+.Test {
+  width: 100%;
+}
+
+.Logo {
+  width: 9.5rem;
+  padding: 4px;
+}
+
 .Calendar {
+  text-decoration: none;
   width: 80%;
 }
 
-.ContainerPaddingCorrection {
+.Card {
+  padding: 10px!important;
+  width: 100%!important;
+}
+
+.ClientCard {
+  background: inherit;
+  padding-top: 1%;
+  padding-left: 0%;
+}
+
+.ContainerPaddingCorrection1 {
+  padding-top: 8vh!important;
+}
+
+.ContainerPaddingCorrection2 {
   padding-top: 3vh!important;
 }
 
@@ -25,7 +50,7 @@
 }
 
 .List-Header {
-  background: #ffffff;
+  background: inherit;
 }
 
 .Text {

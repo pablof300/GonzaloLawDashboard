@@ -1,12 +1,14 @@
 import React from 'react'
-import { List } from 'semantic-ui-react'
+import { Card, List } from 'semantic-ui-react'
 
 const AdminList = () => (
-  <List>
-    <List.Item>1</List.Item>
-    <List.Item>2</List.Item>
-    <List.Item>3</List.Item>
-  </List>
+  <Card className='Card'>
+    <List>
+      <List.Item>1</List.Item>
+      <List.Item>2</List.Item>
+      <List.Item>3</List.Item>
+    </List>
+  </Card>
 )
 
 export default AdminList
