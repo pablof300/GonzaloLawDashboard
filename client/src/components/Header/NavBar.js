@@ -1,44 +1,40 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./NavBar.css";
-import { Dropdown, Menu, Button, ButtonGroup } from 'semantic-ui-react'
-import Footer from "../Footer/Footer";
-
-
+import { Dropdown, Menu, Button } from 'semantic-ui-react'
 
 const NavBar = () => {
   return (
-    
-    
+        
     <Menu>
     
     <Dropdown item text='Menu'>
     
       <Dropdown.Menu>
-        <Dropdown.Item>Home</Dropdown.Item>
-        <Dropdown.Item>Go to Site</Dropdown.Item>
+        <Dropdown.Item>Dashboard Home</Dropdown.Item>
+
+        <Dropdown.Item>Go to General Site</Dropdown.Item>
+
         <Dropdown.Item>User Settings</Dropdown.Item>
+
         <Dropdown.Item>Log Out</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
+    <Menu.Menu position='right'>
+      <Menu.Item>
+      
+        <Button inverted color='violet'>
+          Log in
+        </Button> 
+      </Menu.Item>
 
-    <Menu.Item position = 'right'>
-     
-      <Button floated = 'left'>
-        Log in
-      </Button>
-      <Button floated = 'right'>
-        Sign Up
-      </Button>
-
-     
-    </Menu.Item>
+      <Menu.Item>
+        <Button inverted color='violet'>
+          Sign Up
+        </Button> 
+        
+      </Menu.Item>
+    </Menu.Menu>
   </Menu>
-            
-          
-    
-          
-
   );
 };
 

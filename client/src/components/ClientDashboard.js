@@ -1,19 +1,15 @@
 import React from "react";
-import NavBar from './Header/NavBar'
-import Footer from './Footer/Footer'
+import "./ClientDashboard.css";
+import { Container } from "semantic-ui-react";
 
 
+//put a container to structure
 const ClientDashboard = () => {
     return(
-        <div className="bg">
-            {/* <div className="navBarHeader">
-            <NavBar/>
-            </div>
-            <div className="footer">
-            <Footer/>
-            </div> */}
+        <Container>
+            
+        </Container>
         
-        </div>
 
     );
 }; 

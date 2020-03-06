@@ -1,27 +1,32 @@
 import React from "react";
-//import './Footer.css'
+import { Button, Icon, Menu, MenuItem } from "semantic-ui-react";
 
 const Footer = () => {
-    return (
-        
-           <div className="ui footer violet inverted segment">
-               Gonzalo Law
-               <button className="ui labeled inverted icon button">
-                <i class ="envelope icon"></i>
-                ngonzalo@gonzalolaw.com
-               </button>
-               <button className="ui labeled inverted icon button">
-                <i class ="phone icon"></i>
-                +1(216)527-7777
-               </button>
+    return (      
+        <Menu
+            className="footer" 
+            color='violet'
+            inverted
+        > 
+            <MenuItem>
+            Gonzalo Law LLC
+            </MenuItem>
 
-                
-            </div>
-           
-                    
-
-
-    
+            <Menu.Menu position='right'>
+                <MenuItem>
+                    <Button inverted> 
+                        <Icon name='envelope'/>
+                        ngonzalo@gonzalolaw.com
+                    </Button>
+                </MenuItem>
+                <MenuItem>  
+                    <Button inverted> 
+                        <Icon name='phone'/>
+                        +1(216)527-7777
+                    </Button>
+                </MenuItem>
+            </Menu.Menu>    
+        </Menu>           
     );
 
 };
