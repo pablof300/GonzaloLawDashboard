@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "rc-footer": "^0.6.2",
+    "axios": "^0.19.2",
+    "js-cookie": "^2.2.1",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
     "react-scripts": "^3.3.0",

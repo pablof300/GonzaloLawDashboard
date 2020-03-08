@@ -7,6 +7,7 @@ import NotFound from "./views/NotFound";
 import NavBar from "./components/Header/NavBar";
 import Footer from "./components/Footer/Footer";
 import ClientDashboard from "./components/ClientDashboard";
+import FileComponent from "./components/fileComponent/fileComponent"
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <NavBar />
       <Switch>
         <Route exact path="/Login" component={Login} />
+        <Route exact path="/File" component={FileComponent} />
         <Route exact path="/">
           <Redirect to="/Login" />
         </Route>
