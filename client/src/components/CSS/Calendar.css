@@ -1,0 +1,561 @@
+.react-calendar {
+  width: 350px;
+  max-width: 100%;
+  background: white;
+  border: 1px solid #a0a096;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.125em;
+}
+.react-calendar,
+.react-calendar *,
+.react-calendar *:before,
+.react-calendar *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.react-calendar button {
+  margin: 0;
+  border: 0;
+  outline: none;
+}
+.react-calendar button:enabled:hover {
+  cursor: pointer;
+}
+.react-calendar__navigation {
+  height: 44px;
+  margin-bottom: 1em;
+}
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+}
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #e6e6e6;
+}
+.react-calendar__navigation button[disabled] {
+  background-color: #f0f0f0;
+}
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.75em;
+}
+.react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+.react-calendar__month-view__weekNumbers {
+  font-weight: bold;
+}
+.react-calendar__month-view__weekNumbers .react-calendar__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  padding: calc(0.75em / 0.75) calc(0.5em / 0.75);
+}
+.react-calendar__month-view__days__day--weekend {
+  color: #d10000;
+}
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #757575;
+}
+.react-calendar__year-view .react-calendar__tile,
+.react-calendar__decade-view .react-calendar__tile,
+.react-calendar__century-view .react-calendar__tile {
+  padding: 2em 0.5em;
+}
+.react-calendar__tile {
+  max-width: 100%;
+  text-align: center;
+  padding: 0.75em 0.5em;
+  background: none;
+}
+.react-calendar__tile:disabled {
+  background-color: #f0f0f0;
+}
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #e6e6e6;
+}
+.react-calendar__tile--hasActive {
+  background: #76baff;
+}
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus {
+  background: #a9d4ff;
+}
+.react-calendar__tile--active {
+  background: #006edc;
+  color: white;
+}
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #1087ff;
+}
+.react-calendar--selectRange .react-calendar__tile--hover {
+  background-color: #e6e6e6;
+}
+
+body {
+  margin: 0;
+  background: #f8fafc;
+  font-family: Montserrat, 'Segoe UI', Tahoma, sans-serif;
+}
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child,
+h6:first-child {
+  margin-top: 0;
+}
+h1:last-child,
+h2:last-child,
+h3:last-child,
+h4:last-child,
+h5:last-child,
+h6:last-child {
+  margin-bottom: 0;
+}
+h2 {
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  margin-bottom: 0.325em;
+  font-size: 2.8em;
+}
+p {
+  margin: 0;
+  font-size: 19px;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 0.1em dashed;
+}
+a:hover,
+a:focus {
+  outline: none;
+  color: inherit;
+  border-bottom-style: solid;
+}
+button {
+  font-family: inherit;
+}
+code {
+  display: block;
+  border-radius: 2px;
+  margin: 1em 0;
+  padding: 1em 0.5em;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.react-component .react-calendar,
+.illustration .react-calendar {
+  border-radius: 4px;
+  max-width: 100%;
+  font: inherit;
+  border: 0;
+  overflow: hidden;
+}
+.react-component .react-calendar__navigation,
+.illustration .react-calendar__navigation {
+  margin-bottom: 10px;
+}
+.react-component .react-calendar button,
+.illustration .react-calendar button {
+  font: inherit;
+  font-size: 0.8em;
+}
+.illustration > .react-date-picker {
+  box-shadow: 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+.Showcase nav {
+  padding: 0.5em 0;
+  line-height: 30px;
+}
+.Showcase nav .wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.Showcase nav h1 {
+  margin: 0.5em 1em;
+  margin-left: 0;
+}
+.Showcase nav .others select {
+  width: 270px;
+  height: 40px;
+  display: inline-block;
+  background: none;
+  border: 0;
+  border-radius: 25px;
+  background-color: rgba(0, 0, 0, 0.1);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="32" height="24" viewBox="0 0 32 24"><polygon points="0,0 32,0 16,24" fill="rgba%280, 0, 0, .5%29" /></svg>');
+  background-repeat: no-repeat;
+  background-size: 12px;
+  background-position: 244px 15px;
+  padding: 0.4em 0.7em;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font: inherit;
+}
+.Showcase nav .others select:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.Showcase nav .others select:focus {
+  outline: none;
+  border: 2px solid #3c91e7;
+  padding: calc(0.4em - 2px) calc(0.7em - 2px);
+  background-position: 242px 13px;
+}
+.Showcase nav .others select option {
+  background: #ecf0f2;
+}
+.Showcase header {
+  display: flex;
+  background: linear-gradient(130deg, #3c91e7 0, #78378c 100%);
+  overflow: hidden;
+  font-weight: 600;
+  color: white;
+  padding-top: 5em;
+  padding-bottom: calc(5em +  272px / 2 - 1em);
+}
+.Showcase header p.main {
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  margin-bottom: 0.325em;
+  font-size: calc(40px + 2.8vw);
+}
+@media screen and (min-width: 1200px) {
+  .Showcase header p.main {
+    font-size: 4.6em;
+  }
+}
+.Showcase header p.sub {
+  margin-bottom: 1.3em;
+  font-size: calc(20px + 1.1vw);
+}
+@media screen and (min-width: 1200px) {
+  .Showcase header p.sub {
+    font-size: 2.3em;
+  }
+}
+.Showcase header button,
+.Showcase header a.button {
+  display: inline-block;
+  background: none;
+  border: 0;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 0.4em 0.7em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+  cursor: pointer;
+  font: inherit;
+  text-transform: none;
+  color: inherit;
+  font-size: 1.5em;
+}
+.Showcase header button:hover,
+.Showcase header a.button:hover {
+  background: #ecf0f2;
+  color: #3c91e7;
+}
+.Showcase header button:focus,
+.Showcase header a.button:focus {
+  outline: none;
+  border: 2px solid #ecf0f2;
+  padding: calc(0.4em - 2px) calc(0.7em - 2px);
+}
+.Showcase header .iframe-container {
+  display: inline-block;
+  width: 150px;
+  height: 40px;
+  transform: scale(1.33);
+  transform-origin: top left;
+}
+.Showcase header .iframe-container iframe {
+  transform-origin: top left;
+  transform: scale(1.4);
+}
+.Showcase .react-component {
+  width: calc(100% - 10%);
+  max-width: 1110px;
+  margin-top: -136px;
+  margin-bottom: 4em;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  font-size: 19px;
+}
+.Showcase .react-component > * {
+  box-shadow: 0 30px 40px 0 rgba(16, 36, 94, 0.2);
+}
+.Showcase main {
+  margin-top: 4em;
+}
+.Showcase main section {
+  padding: 4em 0;
+}
+.Showcase main section .richContent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: -1em;
+}
+.Showcase main section .richContent > * {
+  margin: 1em;
+  max-width: 100%;
+}
+.Showcase main section .richContent .text {
+  flex-basis: 400px;
+  flex-grow: 1;
+}
+.Showcase main section .richContent .illustration {
+  flex-basis: calc(100% - 10%);
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+.Showcase main section .richContent .illustration img {
+  width: 200px;
+  height: 200px;
+}
+.Showcase main section:nth-of-type(odd) {
+  background: #dee4f0;
+}
+.Showcase main section:nth-of-type(odd) .richContent .text {
+  order: 1;
+}
+.Showcase main section:nth-of-type(odd) .richContent .illustration {
+  order: 2;
+}
+@media screen and (min-width: 780px) {
+  .Showcase main section:nth-of-type(even) .richContent .illustration {
+    order: 1;
+  }
+  .Showcase main section:nth-of-type(even) .richContent .text {
+    order: 2;
+  }
+}
+@media screen and (min-width: 780px) {
+  .Showcase main section .richContent .illustration {
+    flex-basis: 300px;
+  }
+}
+.Showcase .usedby {
+  padding: 4em 0;
+}
+.Showcase .usedby h2 {
+  font-size: 2em;
+  margin-bottom: 1em;
+}
+.Showcase .usedby__companies {
+  margin: -1em;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+.Showcase .usedby__companies li {
+  max-width: calc(100% - 2em);
+  height: 40px;
+  margin: 1em;
+}
+.Showcase .usedby__companies li img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  filter: contrast(0%) opacity(50%);
+  transition: filter ease-in-out 0.4s;
+}
+.Showcase .usedby__companies li img:hover {
+  filter: none;
+}
+.Showcase .usedby__companies li img.ocado {
+  margin-top: -2px;
+}
+.Showcase footer {
+  display: flex;
+  background: linear-gradient(130deg, #3c91e7 0, #78378c 100%);
+  overflow: hidden;
+  font-weight: 600;
+  color: white;
+  margin-top: 60px;
+  padding-top: 5em;
+  padding-bottom: 5em;
+}
+.Showcase footer p.main {
+  margin-bottom: 0.325em;
+  font-size: calc(20px + 1.4vw);
+  text-transform: uppercase;
+}
+@media screen and (min-width: 1200px) {
+  .Showcase footer p.main {
+    font-size: 2.3em;
+  }
+}
+.Showcase footer p.sub {
+  line-height: 2em;
+  font-size: calc(10px + 0.7vw);
+}
+@media screen and (min-width: 1200px) {
+  .Showcase footer p.sub {
+    font-size: 1.15em;
+  }
+}
+.Showcase footer button,
+.Showcase footer a.button {
+  display: inline-block;
+  background: none;
+  border: 0;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 0.4em 0.7em;
+  margin-right: 1em;
+  margin-top: 1em;
+  cursor: pointer;
+  font: inherit;
+  text-transform: none;
+  color: inherit;
+  font-size: 1em;
+}
+.Showcase footer button:hover,
+.Showcase footer a.button:hover {
+  background: #ecf0f2;
+  color: #3c91e7;
+}
+.Showcase footer button:focus,
+.Showcase footer a.button:focus {
+  outline: none;
+  border: 2px solid #ecf0f2;
+  padding: calc(0.4em - 2px) calc(0.7em - 2px);
+}
+.Showcase .wrapper {
+  width: calc(100% - 10%);
+  max-width: 1110px;
+  margin: 0 auto;
+}
+.Showcase .wrapper:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+@media screen and (max-width: 650px) {
+  .Showcase.Showcase--react-date-picker .react-component {
+    justify-content: flex-start;
+  }
+}
+
+.animated-loader {
+  background: linear-gradient(125.75deg, white 0%, #dee4f0 33%, white 66%, #dee4f0 100%);
+  background-size: 200% 100%;
+  animation-name: loading-animate;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  font-size: 0;
+}
+@keyframes loading-animate {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 200%;
+  }
+}
+.Popup {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+}
+.Popup__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.Popup__container {
+  box-shadow: 0 30px 40px 0 rgba(16, 36, 94, 0.2);
+  border-radius: 8px;
+  position: relative;
+  max-height: calc(100% - 10vw);
+  min-width: 288px;
+  border: 0;
+  background: white;
+  padding: 44px;
+  margin: 5vw;
+  overflow: auto;
+  font: inherit;
+  color: inherit;
+}
+.Popup__header {
+  display: flex;
+  margin-bottom: 2em;
+}
+.Popup__header h2 {
+  margin-right: 1em;
+}
+.Popup__header__close {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  border: 0;
+  border-radius: 50%;
+  margin-top: -0.2em;
+  margin-right: -0.2em;
+  background: none;
+  font-size: 1.8em;
+  line-height: 0.8em;
+  cursor: pointer;
+}
+.Popup__header__close:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+.Popup__header__close:focus {
+  width: 48px;
+  height: 48px;
+  outline: none;
+  border: 2px solid #ecf0f2;
+  margin-top: calc(-0.2em - 2px);
+  margin-right: calc(-0.2em - 2px);
+}
+.Popup h2 {
+  margin-bottom: 0.325em;
+  font-size: 1.8em;
+}
+.Popup h3 {
+  margin-bottom: 0.325em;
+  font-size: 1.2em;
+}
