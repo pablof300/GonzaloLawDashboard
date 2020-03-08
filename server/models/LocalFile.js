@@ -7,4 +7,4 @@ const Schema = new mongoose.Schema({
   size: { type: String }
 });
 
-exports.Model = mongoose.model("files", Schema);
+exports.LocalFile = mongoose.model("LocalFile", Schema);

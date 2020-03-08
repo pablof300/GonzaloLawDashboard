@@ -4,7 +4,7 @@ import Home from "./views/Home/Home";
 import Login from "./views/Login/Login";
 import NotFound from "./views/NotFound";
 import NavBar from "./components/Header/NavBar";
-import FileComponent from "./components/fileComponent/fileComponent"
+import FileComponent from "./components/fileComponent/fileComponent";
 
 const App = () => {
   return (

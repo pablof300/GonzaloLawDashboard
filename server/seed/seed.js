@@ -1,15 +1,14 @@
 require("ts-node").register();
 const config = require("../Config/config");
 const { Seeder } = require("mongo-seeding");
-const path = require('path');
-const configUtil = require("../config/configUtil.js")
-
+const path = require("path");
+const configUtil = require("../config/configUtil.js");
 
 // TODO:
 // Refactor to not have this hardcoded
 const seedConfig = {
   database: {
-    host: 'localhost',
+    host: "localhost",
     port: 27017,
     name: "dashboard"
   },
@@ -17,10 +16,13 @@ const seedConfig = {
 };
 const seeder = new Seeder(seedConfig);
 console.log("Seeding from " + path.resolve("Seed", "data"));
-const collections = seeder.readCollectionsFromPath( path.resolve('./Seed/data'), {
-  extensions: ["ts"],
-  transformers: [Seeder.Transformers.replaceDocumentIdWithUnderscoreId]
-});
+const collections = seeder.readCollectionsFromPath(
+  path.resolve("./Seed/data"),
+  {
+    extensions: ["ts"],
+    transformers: [Seeder.Transformers.replaceDocumentIdWithUnderscoreId]
+  }
+);
 
 seeder
   .import(collections)

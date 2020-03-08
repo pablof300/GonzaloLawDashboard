@@ -1,4 +1,4 @@
-const fileAwsController = require("../controllers/FileAwsController");
+const fileAwsController = require("../controllers/fileAwsController");
 const express = require("express");
 const router = express.Router();
 

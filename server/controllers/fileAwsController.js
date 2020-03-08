@@ -9,13 +9,13 @@ const AWS = require("aws-sdk");
 
 AWS.config.update({
   region: "us-east-1",
-  accessKeyId: config.Aws.AWSAccessKeyId,
-  secretAccessKey: config.Aws.AWSSecretKey
+  accessKeyId: config.AWS.AWS_accessKeyId,
+  secretAccessKey: config.AWS.AWS_secretKey
 });
 
 // configure AWS to work with promises
 //AWS.config.setPromisesDependency(bluebird);
-const S3_BUCKET = config.Aws.bucket;
+const S3_BUCKET = config.AWS.bucket;
 
 exports.sign_s3 = (req, res) => {
   const s3 = new AWS.S3();
