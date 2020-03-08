@@ -1,4 +1,4 @@
-const userDAO = require("../dao/UserDAO");
+const fileDAO = require("../dao/FileDAO");
 
 const catchErrors = async (res, f) => {
   try {
@@ -6,13 +6,11 @@ const catchErrors = async (res, f) => {
     res.send({ ok: true, data: result });
   } catch (e) {
     if (e instanceof ValidationError) {
-      res
-        .status(e.httpErrorCode)
-        .send({
-          ok: false,
-          error: e.message,
-          validationErrors: e.validationErrors
-        });
+      res.status(e.httpErrorCode).send({
+        ok: false,
+        error: e.message,
+        validationErrors: e.validationErrors
+      });
     } else if (e instanceof NotFoundError) {
       res.status(e.httpErrorCode).send({ ok: false, error: e.message });
     } else {
@@ -24,25 +22,25 @@ const catchErrors = async (res, f) => {
 
 exports.getAll = async (req, res) =>
   catchErrors(res, async () => {
-    return userDAO.getAll();
+    return fileDAO.getAll();
   });
 
 exports.get = async (req, res) =>
   catchErrors(res, async () => {
-    return userDAO.get(req.userId);
+    return fileDAO.get(req.params.id);
   });
 
 exports.update = async (req, res) =>
   catchErrors(res, async () => {
-    return userDAO.update(req.userId, req.body);
+    return fileDAO.update(req.params.id, req.body);
   });
 
 exports.create = async (req, res) =>
   catchErrors(res, async () => {
-    return userDAO.create(req.body);
+    return fileDAO.create(req.body);
   });
 
 exports.delete = async (req, res) =>
   catchErrors(res, async () => {
-    return userDAO.delete(req.userId);
+    return fileDAO.delete(req.params.id);
   });

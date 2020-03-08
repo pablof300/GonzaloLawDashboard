@@ -4,7 +4,7 @@ const userDAO = require("../dao/UserDAO.js");
 const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-const configUtil = require("../config/configUtil.js")
+const configUtil = require("../config/configUtil.js");
 
 passport.use(
   "login",
