@@ -4,25 +4,25 @@ const router = express.Router();
 const passport = require("passport");
 
 router.get(
-	"/",
-	passport.authenticate("loggedIn", { session: false }),
-	userController.getAll
+  "/",
+  passport.authenticate("loggedIn", { session: false }),
+  userController.getAll
 );
 router.get(
-	"/:id",
-	passport.authenticate("loggedIn", { session: false }),
-	userController.get
+  "/:id",
+  passport.authenticate("loggedIn", { session: false }),
+  userController.get
 );
 router.put(
-	"/:id",
-	passport.authenticate("loggedIn", { session: false }),
-	userController.update
+  "/:id",
+  passport.authenticate("loggedIn", { session: false }),
+  userController.update
 );
 router.post("/", userController.create);
 router.delete(
-	"/:id",
-	passport.authenticate("loggedIn", { session: false }),
-	userController.delete
+  "/:id",
+  passport.authenticate("loggedIn", { session: false }),
+  userController.delete
 );
 
 module.exports = router;
