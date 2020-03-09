@@ -9,12 +9,11 @@ import {
   Card,
   Search,
   TransitionablePortal,
-  Segment,
-  Header
+  Segment
 } from "semantic-ui-react";
 import "./FileComponent.css";
 import FileUploadComponent from "./FileUploadComponent";
-import axios from "axios";
+import { getFiles, deleteFiles } from "../../../api/FilesApi";
 
 // TODO:
 // - Refactor confirmDeletion to be by fileId not testFileNamesData
@@ -41,13 +40,7 @@ const FileComponent = () => {
   let allFileListInPagination = [];
 
   const loadFiles = async () => {
-    const res = await axios.get("http://localhost:5000/files");
-    const data = res.data.data;
-    let tempfiles = [];
-    data.forEach(element => {
-      tempfiles.unshift(element);
-    });
-    setListOfFiles(tempfiles);
+    setListOfFiles((await getFiles()).data);
     setIsFilesPopulated(true);
   };
 
@@ -105,34 +98,20 @@ const FileComponent = () => {
     setConfirmDeletion({ enabled: false, fileID: null, fileName: null });
   };
 
-  const deleteFile = () => {
+  const deleteFile = async () => {
     const id = confirmDeletion["fileID"];
     const fileName = confirmDeletion["fileName"];
 
-    axios
-      .delete(`http://localhost:5000/fileAws/${fileName}`)
-      .then(res => {
-        if (res.data.success) {
-          const deleteFromDB = async () => {
-            const res = await axios.delete(`http://localhost:5000/files/${id}`);
-            if (res.data.ok) {
-              console.log("file deleted");
-              setIsFilesPopulated(false);
-              setConfirmDeletion({
-                enabled: false,
-                fileID: null,
-                fileName: null
-              });
-            }
-          };
-
-          deleteFromDB();
-        }
-      })
-      .catch(error => {
-        alert("DELETE ERROR: " + JSON.stringify(error));
-      });
-  };
+    const fileIsDeleted = await deleteFiles(fileName, id);
+    if (fileIsDeleted) {
+        setIsFilesPopulated(false);
+        setConfirmDeletion({
+          enabled: false,
+          fileID: null,
+          fileName: null
+        });
+      }
+    };
 
   const openFile = url => {
     window.open(url, "_blank");

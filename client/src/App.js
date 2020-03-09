@@ -6,11 +6,10 @@ import NotFound from "./views/NotFound";
 import NavBar from "./components/util/NavBarComponent/NavBar";
 import FooterComponent from "./components/util/FooterComponent/FooterComponent";
 import ClientDashboard from "./components/client/ClientDashboardComponent/ClientDashboard";
-import AdminDashboard from "./components/admin/AdminComponents/AdminDashboard"
+import AdminDashboard from "./components/admin/AdminComponents/AdminDashboard";
 
 const App = () => {
   return (
-
     <div>
       <NavBar />
       <Switch>
