@@ -1,5 +1,7 @@
 import React from "react";
 import "./NavBar.css";
+import {Image} from 'semantic-ui-react';
+import logo from "../../../assets/LogoCropped.png";
 import { Dropdown, Menu, Button } from 'semantic-ui-react'
 
 const NavBar = () => {
@@ -17,14 +19,7 @@ const NavBar = () => {
     </Dropdown>
     <Menu.Menu position='right'>
       <Menu.Item>
-        <Button inverted color='violet'>
-          Log in
-        </Button> 
-      </Menu.Item>
-      <Menu.Item>
-        <Button inverted color='violet'>
-          Sign Up
-        </Button> 
+      <Image className='Logo' src={logo} align='right'/>
         
       </Menu.Item>
     </Menu.Menu>

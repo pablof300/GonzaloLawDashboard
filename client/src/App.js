@@ -15,7 +15,7 @@ const App = () => {
   return (
     
     <div>
-      <NavBar />
+      
       <Switch>
         <Route exact path="/Login" component={Login} />
         <Route exact path="/dashboard" component={ClientDashboard} />

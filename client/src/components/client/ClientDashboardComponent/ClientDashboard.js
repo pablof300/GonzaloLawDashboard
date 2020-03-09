@@ -1,5 +1,6 @@
 import React from "react";
 import "./ClientDashboard.css";
+import NavBar from "../../util/NavBarComponent/NavBar";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
@@ -8,6 +9,8 @@ import Calendar from "react-calendar";
 
 const ClientDashboard = () => {
     return(
+       <div>
+        <NavBar/>
         <Container className={"container"}>
             <Grid centered>
                 <Grid.Row>
@@ -24,6 +27,7 @@ const ClientDashboard = () => {
                 </Grid.Row>
             </Grid>
         </Container>
+        </div>
     );
 }; 
 

@@ -4,21 +4,21 @@ import { Button, Icon, Menu, MenuItem } from "semantic-ui-react";
 const FooterComponent = () => {
     return (      
         <Menu
-            color='violet'
-            inverted
+            color='grey'
+            
         > 
             <MenuItem>
             Gonzalo Law LLC
             </MenuItem>
             <Menu.Menu position='right'>
                 <MenuItem>
-                    <Button inverted> 
+                    <Button> 
                         <Icon name='envelope'/>
                         ngonzalo@gonzalolaw.com
                     </Button>
                 </MenuItem>
                 <MenuItem>  
-                    <Button inverted> 
+                    <Button> 
                         <Icon name='phone'/>
                         +1(216)527-7777
                     </Button>
