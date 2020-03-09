@@ -4,12 +4,12 @@ import Home from "./views/Home/Home";
 import Login from "./views/Login/Login";
 import "./views/Login/Login.css";
 import NotFound from "./views/NotFound";
-import NavBar from "./components/Header/NavBar";
-import ProgBarComponent from "./components/progBarComponent/ProgCard";
-import Footer from "./components/Footer/Footer";
-import ClientDashboard from "./components/ClientDashboard";
-import FileComponent from "./components/fileComponent/fileComponent"
-import AdminDashboard from "./components/AdminComponents/AdminDashboard"
+import NavBar from "./components/util/NavBarComponent/NavBar";
+import ProgBarComponent from "./components/client/ProgBarComponent/ProgCard";
+import FooterComponent from "./components/util/FooterComponent/FooterComponent";
+import ClientDashboard from "./components/client/ClientDashboardComponent/ClientDashboard";
+import FileComponent from "./components/client/FileComponent/FileComponent"
+import AdminDashboard from "./components/admin/AdminComponents/AdminDashboard"
 
 const App = () => {
   return (
@@ -18,18 +18,17 @@ const App = () => {
       <NavBar />
       <Switch>
         <Route exact path="/Login" component={Login} />
-        <Route exact path="/File" component={FileComponent} />
-        <Route exact path="/ProgBarComponent" component={ProgBarComponent} />
+        <Route exact path="/dashboard" component={ClientDashboard} />
         <Route exact path="/Admin" component={AdminDashboard} />
         <Route exact path="/">
           <Redirect to="/Login" />
         </Route>
         <Route component={NotFound} />
-      </Switch>  
+      </Switch>
       <footer>
-        <Footer />
+        <FooterComponent />
       </footer>
-    </div>    
+    </div>
   );
 };
 

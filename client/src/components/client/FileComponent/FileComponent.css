@@ -1,0 +1,9 @@
+.hidden {
+  display: none;
+}
+.invisible {
+  visibility: hidden;
+}
+.progress {
+  width: 100vh;
+}

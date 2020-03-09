@@ -1,17 +1,15 @@
 import React from "react";
 import { Button, Icon, Menu, MenuItem } from "semantic-ui-react";
 
-const Footer = () => {
+const FooterComponent = () => {
     return (      
         <Menu
-            className="footer" 
             color='violet'
             inverted
         > 
             <MenuItem>
             Gonzalo Law LLC
             </MenuItem>
-
             <Menu.Menu position='right'>
                 <MenuItem>
                     <Button inverted> 
@@ -31,4 +29,4 @@ const Footer = () => {
 
 };
 
-export default Footer;
+export default FooterComponent;

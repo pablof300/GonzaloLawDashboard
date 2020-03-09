@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import logo from "../../assets/HorizontalLogo.png";
-import MessageComponent from "../../components/MessageComponent/MessageComponent";
+import MessageComponent from "../../components/util/MessageComponent/MessageComponent";
 import { authenticate } from "../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import "./Login.css";
 import {
   Grid,
   Segment,
-  Icon,
   Header,
   Button,
   Divider,

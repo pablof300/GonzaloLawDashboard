@@ -4,8 +4,8 @@ import { Grid, Container } from 'semantic-ui-react'
 import AdminNav from './AdminNav'
 import AdminList from './AdminToDoList'
 import ClientList from './AdminClientList'
-import '../CSS/Admin.css'
-import '../CSS/Calendar.css'
+import './CSS/Admin.css'
+import './CSS/Calendar.css'
 import 'react-calendar/dist/Calendar.css'
 
 const AdminDashboard = () => (

@@ -9,10 +9,11 @@ import {
   Card,
   Search,
   TransitionablePortal,
-  Segment
+  Segment,
+  Header
 } from "semantic-ui-react";
-import "./fileComponent.css";
-import FileUploadComponent from "./fileUploadComponent";
+import "./FileComponent.css";
+import FileUploadComponent from "./FileUploadComponent";
 import axios from "axios";
 
 // TODO:
@@ -221,11 +222,9 @@ const FileComponent = () => {
 
   return (
     <div>
-      <div className="keepbottom container">
+      <div>
         <Card unstackable fluid centered raised>
-          <div className="center">
-            <h2 align="center">Files Upload</h2>
-          </div>
+          <h1>Files</h1>
           <Table
             attached="bottom"
             size="small"

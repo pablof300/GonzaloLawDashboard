@@ -1,5 +1,6 @@
 .container {
-  padding-top: 20vh !important;
+  margin-top: 10vh !important;
+  padding-bottom: 20vh !important;
 }
 .footer{
   position: fixed;

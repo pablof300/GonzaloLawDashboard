@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dropdown, Icon, Image, Menu, Segment } from 'semantic-ui-react'
-import logo from "../../assets/LogoCropped.png";
+import logo from "../../../assets/LogoCropped.png";
 
 // TODO: Update <Search> usage after its will be implemented
 
