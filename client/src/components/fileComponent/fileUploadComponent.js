@@ -10,10 +10,10 @@ import {
   Segment,
   TransitionablePortal
 } from "semantic-ui-react";
+import axios from "axios";
 
 const FileUploadComponent = props => {
-  const [file, setFile] = useState("");
-  const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState(null);
   const [showUploadProgress, setShowUploadProgress] = useState(false);
   const [percent, setPercent] = useState(0);
   const [portalProp, setPortalProp] = useState({
@@ -23,34 +23,109 @@ const FileUploadComponent = props => {
   });
 
   const getFile = e => {
-    setFile(e.target.files[0]);
-    setFileName(e.target.files[0].name);
+    e.preventDefault();
+    setFile(e.target.files);
+  };
+
+  const getFileSize = fileSize => {
+    const gb = 10e8,
+      mb = 10e5,
+      kb = 10e2;
+    let result;
+    if (fileSize >= gb) {
+      result = (fileSize / gb).toFixed(2) + " GB";
+    } else if (fileSize >= mb) {
+      result = (fileSize / mb).toFixed(2) + " MB";
+    } else if (fileSize >= kb) {
+      result = (fileSize / kb).toFixed(2) + " KB";
+    } else {
+      result = fileSize.toFixed(2) + " bytes";
+    }
+    return result;
   };
 
   const upload = () => {
     if (file) {
       setShowUploadProgress(true);
-      if (props.listOfFiles.length === 0) {
-        props.listOfFiles.push(fileName);
-      } else {
-        props.listOfFiles.unshift(fileName);
-      }
-      setPercent(100);
+      const i = 0;
+      let fileParts = file[i].name.split(".");
+      let size = file[i].size;
+      const fileName = fileParts[0];
+      const fileType = fileParts[1];
+      const fileSize = getFileSize(size);
+
+      setPortalProp({
+        color: "red",
+        buttonText: "Cancel",
+        text: `Uploading "${fileName}". Please wait...`
+      });
+      console.log("Preparing to upload file");
+      axios
+        .post("http://localhost:5000/fileAws", {
+          fileName: fileName,
+          fileType: fileType
+        })
+        .then(response => {
+          let returnData = response.data.data.returnData;
+          let signedRequest = returnData.signedRequest;
+          //console.log(returnData)
+          const url = returnData.url;
+          //console.log("Received signed request " + signedRequest)
+
+          let options = {
+            headers: {
+              "Content-Type": fileType
+            },
+            onUploadProgress: progressEvent => {
+              setPercent(
+                parseInt(
+                  Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                )
+              );
+            }
+          };
+
+          axios
+            .put(signedRequest, file[i], options)
+            .then(result => {
+              console.log("We got response from s3");
+
+              const fileToStore = {
+                name: fileName,
+                type: fileType,
+                size: fileSize,
+                url: url
+              };
+
+              axios
+                .post("http://localhost:5000/files/", fileToStore)
+                .then(res => {
+                  setPortalProp({
+                    color: "green",
+                    buttonText: "Done!",
+                    text: "Uploaded Successfully"
+                  });
+                  props.setIsFilesPopulated(false);
+                });
+            })
+            .catch(error => {
+              alert("ERROR: " + JSON.stringify(error));
+            });
+        })
+        .catch(error => {
+          alert(JSON.stringify(error));
+        });
     }
   };
 
-  useEffect(() => {
-    if (percent === 100) {
-      setPortalProp({
-        color: "green",
-        buttonText: "Done!",
-        text: "Uploaded Successfully"
-      });
-    }
-  }, [percent]);
-
   const closePortal = () => {
     setShowUploadProgress(false);
+    setPortalProp({
+      color: "red",
+      buttonText: "Cancel",
+      text: "Uploading File. Please wait..."
+    });
+    setPercent(0);
   };
 
   return (

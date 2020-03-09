@@ -1,7 +1,12 @@
 .container {
   padding-top: 20vh !important;
 }
-
+.footer{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
 .IconColor {
   background-color: #ee8c3a !important;
 }
