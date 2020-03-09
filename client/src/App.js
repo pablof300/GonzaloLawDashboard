@@ -5,6 +5,7 @@ import Login from "./views/Login/Login";
 import "./views/Login/Login.css";
 import NotFound from "./views/NotFound";
 import NavBar from "./components/Header/NavBar";
+import ProgBarComponent from "./components/progBarComponent/ProgCard";
 import Footer from "./components/Footer/Footer";
 import ClientDashboard from "./components/ClientDashboard";
 import FileComponent from "./components/fileComponent/fileComponent"
@@ -18,6 +19,7 @@ const App = () => {
       <Switch>
         <Route exact path="/Login" component={Login} />
         <Route exact path="/File" component={FileComponent} />
+        <Route exact path="/ProgBarComponent" component={ProgBarComponent} />
         <Route exact path="/Admin" component={AdminDashboard} />
         <Route exact path="/">
           <Redirect to="/Login" />
