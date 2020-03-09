@@ -7,6 +7,7 @@ import NavBar from "./components/util/NavBarComponent/NavBar";
 import FooterComponent from "./components/util/FooterComponent/FooterComponent";
 import ClientDashboard from "./components/client/ClientDashboardComponent/ClientDashboard";
 import AdminDashboard from "./components/admin/AdminComponents/AdminDashboard";
+import AdminLogin from "./views/AdminLogin/AdminLogin";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <NavBar />
       <Switch>
         <Route exact path="/login" component={Login} />
+        <Route exact path="/adminlogin" component={AdminLogin} />
         <Route exact path="/dashboard" component={ClientDashboard} />
         <Route exact path="/admindashboard" component={AdminDashboard} />
         <Route exact path="/">

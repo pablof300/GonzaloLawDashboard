@@ -14,9 +14,10 @@ exports.getAll = async () => {
 };
 
 exports.get = async id => {
-  const admin = await Admin.findbyid(id);
-  if (!admin) throw new NotFoundError();
-
+  const admin = await Admin.findById(id);
+  if (!admin) {
+    console.log("Could not find an admin for the given id!")
+  }
   return admin;
 };
 

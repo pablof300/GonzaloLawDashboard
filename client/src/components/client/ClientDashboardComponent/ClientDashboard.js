@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import "./ClientDashboard.css";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
-import Calendar from "react-calendar";
+import { verifyUser } from "../../../api/AuthApi"
+import { Redirect } from "react-router-dom";
 
 const ClientDashboard = () => {
+  const [isVerified, setIsVerified] = useState(true);
+
+  verifyUser().then(verified => {
+    setIsVerified(verified)
+  })
+
+  if (!isVerified) {
+    return <Redirect to="/login" />;
+  }
+
   return (
     <Container className={"container"}>
       <Grid centered>
