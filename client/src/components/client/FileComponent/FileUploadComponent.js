@@ -68,10 +68,7 @@ const FileUploadComponent = props => {
         .then(response => {
           let returnData = response.data.data.returnData;
           let signedRequest = returnData.signedRequest;
-          //console.log(returnData)
           const url = returnData.url;
-          //console.log("Received signed request " + signedRequest)
-
           let options = {
             headers: {
               "Content-Type": fileType

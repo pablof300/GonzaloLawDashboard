@@ -1,21 +1,15 @@
-const config = require("../config/config");
+const configUtil = require("./configUtil.js");
 const AWS = require("aws-sdk");
-
-/*AWS.config.update({
-  region: 'us-east-1',
-  accessKeyId: process.env.AWSAccessKeyId,
-  secretAccessKey: process.env.AWSSecretKey
-});*/
 
 AWS.config.update({
   region: "us-east-1",
-  accessKeyId: config.AWS.AWS_accessKeyId,
-  secretAccessKey: config.AWS.AWS_secretKey
+  accessKeyId: configUtil.getAWSAccessKeyId(),
+  secretAccessKey: configUtil.getAWSSecretKey()
 });
 
 // configure AWS to work with promises
 //AWS.config.setPromisesDependency(bluebird);
-const S3_BUCKET = config.AWS.bucket;
+const S3_BUCKET = configUtil.getAWSBucket();
 
 exports.sign_s3 = (req, res) => {
   const s3 = new AWS.S3();
