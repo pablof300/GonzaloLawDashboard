@@ -6,7 +6,8 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const userRoutes = require("../routes/UserRoutes.js");
 const authRoutes = require("../routes/AuthRoutes.js");
-const adminRoutes = require("../routes/AdminRoutes.js");
+const fileRoutes = require("../routes/FileRoutes");
+const fileAwsRoute = require("../routes/FileAwsRoutes");
 const configUtil = require("./configUtil.js");
 const cors = require("cors");
 
@@ -26,6 +27,8 @@ module.exports.init = () => {
   app.use("/user", userRoutes);
   app.use("/admin", adminRoutes);
   app.use("/auth", authRoutes);
+  app.use("/files", fileRoutes);
+  app.use("/fileAws", fileAwsRoute);
 
   if (process.env.NODE_ENV === "production") {
     // Serve any static files

@@ -2,58 +2,34 @@ import React, { useState } from "react";
 import {
   Button,
   Table,
-  Input,
   Icon,
   Menu,
   Pagination,
   Popup,
-  Grid,
   Card,
   Search,
-  Reveal,
-  Confirm
+  TransitionablePortal,
+  Segment
 } from "semantic-ui-react";
 import "./fileComponent.css";
 import FileUploadComponent from "./fileUploadComponent";
-
-const testFileNamesData = [
-  "colors",
-  "phones",
-  "orange",
-  "banana",
-  "apple",
-  "hover",
-  "yeah",
-  "here",
-  "hover",
-  "yeah",
-  "mango",
-  "pear",
-  "fruits",
-  "orange123",
-  "headphones",
-  "book",
-  "paper",
-  "pen",
-  "tvs",
-  "charges",
-  "umbrella",
-  "water"
-];
+import axios from "axios";
 
 // TODO:
 // - Refactor confirmDeletion to be by fileId not testFileNamesData
 
 const FileComponent = () => {
-  const [listOfFiles, setListOfFiles] = useState(testFileNamesData);
+  const [listOfFiles, setListOfFiles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [fileID, setFileID] = useState(""); //need the id to locate on database to pass as prop
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [confirmDeletion, setConfirmDeletion] = useState({
     enabled: false,
+    fileID: null,
     fileName: null
   });
+
+  const [isFilesPopulated, setIsFilesPopulated] = useState(false);
 
   let itemsPerPage = 5;
   let totalPages;
@@ -63,23 +39,39 @@ const FileComponent = () => {
   let endIndex;
   let allFileListInPagination = [];
 
-  const filterFilesByText = (e, { value }) => {
+  const loadFiles = async () => {
+    const res = await axios.get("http://localhost:5000/files");
+    const data = res.data.data;
+    let tempfiles = [];
+    data.forEach(element => {
+      tempfiles.unshift(element);
+    });
+    setListOfFiles(tempfiles);
+    setIsFilesPopulated(true);
+  };
+
+  if (!isFilesPopulated) {
+    loadFiles();
+  }
+
+  const filterFilesByText = async (e, { value }) => {
     setIsLoading(true);
 
-    let results = listOfFiles.filter(fileName => {
+    const results = await listOfFiles.filter(file => {
       return (
         value.length > 0 &&
-        fileName.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
+        file.name.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
       );
     });
 
     setTimeout(() => {
       setIsLoading(!results ? true : false);
-    }, 900);
+    }, 300);
+
     if (results.length > 0) {
       setListOfFiles(results);
     } else {
-      setListOfFiles(testFileNamesData);
+      setIsFilesPopulated(false);
     }
   };
 
@@ -109,19 +101,41 @@ const FileComponent = () => {
   performFilesPagination();
 
   const handleCancel = () => {
-    setConfirmDeletion({ enabled: false, fileName: null });
+    setConfirmDeletion({ enabled: false, fileID: null, fileName: null });
   };
 
   const deleteFile = () => {
-    let files = [];
-    let file = confirmDeletion["fileName"];
-    listOfFiles.forEach(element => {
-      if (element !== file) {
-        files.push(element);
-      }
-    });
-    setListOfFiles(files);
-    setConfirmDeletion({ enabled: false, fileName: null });
+    const id = confirmDeletion["fileID"];
+    const fileName = confirmDeletion["fileName"];
+
+    axios
+      .delete(`http://localhost:5000/fileAws/${fileName}`)
+      .then(res => {
+        if (res.data.success) {
+          const deleteFromDB = async () => {
+            const res = await axios.delete(`http://localhost:5000/files/${id}`);
+            if (res.data.ok) {
+              console.log("file deleted");
+              setIsFilesPopulated(false);
+              setConfirmDeletion({
+                enabled: false,
+                fileID: null,
+                fileName: null
+              });
+            }
+          };
+
+          deleteFromDB();
+        }
+      })
+      .catch(error => {
+        alert("DELETE ERROR: " + JSON.stringify(error));
+      });
+  };
+
+  const openFile = url => {
+    window.open(url, "_blank");
+    // win.focus();
   };
 
   let deleteWarning =
@@ -130,13 +144,21 @@ const FileComponent = () => {
   const fileLists = allFileListInPagination.map(file => {
     return (
       <Table.Body>
-        <Table.Row className={!file ? "invisible" : ""}>
-          <Table.Cell singleLine>{file}</Table.Cell>
-          <Table.Cell singleLine>20mb</Table.Cell>
+        <Table.Row
+          as="tr"
+          key={!file ? null : file._id}
+          className={!file ? "invisible" : ""}
+        >
+          <Table.Cell singleLine>{!file ? "" : file.name}</Table.Cell>
+          <Table.Cell singleLine>{!file ? "" : file.size}</Table.Cell>
           <Table.Cell singleLine>
             <Button
               onClick={() =>
-                setConfirmDeletion({ enabled: true, fileName: file })
+                setConfirmDeletion({
+                  enabled: true,
+                  fileID: file._id,
+                  fileName: file.name
+                })
               }
               icon
               inverted
@@ -145,15 +167,49 @@ const FileComponent = () => {
             >
               <Icon name="delete" /> Delete
             </Button>
-            <Confirm
+
+            <TransitionablePortal
+              onClose={handleCancel}
               open={confirmDeletion["enabled"]}
-              header="Delete File"
-              content={deleteWarning}
-              confirmButton="Yes"
-              onCancel={handleCancel}
-              onConfirm={deleteFile}
-            />
-            <Button inverted color="violet" icon labelPosition="left">
+            >
+              <Segment
+                style={{
+                  left: "30%",
+                  position: "fixed",
+                  top: "50%",
+                  zIndex: 1000
+                }}
+              >
+                <div style={{ width: 500 }}>
+                  <div className="center">
+                    <h3 align="center">Delete File</h3>
+                  </div>
+
+                  <div className="center">{deleteWarning}</div>
+
+                  <div>
+                    <Button color="green" floated="right" onClick={deleteFile}>
+                      Yes
+                    </Button>
+
+                    <Button
+                      color="black"
+                      floated="right"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </Segment>
+            </TransitionablePortal>
+            <Button
+              onClick={() => openFile(file.url)}
+              inverted
+              color="violet"
+              icon
+              labelPosition="left"
+            >
               <Icon name="eye" />
               View
             </Button>
@@ -170,7 +226,13 @@ const FileComponent = () => {
           <div className="center">
             <h2 align="center">Files Upload</h2>
           </div>
-          <Table attached="bottom" size="small" unstackable singleLine fixed>
+          <Table
+            attached="bottom"
+            size="small"
+            unstackable="true"
+            singleLine
+            fixed
+          >
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
@@ -209,8 +271,7 @@ const FileComponent = () => {
                       <FileUploadComponent
                         setOpenModal={setOpenModal}
                         openModal={openModal}
-                        setListOfFiles={setListOfFiles}
-                        listOfFiles={listOfFiles}
+                        setIsFilesPopulated={setIsFilesPopulated}
                       />
                     </div>
                   </div>
@@ -223,7 +284,6 @@ const FileComponent = () => {
                 <Table.HeaderCell colSpan="3">
                   <Menu floated="right" pagination>
                     <Pagination
-                      defaultActivePage={1}
                       pointing
                       secondary
                       activePage={currentPage}
