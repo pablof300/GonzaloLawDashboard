@@ -1,4 +1,4 @@
-const configUtil = require("./configUtil.js");
+const configUtil = require("../config/configUtil");
 const AWS = require("aws-sdk");
 
 AWS.config.update({
