@@ -10,13 +10,13 @@ import AdminDashboard from "./components/admin/AdminComponents/AdminDashboard"
 
 const App = () => {
   return (
-    
+
     <div>
       <NavBar />
       <Switch>
-        <Route exact path="/Login" component={Login} />
+        <Route exact path="/login" component={Login} />
         <Route exact path="/dashboard" component={ClientDashboard} />
-        <Route exact path="/Admin" component={AdminDashboard} />
+        <Route exact path="/admindashboard" component={AdminDashboard} />
         <Route exact path="/">
           <Redirect to="/Login" />
         </Route>
