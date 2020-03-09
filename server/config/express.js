@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const userRoutes = require("../routes/UserRoutes.js");
+const adminRoutes = require("../routes/AdminRoutes.js");
 const authRoutes = require("../routes/AuthRoutes.js");
 const fileRoutes = require("../routes/FileRoutes");
 const fileAwsRoute = require("../routes/FileAwsRoutes");
