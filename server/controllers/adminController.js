@@ -8,12 +8,12 @@ exports.getAll = async (req, res) =>
 
 exports.get = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.get(req.userId);
+    return adminDAO.get(req.adminID);
   });
 
 exports.update = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.update(req.userId, req.body);
+    return adminDAO.update(req.adminID, req.body);
   });
 
 exports.create = async (req, res) =>
@@ -23,20 +23,20 @@ exports.create = async (req, res) =>
 
 exports.delete = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.delete(req.userId);
+    return adminDAO.delete(req.adminID);
   });
 
 exports.getClient = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.getClient(req.userId, req.body);
+    return adminDAO.getClient(req.adminID, req.body);
   });
 
 exports.removeClient = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.removeClient(req.userId, req.body);
+    return adminDAO.removeClient(req.adminID, req.body);
   });
 
 exports.addClient = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.addClient(req.userId, req.body);
+    return adminDAO.addClient(req.adminID, req.body);
   });

@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const userRoutes = require("../routes/UserRoutes.js");
 const authRoutes = require("../routes/AuthRoutes.js");
+const adminRoutes = require("../routes/AdminRoutes.js");
 const configUtil = require("./configUtil.js");
 const cors = require("cors");
 

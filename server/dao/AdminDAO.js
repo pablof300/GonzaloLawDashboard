@@ -47,46 +47,6 @@ exports.deleteAll = async () => {
   await Admin.deleteMany();
 };
 
-exports.removeClient = async (id, client) => {
-  //check if this is correct
-  const admin = await Admin.findById(id);
-  if (!admin) throw new NotFoundError();
-  newClientList = admin.clients;
-  for (var i = 0; i < newClientList.length; i++) {
-    if (newClientList[i].username == client.username) {
-      newClientList.splice(i, 1);
-    }
-  }
-  const admin = await Admin.findByIdAndUpdate(id, { clients: newClientList });
-
-  return admin;
-};
-
-exports.addClient = async (id, client) => {
-  //check if this is correct
-  const admin = await Admin.findById(id);
-  if (!admin) throw new NotFoundError();
-  newClientList = admin.clients;
-  newClientList.push(client);
-  const admin = await Admin.findByIdAndUpdate(id, { clients: newClientList });
-
-  return admin;
-};
-
-exports.getClient = async (id, client) => {
-  //check if this is correct
-  const admin = await Admin.findById(id);
-  if (!admin) throw new NotFoundError();
-  clientList = admin.clients;
-  for (var i = 0; i < clientList.length; i++) {
-    if (clientList[i].username == client.username) {
-      return clientList[i];
-    }
-  }
-
-  return admin;
-};
-
 /*Figure out how to implement Todos later***********
 
 exports.addTodo = async (id, newTodo) => {
