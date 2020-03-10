@@ -7,7 +7,6 @@ import { Dropdown, Menu, Button } from 'semantic-ui-react'
 const NavBar = () => {
   return (
     <Menu>
-    
     <Dropdown item text='Menu'>
     
       <Dropdown.Menu>

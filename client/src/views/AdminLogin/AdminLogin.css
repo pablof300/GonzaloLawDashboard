@@ -1,0 +1,13 @@
+.container {
+  margin-top: 10vh !important;
+  padding-bottom: 20vh !important;
+}
+.footer{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+.IconColor {
+  background-color: #ee8c3a !important;
+}

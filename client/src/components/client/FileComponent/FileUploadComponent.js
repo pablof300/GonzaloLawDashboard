@@ -61,7 +61,7 @@ const FileUploadComponent = props => {
       });
       console.log("Preparing to upload file");
       axios
-        .post("http://localhost:5000/fileAws", {
+        .post("/fileAws", {
           fileName: fileName,
           fileType: fileType
         })
@@ -95,7 +95,7 @@ const FileUploadComponent = props => {
               };
 
               axios
-                .post("http://localhost:5000/files/", fileToStore)
+                .post("/files/", fileToStore)
                 .then(res => {
                   setPortalProp({
                     color: "green",

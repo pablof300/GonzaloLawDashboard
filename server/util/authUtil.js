@@ -1,8 +1,12 @@
 const jwt = require("jsonwebtoken");
+const configUtil = require('../config/configUtil')
 
 exports.tokanizeUser = user => {
-  return jwt.sign(
-    { id: user.id },
-    process.env.JWT_SECRET || require("../config/config").db.uri
+  let token = jwt.sign(
+      { id: user.id },
+      configUtil.getJWTSecret()
   );
+  console.log("token is ");
+  console.log(token);
+  return token
 };

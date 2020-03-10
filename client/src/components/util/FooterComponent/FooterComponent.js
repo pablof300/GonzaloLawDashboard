@@ -26,7 +26,6 @@ const FooterComponent = () => {
             </Menu.Menu>    
         </Menu>           
     );
-
 };
 
 export default FooterComponent;
