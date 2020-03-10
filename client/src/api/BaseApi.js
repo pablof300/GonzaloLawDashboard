@@ -1,9 +1,7 @@
 import axios from "axios";
 
-const port = process.env.PORT || 5000;
-console.log("#### PORT #####");
-console.log(port);
+// const port = process.env.PORT || 5000;
 export default axios.create({
-  baseURL: "http://localhost:" + port,
+  baseURL: "/",
   responseType: "json"
 });
