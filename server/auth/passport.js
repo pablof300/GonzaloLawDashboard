@@ -52,8 +52,6 @@ passport.use(
       passReqToCallback: true
     },
     async (req, jwtPayload, done) => {
-        console.log("received payload")
-        console.log(jwtPayload)
       req.userId = jwtPayload.id;
       if (userDAO.get(jwtPayload.id)) {
         return done(null, true);
@@ -109,7 +107,6 @@ passport.use(
             passReqToCallback: true
         },
         async (req, jwtPayload, done) => {
-            console.log("ID? " + req.userId);
             req.adminID = jwtPayload.id;
             if (await adminDAO.get(jwtPayload.id)) {
                 return done(null, true);
