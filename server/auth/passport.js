@@ -48,7 +48,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configUtil.getDatabaseUri(),
+      secretOrKey: configUtil.getJWTSecret(),
       passReqToCallback: true
     },
     async (req, jwtPayload, done) => {
@@ -101,22 +101,22 @@ passport.use(
 );
 
 passport.use(
-  "adminLoggedIn",
-  new JWTStrategy(
-    {
-      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configUtil.getDatabaseUri(),
-      passReqToCallback: true
-    },
-    async (req, jwtPayload, done) => {
-        console.log("ID? " + req.userId);
-      req.adminID = jwtPayload.id;
-      if (await adminDAO.get(jwtPayload.id)) {
-        return done(null, true);
-      } else {
-          console.log("yaSsS!?")
-        return done("Invalid token?");
-      }
-    }
-  )
+    "adminLoggedIn",
+    new JWTStrategy(
+        {
+            jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+            secretOrKey: configUtil.getJWTSecret(),
+            passReqToCallback: true
+        },
+        async (req, jwtPayload, done) => {
+            console.log("ID? " + req.userId);
+            req.adminID = jwtPayload.id;
+            if (await adminDAO.get(jwtPayload.id)) {
+                return done(null, true);
+            } else {
+                console.log("yaSsS!?")
+                return done("Invalid token?");
+            }
+        }
+    )
 );

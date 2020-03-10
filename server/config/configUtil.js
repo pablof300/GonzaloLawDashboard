@@ -13,3 +13,7 @@ exports.getAWSSecretKey = () => {
 exports.getAWSBucket = () => {
   return process.env.AWS_bucket || require("./config").AWS.bucket;
 };
+
+exports.getJWTSecret = () => {
+  return process.env.JWT_SECRET || require("../config/config").db.uri;
+}
