@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./ClientDashboard.css";
+import NavBar from "../../util/NavBarComponent/NavBar";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
@@ -7,6 +8,7 @@ import { verifyUser } from "../../../api/AuthApi"
 import { Redirect } from "react-router-dom";
 
 const ClientDashboard = () => {
+
   const [isVerified, setIsVerified] = useState(true);
 
   verifyUser().then(verified => {
@@ -18,6 +20,8 @@ const ClientDashboard = () => {
   }
 
   return (
+     <div>
+    <NavBar/>
     <Container className={"container"}>
       <Grid centered>
         <Grid.Row>
@@ -34,6 +38,7 @@ const ClientDashboard = () => {
         </Grid.Row>
       </Grid>
     </Container>
+    </div>
   );
 };
 
