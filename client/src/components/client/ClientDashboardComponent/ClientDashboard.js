@@ -6,6 +6,7 @@ import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
 import { verifyUser } from "../../../api/AuthApi"
 import { Redirect } from "react-router-dom";
+import UserDetailsComponent from './UserDetailsComponent';
 
 const ClientDashboard = () => {
 
@@ -29,6 +30,9 @@ const ClientDashboard = () => {
             <Icon name="users" circular />
             <Header.Content>Client Dashboard</Header.Content>
           </Header>
+        </Grid.Row>
+        <Grid.Row>
+          <UserDetailsComponent/>
         </Grid.Row>
         <Grid.Row>
           <ProgBarComponent />

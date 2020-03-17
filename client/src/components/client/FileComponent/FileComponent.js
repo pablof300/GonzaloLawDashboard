@@ -15,8 +15,6 @@ import "./FileComponent.css";
 import FileUploadComponent from "./FileUploadComponent";
 import { getFiles, deleteFiles } from "../../../api/FilesApi";
 
-// TODO:
-// - Refactor confirmDeletion to be by fileId not testFileNamesData
 
 const FileComponent = () => {
   const [listOfFiles, setListOfFiles] = useState([]);
@@ -40,7 +38,19 @@ const FileComponent = () => {
   let allFileListInPagination = [];
 
   const loadFiles = async () => {
-    setListOfFiles((await getFiles()).data);
+    const data = (await getFiles()).data
+    let tempData = []
+    /**
+     * dont get rid of this logic {tempData}
+     * if you have a way of making it so recent upload shows first, you can rid
+     * of it. If not, then let it be like this
+     * 
+     */
+    data.forEach(element => {
+      tempData.unshift(element) 
+    });
+
+    setListOfFiles(tempData);
     setIsFilesPopulated(true);
   };
 
@@ -84,7 +94,7 @@ const FileComponent = () => {
     remainder = listOfFiles.length % itemsPerPage;
 
     startIndex = (currentPage - 1) * itemsPerPage;
-    endIndex = divisible * itemsPerPage;
+    //endIndex = divisible * itemsPerPage;
     endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
 
     for (let i = startIndex; i < endIndex; i++) {

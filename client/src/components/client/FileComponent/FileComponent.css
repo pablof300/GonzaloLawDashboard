@@ -7,3 +7,20 @@
 .progress {
   width: 100vh;
 }
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
+}
+.wrap {
+  width: 100%;
+  min-width: 20em;
+}
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+.autoMargin {
+  margin: auto;
+}
