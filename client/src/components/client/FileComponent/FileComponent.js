@@ -26,7 +26,6 @@ const FileComponent = () => {
     fileID: null,
     fileName: null
   });
-
   const [isFilesPopulated, setIsFilesPopulated] = useState(false);
 
   let itemsPerPage = 5;
@@ -217,7 +216,7 @@ const FileComponent = () => {
           <Table
             attached="bottom"
             size="small"
-            unstackable="true"
+            unstackable={true}
             singleLine
             fixed
           >

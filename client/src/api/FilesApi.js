@@ -1,7 +1,11 @@
 import API from "./BaseApi.js";
+import {getCurrentUser} from './UserApi';
+
+
 
 const getFiles = async () => {
-  let axiosResponse = await API.get("/files")
+  const user = (await getCurrentUser()).data;
+  let axiosResponse = await API.get(`/files/${user._id}`)
     .then(response => {
       return response.data;
     })
@@ -17,11 +21,12 @@ const getFiles = async () => {
 };
 
 const deleteFiles = async (fileName, id) => {
+  const user = (await getCurrentUser()).data;
   return await API.delete("/fileAws/" + fileName)
     .then(res => {
       if (res.data.success) {
         const deleteFromDB = async () => {
-          const res = await API.delete(`/files/${id}`);
+          const res = await API.delete(`/files/${user._id}/${id}`);
           if (res.data.ok) {
             console.log("File successfully deleted");
             return true;

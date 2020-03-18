@@ -22,7 +22,6 @@ exports.get = async id => {
   if (!user) {
     console.log("Could not find an user for the given id!")
   }
-
   return user;
 };
 

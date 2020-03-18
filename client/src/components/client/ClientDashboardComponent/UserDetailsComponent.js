@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Tab,
   Container,
@@ -12,30 +12,77 @@ import {
   Popup,
   Button,
   Image,
-  Form
+  Form,
+  Input
 } from "semantic-ui-react";
 import "../FileComponent/FileComponent.css";
+import { getCurrentUser, updateUserData } from "../../../../src/api/UserApi";
 
 const MyAccount = () => {
-  const myInfo = {
-    firstName: "Edward",
-    secondName: "Mensah",
-    middleName: "D.",
-    birthDate: "09/20/1994",
-    phoneNumber: "123-456-789",
-    email: "edward@gmail",
-    bio: "I am looking forward for my case to be resolved :)"
+  const [userData, setUserData] = useState([]);
+  const [hasUser, setHasUser] = useState(false);
+  const [userID, setUserID] = useState();
+  const [hasUpdate, setHasUpadate] = useState(false);
+  const [mRef, setRef] = useState(null);
+  //let inputFile = useRef(null);
+
+  const loadUserData = async () => {
+    const user = (await getCurrentUser()).data;
+    setUserID(user._id);
+    setUserData(user);
+    setHasUser(true);
+    //console.log(mRef)
   };
+  if (!hasUser) {
+    loadUserData();
+  }
+
+  const updateUser = async () => {
+    const myInfo = {
+      firstName: "Pablo",
+      secondName: "Estrada",
+      middleName: "G.",
+      address: {
+        street: "5654 129th Ave N",
+        city: "Miami",
+        state: "Florida",
+        zip: 44782
+      },
+      contact: {
+        cellPhone: 123456789,
+        email: "edward@gmail.com"
+      },
+      birthDate: "09/20/1994"
+    };
+
+    const data = (await updateUserData(myInfo)).data;
+    // console.log(data);
+    setHasUpadate(true);
+  };
+
+  const getFile = e => {
+    console.log(e);
+  };
+
+  if (!hasUpdate) {
+    //updateUser();
+  }
+
   return (
     <div>
       <Card unstackable fluid centered>
-        <Grid divided="vertically" style={{ margin: 30 }}>
+        <Grid
+          unstackable
+          padded="vertically"
+          divided="vertically"
+          style={{ margin: 30 }}
+        >
           <Grid.Row>
             <h3>Personal Information</h3>
           </Grid.Row>
 
           <Grid.Row>
-            <Grid.Column width={4}>
+            <Grid.Column width={3}>
               <Popup
                 content="Click to Change Profile Picture"
                 trigger={
@@ -44,13 +91,21 @@ const MyAccount = () => {
                     size="huge"
                     rounded
                     fluid
-                  ></Image>
+                    onClick={() => mRef.current.onClick()}
+                  />
                 }
+              />
+              <Input
+                className="invisible"
+                type="file"
+                id="fileUpload"
+                onChange={getFile.bind(this)}
+                ref={r => setRef(r)}
               />
             </Grid.Column>
 
-            <Grid.Column>
-              <Grid.Row textAlign="left">
+            <Grid.Column stretched={true}>
+              <Grid.Row stretched={true} textAlign="left">
                 <Form widths="equal">
                   <Form.Group className="wrap" unstackable>
                     <Form.Input
@@ -58,57 +113,132 @@ const MyAccount = () => {
                       placeholder="First name"
                       labelPosition="left"
                       readOnly
-                      value={myInfo.firstName}
+                      value={!userData ? "" : userData.firstName}
                     />
                     <Form.Input
                       label="Last name"
                       placeholder="Last name"
                       labelPosition="left"
                       readOnly
-                      value={myInfo.secondName}
+                      value={!userData ? "" : userData.secondName}
                     />
                   </Form.Group>
-                  <Form.Input
-                    className="wrap"
-                    label="Middle name"
-                    labelPosition="left"
-                    placeholder="Middle name"
-                    readOnly
-                    value={myInfo.middleName}
-                  />
+
+                  <Form.Group className="wrap" unstackable>
+                    <Form.Input
+                      className={!userData.middleName ? "hidden" : ""}
+                      label="Middle name"
+                      labelPosition="left"
+                      placeholder="Middle name"
+                      readOnly
+                      value={!userData ? "" : userData.middleName}
+                    />
+                    <Form.Input
+                      className={!userData.otherName ? "hidden" : ""}
+                      label="Other name"
+                      placeholder="Other name"
+                      labelPosition="left"
+                      readOnly
+                      value={!userData ? "" : userData.otherName}
+                    />
+                  </Form.Group>
+
                   <Form.Input
                     className="wrap"
                     label="Birth Date"
                     labelPosition="left"
                     placeholder="mm/dd/yy"
                     readOnly
-                    value={myInfo.birthDate}
+                    value={!userData ? "" : userData.birthDate}
                   />
                   <Form.Input
                     className="wrap"
-                    label="Biography"
+                    label="Username"
                     labelPosition="left"
-                    placeholder="Biography"
+                    placeholder="Username"
                     readOnly
-                    value={myInfo.bio}
+                    value={!userData ? "" : userData.username}
                   />
+
                   <Form.Input
                     className="wrap"
                     label="Phone Number"
                     labelPosition="left"
                     placeholder="Phone Number"
                     readOnly
-                    value={myInfo.phoneNumber}
+                    value={
+                      !userData.contact ? null : userData.contact.cellPhone
+                    }
                   />
+
+                  <Form.Group className="wrap" unstackable>
+                    <Form.Input
+                      className={!userData.workPhone ? "hidden" : ""}
+                      label="Work Phone"
+                      labelPosition="left"
+                      placeholder="Work Phone"
+                      readOnly
+                      value={!userData ? "" : userData.workPhone}
+                    />
+                    <Form.Input
+                      className={!userData.homePhone ? "hidden" : ""}
+                      label="Home Phone"
+                      placeholder="Home Phone"
+                      labelPosition="left"
+                      readOnly
+                      value={!userData ? "" : userData.homePhone}
+                    />
+                  </Form.Group>
                 </Form>
               </Grid.Row>
             </Grid.Column>
           </Grid.Row>
 
           <Grid.Row>
+            <h3>Address</h3>
+          </Grid.Row>
+
+          <Grid.Row stretched={true} textAlign="left">
+            <Form widths="equal">
+              <Form.Group className="wrap" unstackable>
+                <Form.Input
+                  label="Street"
+                  placeholder="Street"
+                  labelPosition="left"
+                  readOnly
+                  value={!userData.address ? "" : userData.address.street}
+                />
+                <Form.Input
+                  label="City"
+                  placeholder="City"
+                  labelPosition="left"
+                  readOnly
+                  value={!userData.address ? "" : userData.address.city}
+                />
+              </Form.Group>
+              <Form.Group className="wrap" unstackable>
+                <Form.Input
+                  label="State"
+                  placeholder="State"
+                  labelPosition="left"
+                  readOnly
+                  value={!userData.address ? "" : userData.address.state}
+                />
+                <Form.Input
+                  label="Zip"
+                  placeholder="Zip"
+                  labelPosition="left"
+                  readOnly
+                  value={!userData.address ? "" : userData.address.zip}
+                />
+              </Form.Group>
+            </Form>
+          </Grid.Row>
+
+          <Grid.Row>
             <h3>Email</h3>
           </Grid.Row>
-          <Grid.Row textAlign="left">
+          <Grid.Row stretched={true} textAlign="left">
             <Form widths="equal">
               <Form.Input
                 className="wrap"
@@ -116,7 +246,7 @@ const MyAccount = () => {
                 labelPosition="left"
                 placeholder="Email"
                 readOnly
-                value={myInfo.email}
+                value={!userData.contact ? "" : userData.contact.email}
               />
             </Form>
           </Grid.Row>
@@ -161,10 +291,11 @@ const myTeamsList = [
     url: "https://react.semantic-ui.com/images/wireframe/square-image.png",
     name: "Patrick White",
     id: 7
-  },
+  }
 ];
 
-const defaultProfile = "https://react.semantic-ui.com/images/wireframe/square-image.png";
+const defaultProfile =
+  "https://react.semantic-ui.com/images/wireframe/square-image.png";
 
 const MyTeam = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -183,7 +314,6 @@ const MyTeam = () => {
     myTeamsList.forEach(element => {
       tempData.unshift(element);
     });*/
-
     /*setListOfLawyers(myTeamsList);
     setIsTeamPopulated(true);*/
   };
@@ -235,8 +365,6 @@ const MyTeam = () => {
     setCurrentPage(activePage);
   };
 
-  
-
   const myLawyersList = allTeamListInPagination.map(lawyer => {
     return (
       <Table.Body>
@@ -251,6 +379,9 @@ const MyTeam = () => {
               size="tiny"
               rounded
               fluid
+              style={{width:70, height:70}}
+              ui={true}
+              wrapped={true}
             ></Image>
           </Table.Cell>
 
@@ -270,34 +401,30 @@ const MyTeam = () => {
         <Table
           attached="bottom"
           size="small"
-          unstackable="true"
+          unstackable={true}
           singleLine
           fixed
+          padded="very"
         >
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Profile Picture</Table.HeaderCell>
               <Table.HeaderCell>Name</Table.HeaderCell>
               <Table.HeaderCell>
-                <div className="actions">
-                  <div className="autoMargin">
-                    <Search
-                      loading={isLoading}
-                      input="text"
-                      showNoResults={false}
-                      actionPosition="left"
-                      placeholder="Search Lawyer..."
-                      onSearchChange={filterTeamByText}
-                    ></Search>
-                  </div>
-                </div>
+                <Search
+                  loading={isLoading}
+                  input="text"
+                  showNoResults={false}
+                  placeholder="Search Lawyer..."
+                  onSearchChange={filterTeamByText}
+                ></Search>
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           {myLawyersList}
           <Table.Footer>
             <Table.Row>
-              <Table.HeaderCell colSpan="2">
+              <Table.HeaderCell colSpan="3">
                 <Menu floated="right" pagination>
                   <Pagination
                     pointing
@@ -307,24 +434,24 @@ const MyTeam = () => {
                     onPageChange={setPageChange}
                   ></Pagination>
                 </Menu>
+                <div>
+                  <Popup
+                    content="Contact the team handling your case"
+                    trigger={
+                      <Button
+                        floated="left"
+                        icon
+                        inverted
+                        labelPosition="left"
+                        color="green"
+                        size="small"
+                      >
+                        <Icon name="chat" /> Contact My Team
+                      </Button>
+                    }
+                  />
+                </div>
               </Table.HeaderCell>
-              <div className="center">
-                      <Popup
-                        content="Contact the team handling your case"
-                        trigger={
-                          <Button
-                            floated="left"
-                            icon
-                            inverted
-                            labelPosition="left"
-                            color="green"
-                            size="small"
-                          >
-                            <Icon name="chat" /> Contact My Team
-                          </Button>
-                        }
-                      />
-                    </div>
             </Table.Row>
           </Table.Footer>
         </Table>
@@ -342,6 +469,7 @@ const UserDetailsComponent = () => {
   return (
     <Container>
       <Tab
+      renderActiveOnly={true}
         menu={{ fluid: true, vertical: true, tabular: true }}
         panes={panes}
       />

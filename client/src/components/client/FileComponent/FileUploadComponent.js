@@ -11,11 +11,14 @@ import {
   TransitionablePortal
 } from "semantic-ui-react";
 import axios from "axios";
+import {getCurrentUser} from '../../../api/UserApi'
 
 const FileUploadComponent = props => {
   const [file, setFile] = useState(null);
   const [showUploadProgress, setShowUploadProgress] = useState(false);
   const [percent, setPercent] = useState(0);
+  const [userID, setUserID] = useState(null)
+  const [gotUserID, setGotUserID] = useState(false)
   const [portalProp, setPortalProp] = useState({
     color: "red",
     buttonText: "Cancel",
@@ -26,6 +29,16 @@ const FileUploadComponent = props => {
     e.preventDefault();
     setFile(e.target.files);
   };
+
+  const getUserData = async () => {
+    const user = (await getCurrentUser()).data;
+    setUserID(user._id);
+    setGotUserID(true)
+  }
+
+  if(!gotUserID){
+    getUserData();
+  }
 
   const getFileSize = fileSize => {
     const gb = 10e8,
@@ -95,7 +108,7 @@ const FileUploadComponent = props => {
               };
 
               axios
-                .post("/files/", fileToStore)
+                .post(`/files/${userID}`, fileToStore)
                 .then(res => {
                   setPortalProp({
                     color: "green",
