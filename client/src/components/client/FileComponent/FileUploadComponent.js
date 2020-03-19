@@ -11,14 +11,16 @@ import {
   TransitionablePortal
 } from "semantic-ui-react";
 import axios from "axios";
-import {getCurrentUser} from '../../../api/UserApi'
+import { getCurrentUser } from "../../../api/UserApi";
+import Cookies from "js-cookie";
+import API from "../../../api/BaseApi.js";
 
 const FileUploadComponent = props => {
   const [file, setFile] = useState(null);
   const [showUploadProgress, setShowUploadProgress] = useState(false);
   const [percent, setPercent] = useState(0);
-  const [userID, setUserID] = useState(null)
-  const [gotUserID, setGotUserID] = useState(false)
+  const [userID, setUserID] = useState(null);
+  const [gotUserID, setGotUserID] = useState(false);
   const [portalProp, setPortalProp] = useState({
     color: "red",
     buttonText: "Cancel",
@@ -33,10 +35,10 @@ const FileUploadComponent = props => {
   const getUserData = async () => {
     const user = (await getCurrentUser()).data;
     setUserID(user._id);
-    setGotUserID(true)
-  }
+    setGotUserID(true);
+  };
 
-  if(!gotUserID){
+  if (!gotUserID) {
     getUserData();
   }
 
@@ -100,16 +102,16 @@ const FileUploadComponent = props => {
             .then(result => {
               console.log("We got response from s3");
 
-              const fileToStore = {
-                name: fileName,
-                type: fileType,
-                size: fileSize,
-                url: url
-              };
-
-              axios
-                .post(`/files/${userID}`, fileToStore)
-                .then(res => {
+              const postFileInDatabse = async () => {
+                const fileToStore = {
+                  name: fileName,
+                  type: fileType,
+                  size: fileSize,
+                  url: url
+                };
+                await API.post("/files", fileToStore, {
+                  headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+                }).then(res => {
                   setPortalProp({
                     color: "green",
                     buttonText: "Done!",
@@ -117,6 +119,8 @@ const FileUploadComponent = props => {
                   });
                   props.setIsFilesPopulated(false);
                 });
+              };
+              postFileInDatabse();
             })
             .catch(error => {
               alert("ERROR: " + JSON.stringify(error));
@@ -180,7 +184,9 @@ const FileUploadComponent = props => {
             >
               <div>
                 <div className="center">
-                  <h3 align="center">{portalProp["text"]}</h3>
+                  <h3 style={{ textTransform: "capitalize" }} align="center">
+                    {portalProp["text"]}
+                  </h3>
                 </div>
 
                 <div>

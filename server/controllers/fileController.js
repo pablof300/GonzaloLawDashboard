@@ -1,4 +1,5 @@
 const fileDAO = require("../dao/FileDAO");
+const userDA0 = require("../dao/UserDAO");
 
 const catchErrors = async (res, f) => {
   try {
@@ -30,17 +31,16 @@ exports.get = async (req, res) =>
     return fileDAO.get(req.params.id);
   });
 
-exports.update = async (req, res) =>
-  catchErrors(res, async () => {
-    return fileDAO.update(req.params.id, req.body);
-  });
-
 exports.create = async (req, res) =>
   catchErrors(res, async () => {
-    return fileDAO.create(req.body);
+    const userId = req.userId;
+    const files = await fileDAO.create(req.body);
+    return userDA0.createFileByUpdate(userId, files);
   });
 
 exports.delete = async (req, res) =>
   catchErrors(res, async () => {
+    const userId = req.userId;
+    await userDA0.deleteFileById(userId, req.params.id);
     return fileDAO.delete(req.params.id);
   });

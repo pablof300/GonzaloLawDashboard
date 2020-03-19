@@ -13,8 +13,7 @@ import {
 } from "semantic-ui-react";
 import "./FileComponent.css";
 import FileUploadComponent from "./FileUploadComponent";
-import { getFiles, deleteFiles } from "../../../api/FilesApi";
-
+import { getUserFiles, deleteFilesFromUser } from "../../../../src/api/UserApi";
 
 const FileComponent = () => {
   const [listOfFiles, setListOfFiles] = useState([]);
@@ -37,19 +36,8 @@ const FileComponent = () => {
   let allFileListInPagination = [];
 
   const loadFiles = async () => {
-    const data = (await getFiles()).data
-    let tempData = []
-    /**
-     * dont get rid of this logic {tempData}
-     * if you have a way of making it so recent upload shows first, you can rid
-     * of it. If not, then let it be like this
-     * 
-     */
-    data.forEach(element => {
-      tempData.unshift(element) 
-    });
-
-    setListOfFiles(tempData);
+    const data = await getUserFiles();
+    setListOfFiles(data);
     setIsFilesPopulated(true);
   };
 
@@ -57,10 +45,10 @@ const FileComponent = () => {
     loadFiles();
   }
 
-  const filterFilesByText = async (e, { value }) => {
+  const filterFilesByText = (e, { value }) => {
     setIsLoading(true);
 
-    const results = await listOfFiles.filter(file => {
+    const results = listOfFiles.filter(file => {
       return (
         value.length > 0 &&
         file.name.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
@@ -111,16 +99,16 @@ const FileComponent = () => {
     const id = confirmDeletion["fileID"];
     const fileName = confirmDeletion["fileName"];
 
-    const fileIsDeleted = await deleteFiles(fileName, id);
+    const fileIsDeleted = await deleteFilesFromUser(fileName, id);
     if (fileIsDeleted) {
-        setIsFilesPopulated(false);
-        setConfirmDeletion({
-          enabled: false,
-          fileID: null,
-          fileName: null
-        });
-      }
-    };
+      setIsFilesPopulated(false);
+      setConfirmDeletion({
+        enabled: false,
+        fileID: null,
+        fileName: null
+      });
+    }
+  };
 
   const openFile = url => {
     window.open(url, "_blank");

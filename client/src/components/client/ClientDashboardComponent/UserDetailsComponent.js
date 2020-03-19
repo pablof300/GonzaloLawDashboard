@@ -15,57 +15,128 @@ import {
   Form,
   Input
 } from "semantic-ui-react";
+import axios from "axios";
 import "../FileComponent/FileComponent.css";
 import { getCurrentUser, updateUserData } from "../../../../src/api/UserApi";
 
+const defaultImage = "https://react.semantic-ui.com/images/wireframe/image.png";
+
 const MyAccount = () => {
   const [userData, setUserData] = useState([]);
-  const [hasUser, setHasUser] = useState(false);
-  const [userID, setUserID] = useState();
-  const [hasUpdate, setHasUpadate] = useState(false);
-  const [mRef, setRef] = useState(null);
-  //let inputFile = useRef(null);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const [isUserDataUpdated, setIsUserDataUpdated] = useState(false);
 
   const loadUserData = async () => {
     const user = (await getCurrentUser()).data;
-    setUserID(user._id);
     setUserData(user);
-    setHasUser(true);
-    //console.log(mRef)
+    setIsUserLoaded(true);
   };
-  if (!hasUser) {
+  if (!isUserLoaded) {
     loadUserData();
   }
 
+  /**
+   * updateUser()
+   * this function would be used to update user information except email and password
+   * maybe we should ask our clients if they would want to enable their clients edit stuffs and which stuffs
+   */
+  //
   const updateUser = async () => {
+    //dummy so disregard
     const myInfo = {
-      firstName: "Pablo",
-      secondName: "Estrada",
-      middleName: "G.",
+      firstName: "Peter",
+      secondName: "Brown",
+      middleName: "White",
+      otherName: "BoneCracker",
       address: {
-        street: "5654 129th Ave N",
-        city: "Miami",
+        street: "7864 137th Ave W",
+        city: "Orlando",
         state: "Florida",
-        zip: 44782
+        zip: 4567
       },
       contact: {
-        cellPhone: 123456789,
-        email: "edward@gmail.com"
+        cellPhone: "345786345",
+        email: "peter@gmail.com",
+        homePhone: 345223561
       },
-      birthDate: "09/20/1994"
+      birthDate: "03/08/1998"
     };
 
     const data = (await updateUserData(myInfo)).data;
-    // console.log(data);
-    setHasUpadate(true);
+    if (data) {
+      /**
+       * show success Alert to client
+       */
+    }
+  };
+
+  const upload = async (fileName, fileType, file) => {
+    console.log("Preparing to upload file");
+    axios
+      .post("/fileAws", {
+        fileName: fileName,
+        fileType: fileType
+      })
+      .then(response => {
+        let returnData = response.data.data.returnData;
+        let signedRequest = returnData.signedRequest;
+        const url = returnData.url;
+        let options = {
+          headers: {
+            "Content-Type": fileType
+          }
+        };
+
+        axios
+          .put(signedRequest, file[0], options)
+          .then(result => {
+            console.log("We got response from s3");
+
+            const userData = {
+              imageUrl: url
+            };
+            updateUserData(userData).then(res => {
+              if (res) {
+                alert("Profile Picture updated successfully");
+              }
+            });
+          })
+          .catch(error => {
+            alert(JSON.stringify(error));
+          });
+      })
+      .catch(error => {
+        alert(JSON.stringify(error));
+      });
+  };
+
+  const checkImageType = fileType => {
+    if (fileType === "png" || fileType === "jpeg" || fileType === "jpg") {
+      return true;
+    }
+    return false;
   };
 
   const getFile = e => {
-    console.log(e);
+    e.preventDefault();
+    const file = e.target.files;
+    let fileParts;
+    if (file[0] && file[0].name) {
+      fileParts = file[0].name.split(".");
+    }
+    const fileName = fileParts[0];
+    const fileType = fileParts[1];
+    console.log(fileType);
+    if (checkImageType(fileType.toLowerCase())) {
+      upload(fileName, fileType, file);
+    } else {
+      alert("ERROR: Please upload a valid image");
+    }
   };
 
-  if (!hasUpdate) {
-    //updateUser();
+  //disregard only used in test mode and not dev mode
+  if (!isUserDataUpdated) {
+    // updateUser();
   }
 
   return (
@@ -82,25 +153,28 @@ const MyAccount = () => {
           </Grid.Row>
 
           <Grid.Row>
-            <Grid.Column width={3}>
+            <Grid.Column width={4}>
+              <Image
+                src={!userData.imageUrl ? defaultImage : userData.imageUrl}
+                size="huge"
+                rounded
+                fluid
+              />
               <Popup
                 content="Click to Change Profile Picture"
                 trigger={
-                  <Image
-                    src="https://react.semantic-ui.com/images/wireframe/image.png"
-                    size="huge"
-                    rounded
-                    fluid
-                    onClick={() => mRef.current.onClick()}
-                  />
+                  <div style={{ marginTop: 20 }}>
+                    <label for="file" class="ui icon button">
+                      Upload
+                    </label>
+                    <input
+                      onChange={getFile}
+                      type="file"
+                      id="file"
+                      style={{ display: "none" }}
+                    />
+                  </div>
                 }
-              />
-              <Input
-                className="invisible"
-                type="file"
-                id="fileUpload"
-                onChange={getFile.bind(this)}
-                ref={r => setRef(r)}
               />
             </Grid.Column>
 
@@ -144,7 +218,7 @@ const MyAccount = () => {
                   </Form.Group>
 
                   <Form.Input
-                    className="wrap"
+                    className={!userData.birthDate ? "hidden" : "wrap"}
                     label="Birth Date"
                     labelPosition="left"
                     placeholder="mm/dd/yy"
@@ -323,10 +397,10 @@ const MyTeam = () => {
   }
   loadTeam();*/
 
-  const filterTeamByText = async (e, { value }) => {
+  const filterTeamByText = (e, { value }) => {
     setIsLoading(true);
 
-    const results = await listOfLawyers.filter(lawyer => {
+    const results = listOfLawyers.filter(lawyer => {
       return (
         value.length > 0 &&
         lawyer.name.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
@@ -379,7 +453,7 @@ const MyTeam = () => {
               size="tiny"
               rounded
               fluid
-              style={{width:70, height:70}}
+              style={{ width: 70, height: 70 }}
               ui={true}
               wrapped={true}
             ></Image>
@@ -469,7 +543,7 @@ const UserDetailsComponent = () => {
   return (
     <Container>
       <Tab
-      renderActiveOnly={true}
+        renderActiveOnly={true}
         menu={{ fluid: true, vertical: true, tabular: true }}
         panes={panes}
       />
