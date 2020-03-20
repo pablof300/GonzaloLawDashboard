@@ -3,7 +3,7 @@ import { Button, Card, Icon, Image, List, Container } from "semantic-ui-react";
 import AddClientForm from "./AddClientForm";
 import ClientCard from "./ClientCard";
 import Popup from "reactjs-popup";
-import "./CSS/Admin.css";
+import "../Admin.css";
 
 const ClientList = () => {
   function AddClient(e) {

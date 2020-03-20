@@ -94,16 +94,14 @@ const FileUploadComponent = props => {
                 url: url
               };
 
-              axios
-                .post("/files/", fileToStore)
-                .then(res => {
-                  setPortalProp({
-                    color: "green",
-                    buttonText: "Done!",
-                    text: "Uploaded Successfully"
-                  });
-                  props.setIsFilesPopulated(false);
+              axios.post("/files/", fileToStore).then(res => {
+                setPortalProp({
+                  color: "green",
+                  buttonText: "Done!",
+                  text: "Uploaded Successfully"
                 });
+                props.setIsFilesPopulated(false);
+              });
             })
             .catch(error => {
               alert("ERROR: " + JSON.stringify(error));
