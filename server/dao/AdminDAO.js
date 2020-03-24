@@ -1,4 +1,5 @@
 const Admin = require("../models/Admin.js").Model;
+const User = require("../models/User.js").Model;
 const { NotFoundError } = require("../util/exceptions");
 
 exports.create = async adminParams => {
@@ -78,14 +79,17 @@ exports.getClient = async (id, client) => {
   //check if this is correct
   const admin = await Admin.findById(id);
   if (!admin) throw new NotFoundError();
+
   clientList = admin.clients;
   for (var i = 0; i < clientList.length; i++) {
-    if (clientList[i].username == client.username) {
-      return clientList[i];
+    if (clientList[i] == client) {
+      const user = await User.findById(client);
+      if (!user) throw new NotFoundError();
+
+      return user;
     }
   }
-
-  return admin;
+  throw new NotFoundError();
 };
 
 /*Figure out how to implement Todos later***********
