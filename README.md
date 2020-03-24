@@ -35,7 +35,7 @@ For authentication to work, you must be running the backend server and connected
 
 1) Start the backend server (make sure to do *npm install* before *npm start*)
 2) Make the following POST request:
-`http://localhost:5000/auth/login?username=pablo&password=123456`
+`http://localhost:5000/auth/login/user?username=pablo&password=123456`
 Obviously, replace 'pablo' and '123456' with whatever user information your have in your database. However, if you have the seeding data, 'pablo' and '123456' are valid.
 3) You will get a response like this:
 
