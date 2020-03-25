@@ -9,13 +9,13 @@ exports.getAll = async (req, res) => {
 
 exports.get = async (req, res) => {
   catchErrors(res, async () => {
-    return adminDAO.get(req.params.id);
+    return adminDAO.get(req.adminId); //gets the admin from the jwt token
   });
 }
 
 exports.update = async (req, res) => {
   catchErrors(res, async () => {
-    return adminDAO.update(req.params.id, req.body);
+    return adminDAO.update(req.adminId, req.body);
   });
 }
 
@@ -26,20 +26,20 @@ exports.create = async (req, res) =>
 
 exports.delete = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.delete(req.params.id);
+    return adminDAO.delete(req.adminId);
   });
 
 exports.getClient = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.getClient(req.params.id, req.params.clientId);
+    return adminDAO.getClient(req.adminId, req.params.clientId);
   });
 
 exports.removeClient = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.removeClient(req.params.id, req.params.clientId);
+    return adminDAO.removeClient(req.adminId, req.params.clientId);
   });
 
 exports.addClient = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.addClient(req.params.id, req.params.clientId);
+    return adminDAO.addClient(req.adminId, req.params.clientId);
   });
