@@ -16,6 +16,5 @@ const Schema = new mongoose.Schema({
   });
 
 
-  //CANT Figure out how to get multiple indicies in the array to be populated
-  //and show up in db
+ 
 exports.Model = mongoose.model("Case", Schema);

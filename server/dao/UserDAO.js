@@ -1,4 +1,5 @@
 const User = require("../models/User.js").Model;
+const CaseDAO = require("./CaseDAO");
 const { NotFoundError } = require("../util/exceptions");
 
 // TODO
@@ -9,11 +10,11 @@ exports.create = async userParams => {
   if (await User.exists({ username: userParams.username })) {
     throw Error("username already taken");
   }
-
   return await new User(userParams).save();
 };
 
 exports.getAll = async () => {
+  console.log("got sent to all in user dao");
   return await User.find({}).exec();
 };
 
@@ -22,7 +23,7 @@ exports.get = async id => {
   if (!user) {
     console.log("Could not find an user for the given id!")
   }
-
+  
   return user;
 };
 
@@ -42,6 +43,25 @@ exports.update = async (id, updatedData) => {
   return exports.get(id);
 };
 
+exports.createCaseByUpdate = async (id, data) => {
+  var newCase = await CaseDAO.create(data);
+  await User.findOneAndUpdate({ _id: id }, { $push: { cases: newCase } }).exec(
+    (err, data) => {
+      if (err) console.log("error: " + err);
+    }
+  );
+  return CaseDAO.get(newCase.id);
+};
+
+exports.deleteCaseById = async (id, caseID) => {
+  await User.findOneAndUpdate({ _id: id }, { $pull: { cases: caseID } }).exec(
+    (err, data) => {
+      if (err) console.log("error: " + err);
+    }
+  );
+  return exports.getCases(id);
+};
+
 exports.delete = async id => {
   const user = await User.findByIdAndDelete(id);
   if (!user) throw new NotFoundError();
@@ -52,3 +72,24 @@ exports.delete = async id => {
 exports.deleteAll = async () => {
   await User.deleteMany();
 };
+
+exports.getCases = async id => {
+  const user = await User.findById(id);
+  if (!user) {
+    console.log("Could not find a user for the given id!")
+  }
+  return user.cases;
+  };
+
+exports.getCase = async (id, caseid) => {
+    const user = await User.findById(id);
+    if (!user) {
+      console.log("Could not find a user for the given id!")
+    }
+    
+    const big = await exports.getCases(id);
+    const temp = big.includes(caseid);
+    if (!temp) throw new NotFoundError();
+
+    return CaseDAO.get(caseid);
+    };    

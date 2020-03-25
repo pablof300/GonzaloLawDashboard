@@ -3,18 +3,12 @@ const { NotFoundError } = require("../util/exceptions");
 
 
 
-
 exports.create = async caseParams => {
-    console.log("made it to caseDAO");
-     /* if (await Case.exists({ _id: id })) {
-        throw Error("File already exist");
-      }  */
       let newCase = new Case(caseParams);
       newCase.save().then(data => {        
     }).catch(err => {
         console.log(err) });
-    console.log("made it past saving the listing");
-    return;
+    return newCase;
 };
 
 
@@ -23,8 +17,8 @@ exports.getAll = async () => {
 };
 
 exports.get = async id => {
-    console.log("sent to .get");
-     const tempCase = await Case.findById(id);
+    
+    const tempCase = await Case.findById(id);
     if (!tempCase) {
       console.log("Could not find a case for the given id!")
     }
@@ -40,7 +34,7 @@ exports.update = async (id, updatedData) => {
     
     return; //exports.get(id);
 };
-
+//works
 exports.delete = async id => {
     console.log("made it to caseDAO!");
     const tempCase = await Case.findByIdAndDelete(id);
@@ -50,5 +44,6 @@ exports.delete = async id => {
 };
 
 exports.deleteAll = async () => {
-    await Case.deleteMany();
+  console.log("got sent to deleteALL fuck!");  
+  await Case.deleteMany();
 };
