@@ -15,7 +15,7 @@ router.get(
 );
 router.put(
   "/:id",
-  //passport.authenticate("adminLoggedIn", { session: false }),
+  passport.authenticate("adminLoggedIn", { session: false }),
   caseController.update
 );
 router.post(
@@ -23,10 +23,9 @@ router.post(
   passport.authenticate("loggedIn", { session: false }),
   caseController.create
 );
-//need to make admin only, make sure other functions work then do that!
 router.delete(
   "/:id",
-  //passport.authenticate("adminLoggedIn", { session: false }),
+  passport.authenticate("adminLoggedIn", { session: false }),
   caseController.delete
 );
 

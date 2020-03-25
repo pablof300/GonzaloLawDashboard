@@ -27,7 +27,7 @@ router.delete(
 );
 
 //Routes for cases through the user...mainly for admin usage
-//get all cases for a specific user
+
 router.get(
   "/:id/cases",
   passport.authenticate("loggedIn", { session: false}),
@@ -48,7 +48,7 @@ router.post(
 
 router.delete(
 "/:id/:caseid",
-//passport.authenticate("adminLoggedIn", { session: false}),
+passport.authenticate("adminLoggedIn", { session: false}),
 userController.deleteCase
 );
 
