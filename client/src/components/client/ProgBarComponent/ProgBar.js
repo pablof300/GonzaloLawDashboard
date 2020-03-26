@@ -24,12 +24,21 @@ const progBar = props => {
   );
   */
 
-  const bar = props.cases.map(function(element) {
-    <Step>
-      <Step.Content>
-        <Step.Title>element.</Step.Title>
-      </Step.Content>
-    </Step>;
+  //get id for current user
+  //const id = Cookies.get("jwt");
+
+  //pass id into case API to get all cases for that user
+  const cases = ["1", "2", "3", "4"];
+
+  const bar = cases.map(function(element) {
+    //check if step has been completed before returning it
+    return (
+      <Step>
+        <Step.Content>
+          <Step.Title>element.</Step.Title>
+        </Step.Content>
+      </Step>
+    );
   });
 
   return (
