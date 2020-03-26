@@ -7,17 +7,17 @@ const progBar = props => {
     <Step.Group style={{ overflow: "auto" }} size="small" ordered>
       <Step completed>
         <Step.Content>
-          <Step.Title>lorum ipsum</Step.Title>
+          <Step.Title>First step</Step.Title>
         </Step.Content>
       </Step>
       <Step active>
         <Step.Content>
-          <Step.Title>sumas clos</Step.Title>
+          <Step.Title>Second step</Step.Title>
         </Step.Content>
       </Step>
       <Step disabled>
         <Step.Content>
-          <Step.Title>froman loman</Step.Title>
+          <Step.Title>Third step</Step.Title>
         </Step.Content>
       </Step>
     </Step.Group>

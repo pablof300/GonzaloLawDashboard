@@ -61,17 +61,14 @@ const FileUploadComponent = props => {
       });
       console.log("Preparing to upload file");
       axios
-        .post("http://localhost:5000/fileAws", {
+        .post("/fileAws", {
           fileName: fileName,
           fileType: fileType
         })
         .then(response => {
           let returnData = response.data.data.returnData;
           let signedRequest = returnData.signedRequest;
-          //console.log(returnData)
           const url = returnData.url;
-          //console.log("Received signed request " + signedRequest)
-
           let options = {
             headers: {
               "Content-Type": fileType
@@ -97,16 +94,14 @@ const FileUploadComponent = props => {
                 url: url
               };
 
-              axios
-                .post("http://localhost:5000/files/", fileToStore)
-                .then(res => {
-                  setPortalProp({
-                    color: "green",
-                    buttonText: "Done!",
-                    text: "Uploaded Successfully"
-                  });
-                  props.setIsFilesPopulated(false);
+              axios.post("/files/", fileToStore).then(res => {
+                setPortalProp({
+                  color: "green",
+                  buttonText: "Done!",
+                  text: "Uploaded Successfully"
                 });
+                props.setIsFilesPopulated(false);
+              });
             })
             .catch(error => {
               alert("ERROR: " + JSON.stringify(error));

@@ -11,9 +11,9 @@ import {
   TransitionablePortal,
   Segment
 } from "semantic-ui-react";
-import "./fileComponent.css";
-import FileUploadComponent from "./fileUploadComponent";
-import axios from "axios";
+import "./FileComponent.css";
+import FileUploadComponent from "./FileUploadComponent";
+import { getFiles, deleteFiles } from "../../../api/FilesApi";
 
 // TODO:
 // - Refactor confirmDeletion to be by fileId not testFileNamesData
@@ -40,13 +40,7 @@ const FileComponent = () => {
   let allFileListInPagination = [];
 
   const loadFiles = async () => {
-    const res = await axios.get("http://localhost:5000/files");
-    const data = res.data.data;
-    let tempfiles = [];
-    data.forEach(element => {
-      tempfiles.unshift(element);
-    });
-    setListOfFiles(tempfiles);
+    setListOfFiles((await getFiles()).data);
     setIsFilesPopulated(true);
   };
 
@@ -104,33 +98,19 @@ const FileComponent = () => {
     setConfirmDeletion({ enabled: false, fileID: null, fileName: null });
   };
 
-  const deleteFile = () => {
+  const deleteFile = async () => {
     const id = confirmDeletion["fileID"];
     const fileName = confirmDeletion["fileName"];
 
-    axios
-      .delete(`http://localhost:5000/fileAws/${fileName}`)
-      .then(res => {
-        if (res.data.success) {
-          const deleteFromDB = async () => {
-            const res = await axios.delete(`http://localhost:5000/files/${id}`);
-            if (res.data.ok) {
-              console.log("file deleted");
-              setIsFilesPopulated(false);
-              setConfirmDeletion({
-                enabled: false,
-                fileID: null,
-                fileName: null
-              });
-            }
-          };
-
-          deleteFromDB();
-        }
-      })
-      .catch(error => {
-        alert("DELETE ERROR: " + JSON.stringify(error));
+    const fileIsDeleted = await deleteFiles(fileName, id);
+    if (fileIsDeleted) {
+      setIsFilesPopulated(false);
+      setConfirmDeletion({
+        enabled: false,
+        fileID: null,
+        fileName: null
       });
+    }
   };
 
   const openFile = url => {
@@ -221,11 +201,9 @@ const FileComponent = () => {
 
   return (
     <div>
-      <div className="keepbottom container">
+      <div>
         <Card unstackable fluid centered raised>
-          <div className="center">
-            <h2 align="center">Files Upload</h2>
-          </div>
+          <h1>Files</h1>
           <Table
             attached="bottom"
             size="small"

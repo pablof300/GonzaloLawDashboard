@@ -1,0 +1,13 @@
+.header {
+    background-color: transparent;
+    margin: 0;
+}
+
+.container {
+    padding-top: 3vh !important;
+}
+
+.main_container{
+    height: 100%;
+}
+

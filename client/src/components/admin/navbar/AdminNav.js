@@ -1,17 +1,17 @@
-import React from 'react'
-import { Dropdown, Icon, Image, Menu, Segment } from 'semantic-ui-react'
-import logo from "../../assets/LogoCropped.png";
+import React from "react";
+import { Dropdown, Icon, Image, Menu } from "semantic-ui-react";
+import logo from "../../../assets/LogoCropped.png";
 
 // TODO: Update <Search> usage after its will be implemented
 
 const AdminNav = () => (
   <div>
-    <Menu attached='top'>
-      <Dropdown item icon='bars' simple>
+    <Menu attached="top">
+      <Dropdown item icon="bars" simple>
         <Dropdown.Menu>
           <Dropdown.Item>
-            <Icon name='dropdown' />
-            <span className='text'>Create New...</span>
+            <Icon name="dropdown" />
+            <span className="text">Create New...</span>
 
             <Dropdown.Menu>
               <Dropdown.Item>Case</Dropdown.Item>
@@ -24,11 +24,11 @@ const AdminNav = () => (
           <Dropdown.Item>Sign Out</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      <div className='Test'>
-        <Image className='Logo' src={logo} align='right'/>
+      <div className="Test">
+        <Image className="Logo" src={logo} align="right" />
       </div>
     </Menu>
   </div>
-)
+);
 
-export default AdminNav
+export default AdminNav;

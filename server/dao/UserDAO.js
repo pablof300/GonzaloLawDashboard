@@ -19,7 +19,9 @@ exports.getAll = async () => {
 
 exports.get = async id => {
   const user = await User.findById(id);
-  if (!user) throw new NotFoundError();
+  if (!user) {
+    console.log("Could not find an user for the given id!")
+  }
 
   return user;
 };

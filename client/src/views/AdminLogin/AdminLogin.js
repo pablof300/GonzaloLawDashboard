@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import logo from "../../assets/HorizontalLogo.png";
 import MessageComponent from "../../components/util/MessageComponent/MessageComponent";
-import { authenticateUser } from "../../api/AuthApi";
+import { authenticateAdmin } from "../../api/AuthApi";
 import { Redirect } from "react-router-dom";
-import "./Login.css";
+import "./AdminLogin.css";
 import {
   Grid,
   Segment,
@@ -15,7 +15,7 @@ import {
   Image
 } from "semantic-ui-react";
 
-function Login() {
+function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,7 +26,7 @@ function Login() {
       setError("Missing username or password");
       return;
     }
-    let authResponse = await authenticateUser(username, password);
+    let authResponse = await authenticateAdmin(username, password);
     if (authResponse.token) {
       setSuccessfulLogin(true);
     } else {
@@ -35,7 +35,7 @@ function Login() {
   };
 
   if (successfulLogin) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/admindashboard" />;
   }
 
   return (
@@ -80,4 +80,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default AdminLogin;
