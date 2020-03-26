@@ -1,6 +1,7 @@
 const userDAO = require("../dao/UserDAO");
 const catchErrors = require("../util/catchErrors");
 
+
 exports.getAll = async (req, res) =>
 catchErrors(res, async () => {
   return userDAO.getAll();
@@ -8,8 +9,6 @@ catchErrors(res, async () => {
 
 exports.get = async (req, res) => 
   catchErrors(res, async () => {
-    console.log("sent there good");
-    console.log("req.userID is: " + req.userId)
     return userDAO.get(req.userId);
   }); 
 
@@ -40,8 +39,13 @@ exports.getCases = async (req, res) =>
   
 exports.createCase = async (req, res) => 
   catchErrors(res, async () => {
-    return userDAO.createCaseByUpdate(req.params.id, req.body);
+    return userDAO.createCase(req.params.id, req.body);
   });
+
+exports.updateCase = async (req, res) => 
+  catchErrors(res, async () => {
+    return userDAO.updateCase(req.params.id, req.body, req.params.caseid);
+  });  
 
 exports.deleteCase = async (req, res) =>
   catchErrors(res, async () => {

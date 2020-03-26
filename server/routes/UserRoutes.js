@@ -46,6 +46,12 @@ router.post(
   userController.createCase
 );
 
+router.put(
+  "/:id/:caseid",
+  passport.authenticate("adminLoggedIn", { session: false}),
+  userController.updateCase
+);
+
 router.delete(
 "/:id/:caseid",
 passport.authenticate("adminLoggedIn", { session: false}),

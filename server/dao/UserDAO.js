@@ -2,10 +2,6 @@ const User = require("../models/User.js").Model;
 const CaseDAO = require("./CaseDAO");
 const { NotFoundError } = require("../util/exceptions");
 
-// TODO
-// 1. Add support for a prod/dev config without hardcoded vars
-// 2. Possible memoization of db connection
-
 exports.create = async userParams => {
   if (await User.exists({ username: userParams.username })) {
     throw Error("username already taken");
@@ -14,7 +10,6 @@ exports.create = async userParams => {
 };
 
 exports.getAll = async () => {
-  console.log("got sent to all in user dao");
   return await User.find({}).exec();
 };
 
@@ -43,7 +38,7 @@ exports.update = async (id, updatedData) => {
   return exports.get(id);
 };
 
-exports.createCaseByUpdate = async (id, data) => {
+exports.createCase = async (id, data) => {
   var newCase = await CaseDAO.create(data);
   await User.findOneAndUpdate({ _id: id }, { $push: { cases: newCase } }).exec(
     (err, data) => {
@@ -92,4 +87,12 @@ exports.getCase = async (id, caseid) => {
     if (!temp) throw new NotFoundError();
 
     return CaseDAO.get(caseid);
-    };    
+    };
+    
+exports.updateCase = async (id, data, caseid) => {
+      const user = await User.findById(id);
+      if (!user) {
+        console.log("Could not find a user for the given id!")
+      }
+      return CaseDAO.update(caseid, data);
+      };        
