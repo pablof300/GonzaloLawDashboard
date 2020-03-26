@@ -1,42 +1,8 @@
 import React, { useState } from "react";
 import { Step } from "semantic-ui-react";
 
-/*
-This component takes in an array of case steps that will be retrieved from the database and passed down as props.
-It maps each of those case steps to a step component that will be rendered to the user.
-*/
-
 const progBar = props => {
   /*
-  const progBarItems = props.progBarItems.map(item => {
-    if (item.completed) {
-      return (
-        <Step completed>
-          <Step.Content>
-            <Step.Title>{item.title}</Step.Title>
-          </Step.Content>
-        </Step>
-      );
-    } else if (item.active) {
-      return (
-        <Step active>
-          <Step.Content>
-            <Step.Title>{item.title}</Step.Title>
-          </Step.Content>
-        </Step>
-      );
-    } else {
-      return (
-        <Step disabled>
-          <Step.Content>
-            <Step.Title>{item.title}</Step.Title>
-          </Step.Content>
-        </Step>
-      );
-    }
-  });
-  */
-
   return (
     <Step.Group style={{ overflow: "auto" }} size="small" ordered>
       <Step completed>
@@ -54,6 +20,21 @@ const progBar = props => {
           <Step.Title>froman loman</Step.Title>
         </Step.Content>
       </Step>
+    </Step.Group>
+  );
+  */
+
+  const bar = props.cases.map(function(element) {
+    <Step>
+      <Step.Content>
+        <Step.Title>element.</Step.Title>
+      </Step.Content>
+    </Step>;
+  });
+
+  return (
+    <Step.Group style={{ overflow: "auto" }} size="small" ordered>
+      {bar}
     </Step.Group>
   );
 };
