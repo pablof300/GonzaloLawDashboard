@@ -13,7 +13,7 @@ import {
 } from "semantic-ui-react";
 import "./FileComponent.css";
 import FileUploadComponent from "./FileUploadComponent";
-import { getUserFiles, deleteFilesFromUser } from "../../../../src/api/UserApi";
+import { getAllUserFiles, deleteUserFileById } from "../../../../src/api/UserApi";
 
 const FileComponent = () => {
   const [listOfFiles, setListOfFiles] = useState([]);
@@ -27,16 +27,10 @@ const FileComponent = () => {
   });
   const [isFilesPopulated, setIsFilesPopulated] = useState(false);
 
-  let itemsPerPage = 5;
-  let totalPages;
-  let divisible;
-  let remainder;
-  let startIndex;
-  let endIndex;
-  let allFileListInPagination = [];
+  let itemsPerPage = 5, totalPages, startIndex, endIndex, allFileListInPagination = [];
 
   const loadFiles = async () => {
-    const data = await getUserFiles();
+    const data = await getAllUserFiles();
     setListOfFiles(data);
     setIsFilesPopulated(true);
   };
@@ -76,12 +70,7 @@ const FileComponent = () => {
     } else {
       totalPages = parseInt(listOfFiles.length / itemsPerPage) + 1;
     }
-
-    divisible = parseInt(listOfFiles.length / itemsPerPage);
-    remainder = listOfFiles.length % itemsPerPage;
-
     startIndex = (currentPage - 1) * itemsPerPage;
-    //endIndex = divisible * itemsPerPage;
     endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
 
     for (let i = startIndex; i < endIndex; i++) {
@@ -99,7 +88,7 @@ const FileComponent = () => {
     const id = confirmDeletion["fileID"];
     const fileName = confirmDeletion["fileName"];
 
-    const fileIsDeleted = await deleteFilesFromUser(fileName, id);
+    const fileIsDeleted = await deleteUserFileById(fileName, id);
     if (fileIsDeleted) {
       setIsFilesPopulated(false);
       setConfirmDeletion({
@@ -227,6 +216,8 @@ const FileComponent = () => {
                     <div>
                       <Popup
                         content="Add supporting files"
+                        position='top right'
+                        positionFixed
                         trigger={
                           <Button
                             floated="right"

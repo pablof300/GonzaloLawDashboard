@@ -3,13 +3,9 @@ import "./NavBar.css";
 import {Image} from 'semantic-ui-react';
 import logo from "../../../assets/LogoCropped.png";
 import { Dropdown, Menu, Button } from 'semantic-ui-react'
-import { Redirect } from "react-router-dom";
 
 const NavBar = () => {
 
-  const navigateTo = (routeName) => {
-    return <Redirect to={routeName} />
-  }
   return (
     <Menu>
     <Dropdown item text='Menu'>

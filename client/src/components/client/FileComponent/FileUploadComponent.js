@@ -13,7 +13,6 @@ import {
 import axios from "axios";
 import { getCurrentUser } from "../../../api/UserApi";
 import Cookies from "js-cookie";
-import API from "../../../api/BaseApi.js";
 
 const FileUploadComponent = props => {
   const [file, setFile] = useState(null);
@@ -102,14 +101,14 @@ const FileUploadComponent = props => {
             .then(result => {
               console.log("We got response from s3");
 
-              const postFileInDatabse = async () => {
+              const postFileInDatabase = async () => {
                 const fileToStore = {
                   name: fileName,
                   type: fileType,
                   size: fileSize,
                   url: url
                 };
-                await API.post("/files", fileToStore, {
+                axios.post("/files", fileToStore, {
                   headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
                 }).then(res => {
                   setPortalProp({
@@ -120,7 +119,7 @@ const FileUploadComponent = props => {
                   props.setIsFilesPopulated(false);
                 });
               };
-              postFileInDatabse();
+              postFileInDatabase();
             })
             .catch(error => {
               alert("ERROR: " + JSON.stringify(error));

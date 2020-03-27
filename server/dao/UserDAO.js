@@ -32,7 +32,7 @@ exports.getByUsername = async username => {
   return user;
 };
 
-exports.createFileByUpdate = async (id, data) => {
+exports.addFileToUser = async (id, data) => {
   await User.findOneAndUpdate({ _id: id }, { $push: { files: data._id } }).exec(
     (err, data) => {
       if (err) console.log("error: " + err);
