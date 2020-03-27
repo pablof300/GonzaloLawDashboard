@@ -9,7 +9,7 @@ const getCurrentUser = async () => {
       return response.data;
     })
     .catch(error => {
-      if (error.response) {
+      if (error !== null && error.response) {
         return { error: error.response.data.error };
       }
       return {
@@ -36,9 +36,9 @@ const getAllUserFiles = async () => {
 const uploadUserProfilePicture = (fileName, fileType, file) => {
   console.log("Preparing to upload Profile Picture");
   API.post("/fileAws", {
-      fileName: fileName,
-      fileType: fileType
-    })
+    fileName: fileName,
+    fileType: fileType
+  })
     .then(response => {
       let returnData = response.data.data.returnData;
       let signedRequest = returnData.signedRequest;
@@ -51,24 +51,23 @@ const uploadUserProfilePicture = (fileName, fileType, file) => {
 
       const uploadToMongo = () => {
         API.put(signedRequest, file[0], options)
-        .then(result => {
-          console.log("We got response from s3");
+          .then(result => {
+            console.log("We got response from s3");
 
-          const userData = {
-            imageUrl: url
-          };
-          updateUserData(userData).then(res => {
-            if (res) {
-              alert("Profile Picture updated successfully");
-            }
+            const userData = {
+              imageUrl: url
+            };
+            updateUserData(userData).then(res => {
+              if (res) {
+                alert("Profile Picture updated successfully");
+              }
+            });
+          })
+          .catch(error => {
+            alert(JSON.stringify(error));
           });
-        })
-        .catch(error => {
-          alert(JSON.stringify(error));
-        });
         uploadToMongo();
-      }
-     
+      };
     })
     .catch(error => {
       alert(JSON.stringify(error));
@@ -140,4 +139,10 @@ const updateUserData = async data => {
   return axiosResponse;
 };
 
-export {uploadUserProfilePicture, getCurrentUser, updateUserData, getAllUserFiles, deleteUserFileById };
+export {
+  uploadUserProfilePicture,
+  getCurrentUser,
+  updateUserData,
+  getAllUserFiles,
+  deleteUserFileById
+};
