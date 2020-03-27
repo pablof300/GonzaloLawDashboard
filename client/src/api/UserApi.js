@@ -49,8 +49,7 @@ const uploadUserProfilePicture = (fileName, fileType, file) => {
         }
       };
 
-      const uploadToMongo = () => {
-        API.put(signedRequest, file[0], options)
+      API.put(signedRequest, file[0], options)
           .then(result => {
             console.log("We got response from s3");
 
@@ -60,14 +59,14 @@ const uploadUserProfilePicture = (fileName, fileType, file) => {
             updateUserData(userData).then(res => {
               if (res) {
                 alert("Profile Picture updated successfully");
+                console.log("Profile Picture updated successfully");
               }
             });
           })
           .catch(error => {
             alert(JSON.stringify(error));
           });
-        uploadToMongo();
-      };
+     
     })
     .catch(error => {
       alert(JSON.stringify(error));

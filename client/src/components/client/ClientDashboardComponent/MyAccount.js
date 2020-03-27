@@ -37,7 +37,6 @@ const MyAccount = () => {
     }
     const fileName = fileParts[0];
     const fileType = fileParts[1];
-    console.log(fileType);
     if (checkImageType(fileType.toLowerCase())) {
         uploadUserProfilePicture(fileName, fileType, file);
     } else {
