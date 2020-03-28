@@ -1,6 +1,7 @@
 const Admin = require("../models/Admin.js").Model;
 const User = require("../models/User.js").Model;
 const { NotFoundError } = require("../util/exceptions");
+const mongoose = require("mongoose");
 
 exports.create = async adminParams => {
   if (await Admin.exists({ username: adminParams.username })) {
@@ -50,39 +51,25 @@ exports.deleteAll = async () => {
 };
 
 exports.removeClient = async (id, client) => {
-  const admin = await Admin.findById(id);
+  const admin = await Admin.findByIdAndUpdate(id,
+    { $pullAll: { clients: [client] } },
+    { new: true },
+    function (err, data) { }
+  );
   if (!admin) throw new NotFoundError();
-  clientList = admin.clients;
-
-  for (var i = 0; i < clientList.length; i++) { //Fix the logic
-    if (clientList[i] == client) {
-      clientList.splice(i, 1);
-    }
-  }
-
-  await Admin.findByIdAndUpdate(id, { clients: clientList });
 
   return admin;
 };
 
 exports.addClient = async (id, client) => {
-  const admin = await Admin.findById(id);
-  if (!admin) throw new NotFoundError();
   const user = await User.findById(client);
   if (!user) throw new NotFoundError();
-  clientList = admin.clients;
 
-  for (var i = 0; i < clientList.length; i++) { //Fix the logic
-    if (clientList[i] == client) {
-      console.log("Client aready in list")
-
-      return admin;
-    }
-  }
-
-  newClientList = admin.clients;
-  newClientList.push(user.id);
-  await Admin.findByIdAndUpdate(id, { clients: newClientList });
+  const admin = await Admin.findByIdAndUpdate(id,
+    { $addToSet: { clients: [client] } },
+    { new: true },
+    function (err, data) { }
+  );
 
   return admin;
 };
@@ -100,13 +87,24 @@ exports.getClient = async (id, client) => {
       return user;
     }
   }
+
   throw new NotFoundError();
 };
 
 exports.getAllClients = async (id) => {
   const admin = await Admin.findById(id);
   if (!admin) throw new NotFoundError();
-  return admin.clients;
+
+  const users = await User.find({
+
+    '_id': {
+      $in: admin.clients
+    }
+
+  });
+
+
+  return users;
 }
 
 /*Figure out how to implement Todos later***********
