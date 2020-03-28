@@ -50,38 +50,49 @@ exports.deleteAll = async () => {
 };
 
 exports.removeClient = async (id, client) => {
-  //check if this is correct
   const admin = await Admin.findById(id);
   if (!admin) throw new NotFoundError();
-  newClientList = admin.clients;
-  for (var i = 0; i < newClientList.length; i++) {
-    if (newClientList[i].username == client.username) {
-      newClientList.splice(i, 1);
+  clientList = admin.clients;
+
+  for (var i = 0; i < clientList.length; i++) { //Fix the logic
+    if (clientList[i] == client) {
+      clientList.splice(i, 1);
     }
   }
-  await Admin.findByIdAndUpdate(id, { clients: newClientList });
+
+  await Admin.findByIdAndUpdate(id, { clients: clientList });
 
   return admin;
 };
 
 exports.addClient = async (id, client) => {
-  //check if this is correct
   const admin = await Admin.findById(id);
   if (!admin) throw new NotFoundError();
+  const user = await User.findById(client);
+  if (!user) throw new NotFoundError();
+  clientList = admin.clients;
+
+  for (var i = 0; i < clientList.length; i++) { //Fix the logic
+    if (clientList[i] == client) {
+      console.log("Client aready in list")
+
+      return admin;
+    }
+  }
+
   newClientList = admin.clients;
-  newClientList.push(client);
+  newClientList.push(user.id);
   await Admin.findByIdAndUpdate(id, { clients: newClientList });
 
   return admin;
 };
 
 exports.getClient = async (id, client) => {
-  //check if this is correct
   const admin = await Admin.findById(id);
   if (!admin) throw new NotFoundError();
 
   clientList = admin.clients;
-  for (var i = 0; i < clientList.length; i++) {
+  for (var i = 0; i < clientList.length; i++) { //Fix the logic
     if (clientList[i] == client) {
       const user = await User.findById(client);
       if (!user) throw new NotFoundError();
@@ -91,6 +102,12 @@ exports.getClient = async (id, client) => {
   }
   throw new NotFoundError();
 };
+
+exports.getAllClients = async (id) => {
+  const admin = await Admin.findById(id);
+  if (!admin) throw new NotFoundError();
+  return admin.clients;
+}
 
 /*Figure out how to implement Todos later***********
 

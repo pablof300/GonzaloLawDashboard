@@ -7,8 +7,6 @@ exports.getAll = async (req, res) =>
   });
 
 exports.get = async (req, res) => {
-  console.log(req);
-  console.log(req.userId);
   catchErrors(res, async () => {
     return userDAO.get(req.userId);
   });

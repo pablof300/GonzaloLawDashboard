@@ -43,3 +43,8 @@ exports.addClient = async (req, res) =>
   catchErrors(res, async () => {
     return adminDAO.addClient(req.adminId, req.params.clientId);
   });
+
+exports.getAllClients = async (req, res) =>
+  catchErrors(res, async () => {
+    return adminDAO.getAllClients(req.adminId);
+  });

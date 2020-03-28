@@ -4,7 +4,7 @@ const router = express.Router();
 const passport = require("passport");
 
 router.get(
-  "/getall",
+  "/getAll",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getAll
 );
@@ -24,6 +24,12 @@ router.delete(
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.delete
 );
+
+router.get(
+  "/clients",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.getAllClients
+)
 
 router.get(
   "/:clientId",
