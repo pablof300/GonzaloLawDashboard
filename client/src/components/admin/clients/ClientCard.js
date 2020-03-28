@@ -1,6 +1,6 @@
 import React from "react";
 import { Image, Item } from "semantic-ui-react";
-import "./CSS/Admin.css";
+import "../Admin.css";
 
 const ClientCard = () => (
   <Item.Group>

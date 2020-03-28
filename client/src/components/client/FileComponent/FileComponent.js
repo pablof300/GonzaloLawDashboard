@@ -104,14 +104,14 @@ const FileComponent = () => {
 
     const fileIsDeleted = await deleteFiles(fileName, id);
     if (fileIsDeleted) {
-        setIsFilesPopulated(false);
-        setConfirmDeletion({
-          enabled: false,
-          fileID: null,
-          fileName: null
-        });
-      }
-    };
+      setIsFilesPopulated(false);
+      setConfirmDeletion({
+        enabled: false,
+        fileID: null,
+        fileName: null
+      });
+    }
+  };
 
   const openFile = url => {
     window.open(url, "_blank");
