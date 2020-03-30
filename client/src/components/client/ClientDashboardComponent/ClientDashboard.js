@@ -38,7 +38,6 @@ const ClientDashboard = () => {
           </Grid.Row>
         </Grid>
       </Container>
-     <div>
     <NavBar/>
     <Container className={"container"}>
       <Grid centered>

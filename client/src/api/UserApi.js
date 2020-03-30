@@ -2,7 +2,7 @@ import API from "./BaseApi.js";
 import Cookies from "js-cookie";
 
 const getCurrentUser = async () => {
-  let axiosResponse = await API.get("/user/:id", {
+  let axiosResponse = await API.get("/user/", {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {
@@ -10,7 +10,7 @@ const getCurrentUser = async () => {
     })
     .catch(error => {
       if (error !== null && error.response) {
-        return { error: error.response.data.error };
+        return { error: error.response };
       }
       return {
         error: "Unable to retrieve user!"
