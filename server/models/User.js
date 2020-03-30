@@ -26,6 +26,12 @@ const Schema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "LocalFile"
     }
+  ],
+  cases: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Case"
+    }
   ]
 });
 
