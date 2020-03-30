@@ -20,11 +20,3 @@ module.exports = catchErrors = async (res, f) => {
     }
   }
 };
-
-exports.getCurrentUser = async req => {
-  try {
-    return await userDAO.get(req.userId);
-  } catch (e) {
-    throw new NotFoundError();
-  }
-};

@@ -11,11 +11,15 @@ import {
   TransitionablePortal
 } from "semantic-ui-react";
 import axios from "axios";
+import { getCurrentUser } from "../../../api/UserApi";
+import Cookies from "js-cookie";
 
 const FileUploadComponent = props => {
   const [file, setFile] = useState(null);
   const [showUploadProgress, setShowUploadProgress] = useState(false);
   const [percent, setPercent] = useState(0);
+  const [userID, setUserID] = useState(null);
+  const [gotUserID, setGotUserID] = useState(false);
   const [portalProp, setPortalProp] = useState({
     color: "red",
     buttonText: "Cancel",
@@ -26,6 +30,16 @@ const FileUploadComponent = props => {
     e.preventDefault();
     setFile(e.target.files);
   };
+
+  const getUserData = async () => {
+    const user = (await getCurrentUser()).data;
+    setUserID(user._id);
+    setGotUserID(true);
+  };
+
+  if (!gotUserID) {
+    getUserData();
+  }
 
   const getFileSize = fileSize => {
     const gb = 10e8,
@@ -87,21 +101,25 @@ const FileUploadComponent = props => {
             .then(result => {
               console.log("We got response from s3");
 
-              const fileToStore = {
-                name: fileName,
-                type: fileType,
-                size: fileSize,
-                url: url
-              };
-
-              axios.post("/files/", fileToStore).then(res => {
-                setPortalProp({
-                  color: "green",
-                  buttonText: "Done!",
-                  text: "Uploaded Successfully"
+              const postFileInDatabase = async () => {
+                const fileToStore = {
+                  name: fileName,
+                  type: fileType,
+                  size: fileSize,
+                  url: url
+                };
+                axios.post("/files", fileToStore, {
+                  headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+                }).then(res => {
+                  setPortalProp({
+                    color: "green",
+                    buttonText: "Done!",
+                    text: "Uploaded Successfully"
+                  });
+                  props.setIsFilesPopulated(false);
                 });
-                props.setIsFilesPopulated(false);
-              });
+              };
+              postFileInDatabase();
             })
             .catch(error => {
               alert("ERROR: " + JSON.stringify(error));
@@ -165,7 +183,9 @@ const FileUploadComponent = props => {
             >
               <div>
                 <div className="center">
-                  <h3 align="center">{portalProp["text"]}</h3>
+                  <h3 style={{ textTransform: "capitalize" }} align="center">
+                    {portalProp["text"]}
+                  </h3>
                 </div>
 
                 <div>
