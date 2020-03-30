@@ -32,7 +32,7 @@ const AdminDashboard = () => {
       start: "2020-03-22T10:30:00",
       end: "2020-03-22T12:30:00"
     }
-  ]
+  ];
 
   return (
     <div>

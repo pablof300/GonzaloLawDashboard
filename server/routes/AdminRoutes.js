@@ -29,7 +29,7 @@ router.get(
   "/clients",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getAllClients
-)
+);
 
 router.get(
   "/:clientId",

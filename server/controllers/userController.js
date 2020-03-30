@@ -10,7 +10,7 @@ exports.get = async (req, res) => {
   catchErrors(res, async () => {
     return userDAO.get(req.userId);
   });
-}
+};
 
 exports.update = async (req, res) =>
   catchErrors(res, async () => {

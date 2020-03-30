@@ -12,13 +12,13 @@ exports.create = async adminParams => {
 };
 
 exports.getAll = async () => {
-  return await Admin.find({}).exec(); //why exec?
+  return await Admin.find({}).exec();
 };
 
 exports.get = async id => {
   const admin = await Admin.findById(id);
   if (!admin) {
-    console.log("Could not find an admin for the given id!")
+    console.log("Could not find an admin for the given id!");
   }
   return admin;
 };
@@ -51,10 +51,11 @@ exports.deleteAll = async () => {
 };
 
 exports.removeClient = async (id, client) => {
-  const admin = await Admin.findByIdAndUpdate(id,
+  const admin = await Admin.findByIdAndUpdate(
+    id,
     { $pullAll: { clients: [client] } },
     { new: true },
-    function (err, data) { }
+    function(err, data) {}
   );
   if (!admin) throw new NotFoundError();
 
@@ -65,21 +66,24 @@ exports.addClient = async (id, client) => {
   const user = await User.findById(client);
   if (!user) throw new NotFoundError();
 
-  const admin = await Admin.findByIdAndUpdate(id,
+  const admin = await Admin.findByIdAndUpdate(
+    id,
     { $addToSet: { clients: [client] } },
     { new: true },
-    function (err, data) { }
+    function(err, data) {}
   );
 
   return admin;
 };
 
+// TODO:
+// Update with better logic
 exports.getClient = async (id, client) => {
   const admin = await Admin.findById(id);
   if (!admin) throw new NotFoundError();
 
   clientList = admin.clients;
-  for (var i = 0; i < clientList.length; i++) { //Fix the logic
+  for (var i = 0; i < clientList.length; i++) {
     if (clientList[i] == client) {
       const user = await User.findById(client);
       if (!user) throw new NotFoundError();
@@ -91,45 +95,15 @@ exports.getClient = async (id, client) => {
   throw new NotFoundError();
 };
 
-exports.getAllClients = async (id) => {
+exports.getAllClients = async id => {
   const admin = await Admin.findById(id);
   if (!admin) throw new NotFoundError();
 
   const users = await User.find({
-
-    '_id': {
+    _id: {
       $in: admin.clients
     }
-
   });
 
-
   return users;
-}
-
-/*Figure out how to implement Todos later***********
-
-exports.addTodo = async (id, newTodo) => {
-	//check if this is correct
-	const admin = await Admin.findById(id);
-	if (!admin) throw new NotFoundError();
-	newTodoList = admin.todoList;
-	newTtodoList.push(newTodo);
-	const admin = await Admin.findByIdAndUpdate(id, { todoList: newTodoList });
-
-	return admin;
 };
-
-exports.deleteTodo = async (id, numIndex) => {
-	const admin = await Admin.findById(id);
-	if(!admin) throw new NotFoundError();
-	todoList = admin.todoList;
-	todoList[numIndex] = "";
-	const admin = await Admin.findByIdAndUpdate(id, { todoList: newTodoList });
-
-	return admin;
-}
-
-exports.shiftTodo = async (id, shiftFromIndex, shiftToIndex) => {...}
-
-*************************************************/

@@ -7,8 +7,8 @@ const bodyParser = require("body-parser");
 const userRoutes = require("../routes/UserRoutes.js");
 const adminRoutes = require("../routes/AdminRoutes.js");
 const authRoutes = require("../routes/AuthRoutes.js");
-//const fileRoutes = require("../routes/FileRoutes");
-//const fileAwsRoute = require("../routes/FileAwsRoutes");
+const fileRoutes = require("../routes/FileRoutes");
+const fileAwsRoute = require("../routes/FileAwsRoutes");
 const configUtil = require("./configUtil.js");
 const cors = require("cors");
 
@@ -28,15 +28,15 @@ module.exports.init = () => {
   app.use("/user", userRoutes);
   app.use("/admin", adminRoutes);
   app.use("/auth", authRoutes);
-  //app.use("/files", fileRoutes);
-  //app.use("/fileAws", fileAwsRoute);
+  app.use("/files", fileRoutes);
+  app.use("/fileAws", fileAwsRoute);
 
   if (process.env.NODE_ENV === "production") {
     // Serve any static files
     app.use(express.static(path.join(__dirname, "../../client/build")));
 
     // Handle React routing, return all requests to React app
-    app.get("*", function (req, res) {
+    app.get("*", function(req, res) {
       res.sendFile(path.join(__dirname, "../../client/build", "index.html"));
     });
   }

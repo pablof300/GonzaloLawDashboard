@@ -6,12 +6,14 @@ import { Card, Button } from "semantic-ui-react";
 
 import "./Calendar.css";
 
-const Calendar = (props) => {
+const Calendar = props => {
   const [isMonthlyViewEnabled, setIsMonthlyViewEnabled] = useState(true);
   const cal = useRef();
-  
+
   useEffect(() => {
-    cal.current.getApi().changeView(isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek");
+    cal.current
+      .getApi()
+      .changeView(isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek");
   }, [isMonthlyViewEnabled]);
 
   return (
@@ -24,12 +26,15 @@ const Calendar = (props) => {
           events={props.events}
         />
       </Card.Content>
-        <Card.Content extra>
-           <Button primary>Add Appointment</Button>
-            <Button color={'green'} onClick={() => setIsMonthlyViewEnabled(!isMonthlyViewEnabled)}>
-                Switch to {isMonthlyViewEnabled ? "weekly" : "monthly"} view
-            </Button>
-        </Card.Content>
+      <Card.Content extra>
+        <Button primary>Add Appointment</Button>
+        <Button
+          color={"green"}
+          onClick={() => setIsMonthlyViewEnabled(!isMonthlyViewEnabled)}
+        >
+          Switch to {isMonthlyViewEnabled ? "weekly" : "monthly"} view
+        </Button>
+      </Card.Content>
     </Card>
   );
 };

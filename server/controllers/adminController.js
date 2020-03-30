@@ -5,19 +5,19 @@ exports.getAll = async (req, res) => {
   catchErrors(res, async () => {
     return adminDAO.getAll();
   });
-}
+};
 
 exports.get = async (req, res) => {
   catchErrors(res, async () => {
     return adminDAO.get(req.adminId); //gets the admin from the jwt token
   });
-}
+};
 
 exports.update = async (req, res) => {
   catchErrors(res, async () => {
     return adminDAO.update(req.adminId, req.body);
   });
-}
+};
 
 exports.create = async (req, res) =>
   catchErrors(res, async () => {
