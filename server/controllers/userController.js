@@ -28,6 +28,6 @@ exports.delete = async (req, res) =>
   });
 
 exports.getEvents = async (req, res) =>
-    catchErrors(res, async () => {
-        return eventDAO.getEventsByUser(req.userId);
-    });
+  catchErrors(res, async () => {
+    return eventDAO.getEventsByUser(req.userId);
+  });

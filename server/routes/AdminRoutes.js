@@ -14,9 +14,9 @@ router.get(
   adminController.get
 );
 router.get(
-    "/events",
-    passport.authenticate("adminLoggedIn", { session: false }),
-    adminController.getEvents
+  "/events",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.getEvents
 );
 router.put(
   "/",
