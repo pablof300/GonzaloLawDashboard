@@ -28,7 +28,8 @@ const usersData: User[] = [
     username: "pablo",
     password: "123456",
     firstName: "Pablo",
-    secondName: "Estrada"
+    secondName: "Estrada",
+    imageUrl: "https://react.semantic-ui.com/images/wireframe/square-image.png"
   },
   {
     username: "peter",
@@ -48,7 +49,8 @@ const usersData: User[] = [
       email: "peter@gmail.com",
       homePhone: 345223561
     },
-    birthDate: "03/08/1998"
+    birthDate: "03/08/1998",
+    imageUrl: "https://react.semantic-ui.com/images/wireframe/square-image.png"
   },
   {
     username: "edward",
@@ -67,7 +69,8 @@ const usersData: User[] = [
       email: "edward@gmail.com",
       homePhone: 345223561
     },
-    birthDate: "05/12/1990"
+    birthDate: "05/12/1990",
+    imageUrl: "https://react.semantic-ui.com/images/wireframe/square-image.png"
   },
 ];
 
