@@ -16,4 +16,4 @@ exports.getAWSBucket = () => {
 
 exports.getJWTSecret = () => {
   return process.env.JWT_SECRET || require("./config").jwtSecret;
-}
+};

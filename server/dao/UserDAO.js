@@ -20,7 +20,7 @@ exports.getAll = async () => {
 exports.get = async id => {
   const user = await User.findById(id);
   if (!user) {
-    console.log("Could not find an user for the given id!")
+    console.log("Could not find an user for the given id!");
   }
 
   return user;
