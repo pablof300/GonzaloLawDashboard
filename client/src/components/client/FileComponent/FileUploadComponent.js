@@ -58,7 +58,7 @@ const FileUploadComponent = props => {
     return result;
   };
 
-  const upload = () => {
+  const upload = async () => {
     if (file) {
       const i = 0;
       let fileParts = file[i].name.split(".");
@@ -67,7 +67,9 @@ const FileUploadComponent = props => {
       const fileType = fileParts[1];
       const fileSize = getFileSize(size);
 
-      if(!checkIfUserUploadingFileExist(fileName, fileType)){
+      let res = await checkIfUserUploadingFileExist(fileName, fileType);
+
+      if(!res){
         setShowUploadProgress(true);
         setPortalProp({
           color: "red",

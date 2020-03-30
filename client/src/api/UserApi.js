@@ -22,30 +22,33 @@ const getCurrentUser = async () => {
 
 const getAllUserFiles = async () => {
   const user = (await getCurrentUser()).data;
-  const filesID = user.files;
   let allFiles = [];
-  for (let i = 0; i < filesID.length; i++) {
-    const data = (await getUserFileById(filesID[i])).data;
-    if (data) {
-      allFiles.unshift(data);
+  if(user.files){
+    const filesID = user.files;
+    for (let i = 0; i < filesID.length; i++) {
+      const data = (await getUserFileById(filesID[i])).data;
+      if (data) {
+        allFiles.unshift(data);
+      }
     }
   }
+ 
   return allFiles;
 };
 
 const checkIfUserUploadingFileExist = async (fileName, fileType) => {
   const user = (await getCurrentUser()).data;
-  const filesID = user.files;
-  for(let i = 0; i < filesID.length; i++){
-    const data = (await getUserFileById(filesID[i])).data;
-    if(data.name === fileName && data.type === fileType){
-      return true;
+  if(user.files){
+    const filesID = user.files;
+    for (let i = 0; i < filesID.length; i++) {
+      const data = (await getUserFileById(filesID[i])).data;
+      if (data.name === fileName && data.type === fileType) {
+        return true;
+      }
     }
   }
-
   return false;
-
-}
+};
 
 const getAllLawyersWorkingOnUserCase = async () => {
   const user = (await getCurrentUser()).data;
@@ -55,20 +58,19 @@ const getAllLawyersWorkingOnUserCase = async () => {
     result = await API.get("/admin/:allAdmins").then(res => {
       const lawyers = res.data.data;
       let userLawyers = [];
-      for(let i = 0; i < lawyers.length; i++){
-        if(lawyers[i] && lawyers[i].clients){
+      for (let i = 0; i < lawyers.length; i++) {
+        if (lawyers[i] && lawyers[i].clients) {
           const lawyer = lawyers[i];
-          const clients = lawyers[i].clients
-          for(let j = 0; j < clients.length; j++){
-            if(clients[j] === userID){
-              userLawyers.push(lawyer)
+          const clients = lawyers[i].clients;
+          for (let j = 0; j < clients.length; j++) {
+            if (clients[j] === userID) {
+              userLawyers.push(lawyer);
               break;
             }
           }
         }
       }
       return userLawyers;
-      
     });
   }
 
