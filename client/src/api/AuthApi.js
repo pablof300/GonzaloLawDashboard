@@ -42,35 +42,38 @@ const authenticateAdmin = async (username, password) => {
 };
 
 const verifyUser = async () => {
-  let axiosResponse = await API.get("/auth/verify/user", { headers: {"Authorization" : `Bearer ${Cookies.get('jwt')}`} })
-      .then(async response => {
-        if (response.status === 200) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .catch(error => {
-        console.log(error)
+  let axiosResponse = await API.get("/auth/verify/user", {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(async response => {
+      if (response.status === 200) {
+        return true;
+      } else {
         return false;
-      });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      return false;
+    });
   return axiosResponse;
 };
 
-
 const verifyAdmin = async () => {
-  let axiosResponse = await API.get("/auth/verify/admin", { headers: {"Authorization" : `Bearer ${Cookies.get('jwt')}`} })
-      .then(async response => {
-        if (response.status === 200) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .catch(error => {
-        console.log(error)
+  let axiosResponse = await API.get("/auth/verify/admin", {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(async response => {
+      if (response.status === 200) {
+        return true;
+      } else {
         return false;
-      });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      return false;
+    });
   return axiosResponse;
 };
 

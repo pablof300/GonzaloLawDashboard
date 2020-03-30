@@ -14,8 +14,8 @@ const AdminDashboard = () => {
   const [isVerified, setIsVerified] = useState(true);
 
   verifyAdmin().then(verified => {
-    setIsVerified(verified)
-  })
+    setIsVerified(verified);
+  });
 
   if (!isVerified) {
     return <Redirect to="/adminlogin" />;
@@ -44,6 +44,6 @@ const AdminDashboard = () => {
       </Container>
     </div>
   );
-}
+};
 
 export default AdminDashboard;

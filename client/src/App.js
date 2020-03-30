@@ -12,7 +12,6 @@ import AdminLogin from "./views/AdminLogin/AdminLogin";
 const App = () => {
   return (
     <div>
-      
       <Switch>
         <Route exact path="/login" component={Login} />
         <Route exact path="/adminlogin" component={AdminLogin} />
