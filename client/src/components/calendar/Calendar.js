@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import AddEvent from "./AddEvent"
 import { Card, Button } from "semantic-ui-react";
 
 import "./Calendar.css";
@@ -14,6 +15,12 @@ const Calendar = (props) => {
     cal.current.getApi().changeView(isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek");
   }, [isMonthlyViewEnabled]);
 
+
+  let formattedEvents = [];
+  props.events.forEach(event => {
+      formattedEvents.push({ title: event.title, start: event.startDate, end: event.endDate })
+  })
+
   return (
     <Card fluid>
       <Card.Content>
@@ -21,11 +28,11 @@ const Calendar = (props) => {
           ref={cal}
           defaultView={isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek"}
           plugins={[dayGridPlugin, timeGridPlugin]}
-          events={props.events}
+          events={formattedEvents}
         />
       </Card.Content>
         <Card.Content extra>
-           <Button primary>Add Appointment</Button>
+            <AddEvent />
             <Button color={'green'} onClick={() => setIsMonthlyViewEnabled(!isMonthlyViewEnabled)}>
                 Switch to {isMonthlyViewEnabled ? "weekly" : "monthly"} view
             </Button>

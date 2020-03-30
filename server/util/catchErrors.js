@@ -1,6 +1,6 @@
 const { ValidationError, NotFoundError } = require('./exceptions');
 
-exports.catchErrors = async (res, f) => {
+module.exports = async (res, f) => {
   try {
     const result = await f();
     res.send({ ok: true, data: result })
@@ -12,13 +12,5 @@ exports.catchErrors = async (res, f) => {
     } else {
       res.status(400).send({ ok: false, error: e.message});
     }
-  }
-};
-
-exports.getCurrentUser = async req => {
-  try {
-    return await userDAO.get(req.userId);
-  } catch (e) {
-    throw new NotFoundError();
   }
 };

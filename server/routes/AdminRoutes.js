@@ -4,14 +4,19 @@ const router = express.Router();
 const passport = require("passport");
 
 router.get(
-  "/",
+  "/all",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getAll
 );
 router.get(
-  "/:id",
+  "/",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.get
+);
+router.get(
+    "/events",
+    passport.authenticate("adminLoggedIn", { session: false }),
+    adminController.getEvents
 );
 router.put(
   "/:id",

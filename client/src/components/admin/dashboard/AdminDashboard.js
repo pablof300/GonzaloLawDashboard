@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Grid, Container } from "semantic-ui-react";
 import AdminNav from "../navbar/AdminNav";
 import AdminList from "../list/AdminToDoList";
 import ClientList from "../clients/AdminClientList";
 import Calendar from "../../calendar/Calendar";
+import { getEvents } from "../../../api/AdminApi";
 
 import "../Admin.css";
 
@@ -12,28 +13,36 @@ import { Redirect } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [isVerified, setIsVerified] = useState(true);
+  const [events, setEvents] = useState([])
 
   verifyAdmin().then(verified => {
     setIsVerified(verified);
+  })
+
+  useEffect(() => {
+      setEventData()
   });
+
+  const setEventData = async () => {
+    if (events.length > 0) {
+      return
+    }
+    let eventResponse = await getEvents()
+    console.log(eventResponse)
+    if (eventResponse.data) {
+      console.log("Successfully fetched event data");
+      setEvents(eventResponse.data);
+    } else {
+      console.log(eventResponse.error)
+      console.log("Unable to fetch event data")
+    };
+  };
 
   if (!isVerified) {
     return <Redirect to="/adminlogin" />;
   }
 
-  const dummyEvents = [
-    {
-      title: "Mr. Estrada",
-      start: "2020-03-18T10:30:00",
-      end: "2020-03-18T12:30:00"
-    },
-    {
-      title: "Mr. Hutch",
-      start: "2020-03-22T10:30:00",
-      end: "2020-03-22T12:30:00"
-    }
-  ]
-
+  console.log(events)
   return (
     <div>
       <AdminNav />
@@ -41,7 +50,7 @@ const AdminDashboard = () => {
         <Grid divided>
           <Grid.Row>
             <Grid.Column width={12}>
-              <Calendar events={dummyEvents} />
+              <Calendar events={events} />
             </Grid.Column>
             <Grid.Column width={4}>
               <ClientList />
