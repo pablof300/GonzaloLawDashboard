@@ -26,3 +26,8 @@ exports.delete = async (req, res) =>
   catchErrors(res, async () => {
     return userDAO.delete(req.userId);
   });
+
+exports.getEvents = async (req, res) =>
+    catchErrors(res, async () => {
+        return eventDAO.getEventsByUser(req.userId);
+    });

@@ -48,3 +48,8 @@ exports.getAllClients = async (req, res) =>
   catchErrors(res, async () => {
     return adminDAO.getAllClients(req.adminId);
   });
+
+exports.getEvents = async (req, res) =>
+    catchErrors(res, async () => {
+        return eventDAO.getEventsByAdmin(req.adminID);
+    });
