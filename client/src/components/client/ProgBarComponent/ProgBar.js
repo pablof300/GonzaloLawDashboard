@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Popup, Step } from "semantic-ui-react";
+import Cookies from "js-cookie";
 
 const progBar = props => {
   /*
@@ -25,7 +26,7 @@ const progBar = props => {
   */
 
   //get id for current user
-  //const id = Cookies.get("jwt");
+  const id = Cookies.get("jwt");
 
   //pass id into case API to get all cases for that user
   const cases = ["1", "2"];
