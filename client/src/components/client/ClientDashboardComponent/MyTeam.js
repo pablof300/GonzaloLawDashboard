@@ -11,81 +11,52 @@ import {
   Image
 } from "semantic-ui-react";
 import "../FileComponent/FileComponent.css";
-
-const myTeamsList = [
-  {
-    url: "https://react.semantic-ui.com/images/avatar/large/chris.jpg",
-    name: "Tyler",
-    id: 1
-  },
-  {
-    url: "https://react.semantic-ui.com/images/avatar/large/ade.jpg",
-    name: "Pablo",
-    id: 2
-  },
-  {
-    url: "https://react.semantic-ui.com/images/avatar/large/jenny.jpg",
-    name: "Edward Mensah",
-    id: 3
-  },
-  {
-    url: "https://react.semantic-ui.com/images/avatar/large/justen.jpg",
-    name: "Hutchinson Vandyke",
-    id: 4
-  },
-  {
-    url: "https://react.semantic-ui.com/images/avatar/large/nan.jpg",
-    name: "Herman Perera",
-    id: 5
-  },
-  {
-    url: "https://react.semantic-ui.com/images/avatar/large/stevie.jpg",
-    name: "Nate Stull",
-    id: 6
-  },
-  {
-    url: "https://react.semantic-ui.com/images/wireframe/square-image.png",
-    name: "Patrick White",
-    id: 7
-  }
-];
+import { getAllLawyersWorkingOnUserCase } from "../../../../src/api/UserApi";
 
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
 
 const MyTeam = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [listOfLawyers, setListOfLawyers] = useState(myTeamsList);
+  const [listOfLawyers, setListOfLawyers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isTeamPopulated, setIsTeamPopulated] = useState(false);
+  const [userLawyers, setUserLawyers] = useState(false);
 
-  let itemsPerPage = 3;
-  let totalPages;
-  let startIndex;
-  let endIndex;
-  let allTeamListInPagination = [];
+  let itemsPerPage = 3,
+    totalPages,
+    startIndex,
+    endIndex,
+    allTeamListInPagination = [];
 
-  const loadTeam = () => {
-    /*let tempData = [];
-  myTeamsList.forEach(element => {
-    tempData.unshift(element);
-  });*/
-    /*setListOfLawyers(myTeamsList);
-  setIsTeamPopulated(true);*/
+  const loadTeam = async () => {
+    const userLawyers = (await getAllLawyersWorkingOnUserCase());
+    setListOfLawyers(userLawyers);
+    setUserLawyers(true);
   };
 
-  /*if (!isTeamPopulated) {
-  loadTeam();
-}
-*/
+  if (!userLawyers) {
+    loadTeam();
+  }
+
+  const fullName = lawyer => {
+    if (lawyer) {
+      if (lawyer.middleName) {
+        return (
+          lawyer.firstName + " " + lawyer.middleName + " " + lawyer.secondName
+        );
+      }
+      return lawyer.firstName + " " + lawyer.secondName;
+    }
+    return null;
+  };
 
   const filterTeamByText = (e, { value }) => {
     setIsLoading(true);
-
     const results = listOfLawyers.filter(lawyer => {
+      const name = fullName(lawyer);
       return (
         value.length > 0 &&
-        lawyer.name.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
+        name.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
       );
     });
 
@@ -96,7 +67,7 @@ const MyTeam = () => {
     if (results.length > 0) {
       setListOfLawyers(results);
     } else {
-      setListOfLawyers(myTeamsList);
+      setUserLawyers(false);
     }
   };
 
@@ -126,22 +97,22 @@ const MyTeam = () => {
       <Table.Body>
         <Table.Row
           as="tr"
-          key={!lawyer ? null : lawyer.id}
+          key={!lawyer ? null : lawyer._id}
           className={!lawyer ? "invisible" : ""}
         >
           <Table.Cell singleLine>
             <Image
-              src={!lawyer ? defaultProfile : lawyer.url}
+              src={
+                !(lawyer && lawyer.imageUrl) ? defaultProfile : lawyer.imageUrl
+              }
               size="tiny"
               rounded
               fluid
               style={{ width: 70, height: 70 }}
-              ui={true}
-              wrapped={true}
             ></Image>
           </Table.Cell>
 
-          <Table.Cell singleLine>{!lawyer ? "" : lawyer.name}</Table.Cell>
+          <Table.Cell singleLine>{!lawyer ? "" : fullName(lawyer)}</Table.Cell>
         </Table.Row>
       </Table.Body>
     );

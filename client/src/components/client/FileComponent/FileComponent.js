@@ -85,10 +85,13 @@ const FileComponent = () => {
   };
 
   const deleteFile = async () => {
-    const id = confirmDeletion["fileID"];
-    const fileName = confirmDeletion["fileName"];
+    const params = {
+      id: confirmDeletion["fileID"],
+      fileName: confirmDeletion["fileName"],
+      folder: "caseFiles"
+    }
 
-    const fileIsDeleted = await deleteUserFileById(fileName, id);
+    const fileIsDeleted = await deleteUserFileById(params);
     if (fileIsDeleted) {
       setIsFilesPopulated(false);
       setConfirmDeletion({
