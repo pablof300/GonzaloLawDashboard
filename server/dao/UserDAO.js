@@ -71,7 +71,7 @@ exports.deleteAll = async () => {
 exports.getCases = async id => {
   const user = await User.findById(id);
   if (!user) {
-    console.log("Could not find a user for the given id!")
+    throw new NotFoundError();
   }
   return user.cases;
   };
@@ -79,20 +79,16 @@ exports.getCases = async id => {
 exports.getCase = async (id, caseid) => {
     const user = await User.findById(id);
     if (!user) {
-      console.log("Could not find a user for the given id!")
+      throw new NotFoundError();
     }
     
-    const big = await exports.getCases(id);
-    const temp = big.includes(caseid);
-    if (!temp) throw new NotFoundError();
-
     return CaseDAO.get(caseid);
     };
     
 exports.updateCase = async (id, data, caseid) => {
       const user = await User.findById(id);
       if (!user) {
-        console.log("Could not find a user for the given id!")
+        throw new NotFoundError();
       }
       return CaseDAO.update(caseid, data);
       };        

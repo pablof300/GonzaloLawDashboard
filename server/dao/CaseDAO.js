@@ -16,7 +16,7 @@ exports.get = async id => {
     
     const tempCase = await Case.findById(id);
     if (!tempCase) {
-      console.log("Could not find a case for the given id!")
+      throw new NotFoundError();
     }
     return tempCase; 
 };
