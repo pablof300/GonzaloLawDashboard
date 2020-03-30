@@ -1,6 +1,6 @@
 const { ValidationError, NotFoundError } = require('./exceptions');
 
-exports.catchErrors = async (res, f) => {
+module.exports = catchErrors = async (res, f) => {
   try {
     const result = await f();
     res.send({ ok: true, data: result })

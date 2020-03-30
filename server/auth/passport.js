@@ -14,7 +14,7 @@ passport.use(
       usernameField: "username",
       passwordField: "password"
     },
-    function(username, password, done) {
+    function (username, password, done) {
       userDAO
         .getByUsername(username)
         .then(userModel => {
@@ -69,7 +69,7 @@ passport.use(
       usernameField: "username",
       passwordField: "password"
     },
-    function(username, password, done) {
+    function (username, password, done) {
       adminDAO
         .getByUsername(username)
         .then(adminModel => {
@@ -99,21 +99,21 @@ passport.use(
 );
 
 passport.use(
-    "adminLoggedIn",
-    new JWTStrategy(
-        {
-            jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-            secretOrKey: configUtil.getJWTSecret(),
-            passReqToCallback: true
-        },
-        async (req, jwtPayload, done) => {
-            req.adminID = jwtPayload.id;
-            if (await adminDAO.get(jwtPayload.id)) {
-                return done(null, true);
-            } else {
-                console.log("yaSsS!?")
-                return done("Invalid token?");
-            }
-        }
-    )
+  "adminLoggedIn",
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: configUtil.getJWTSecret(),
+      passReqToCallback: true
+    },
+    async (req, jwtPayload, done) => {
+      req.adminId = jwtPayload.id;
+      if (await adminDAO.get(jwtPayload.id)) {
+        return done(null, true);
+      } else {
+        console.log("yaSsS!?")
+        return done("Invalid token?");
+      }
+    }
+  )
 );
