@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Container } from "semantic-ui-react";
 import AdminNav from "../navbar/AdminNav";
+import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import AdminList from "../list/AdminToDoList";
 import ClientList from "../clients/AdminClientList";
 import Calendar from "../../calendar/Calendar";
@@ -64,6 +65,7 @@ const AdminDashboard = () => {
           </Grid.Row>
         </Grid>
       </Container>
+      <FooterComponent/>
     </div>
   );
 };
