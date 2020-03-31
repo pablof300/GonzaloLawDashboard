@@ -1,4 +1,4 @@
-require("../auth/passport");
+require("../auth/passport.js");
 const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const userRoutes = require("../routes/UserRoutes.js");
 const adminRoutes = require("../routes/AdminRoutes.js");
+const caseRoutes = require("../routes/CaseRoutes.js");
 const authRoutes = require("../routes/AuthRoutes.js");
 const fileRoutes = require("../routes/FileRoutes");
 const fileAwsRoute = require("../routes/FileAwsRoutes");
@@ -26,6 +27,7 @@ module.exports.init = () => {
   app.use(cors());
 
   app.use("/user", userRoutes);
+  app.use("/case", caseRoutes);
   app.use("/admin", adminRoutes);
   app.use("/auth", authRoutes);
   app.use("/files", fileRoutes);

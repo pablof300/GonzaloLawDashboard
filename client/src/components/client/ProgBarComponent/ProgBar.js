@@ -5,12 +5,16 @@ import Cookies from "js-cookie";
 const progBar = props => {
   /*
   return (
-    <Step.Group style={{ overflow: "auto" }} size="small" ordered>
-      <Step completed>
+    <Step.Group  size="small" ordered>
+    <Popup positionFixed
+ content='I am positioned to the top center' position='top center' trigger={
+       <Step completed>
         <Step.Content>
           <Step.Title>First step</Step.Title>
         </Step.Content>
       </Step>
+    }/>
+     
       <Step active>
         <Step.Content>
           <Step.Title>Second step</Step.Title>
