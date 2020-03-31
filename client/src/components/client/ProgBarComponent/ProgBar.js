@@ -29,7 +29,7 @@ const progBar = props => {
   const id = Cookies.get("jwt");
 
   //pass id into case API to get all cases for that user
-  const cases = ["1", "2"];
+  const cases = ["1", "2"]; //replace this with a default to 0th indexed casein db
 
   const bar = cases.map(function(element) {
     //check if step has been completed before returning it
