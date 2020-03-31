@@ -14,7 +14,7 @@ const MyAccount = () => {
 
   const loadUserData = async () => {
     const user = (await getCurrentUser()).data;
-    if(user){
+    if (user) {
       setUserData(user);
       setIsUserLoaded(true);
     }
@@ -51,7 +51,7 @@ const MyAccount = () => {
       } else {
         alert("ERROR: Please upload a valid image");
       }
-    }else{
+    } else {
       alert("ERROR: Either the file is corrupted or no user is logged in.");
     }
   };

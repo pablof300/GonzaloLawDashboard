@@ -30,11 +30,10 @@ const MyTeam = () => {
 
   const loadTeam = async () => {
     const userLawyers = await getAllLawyersWorkingOnUserCase();
-    if(userLawyers){
+    if (userLawyers) {
       setListOfLawyers(userLawyers);
       setUserLawyers(true);
     }
-    
   };
 
   if (!userLawyers) {

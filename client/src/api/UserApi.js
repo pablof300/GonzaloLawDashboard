@@ -56,32 +56,35 @@ const getAllLawyersWorkingOnUserCase = async () => {
   if (user) {
     const userID = user._id;
     result = await API.get("/admin/:allAdmins", {
-      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }).then(res => {
-      const lawyers = res.data.data;
-      if(lawyers){
-        let userLawyers = [];
-        for (let i = 0; i < lawyers.length; i++) {
-          if (lawyers[i] && lawyers[i].clients) {
-            const lawyer = lawyers[i];
-            const clients = lawyers[i].clients;
-            for (let j = 0; j < clients.length; j++) {
-              if (clients[j] === userID) {
-                userLawyers.push(lawyer);
-                break;
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    })
+      .then(res => {
+        const lawyers = res.data.data;
+        if (lawyers) {
+          let userLawyers = [];
+          for (let i = 0; i < lawyers.length; i++) {
+            if (lawyers[i] && lawyers[i].clients) {
+              const lawyer = lawyers[i];
+              const clients = lawyers[i].clients;
+              for (let j = 0; j < clients.length; j++) {
+                if (clients[j] === userID) {
+                  userLawyers.push(lawyer);
+                  break;
+                }
               }
             }
           }
+          return userLawyers;
         }
-        return userLawyers;
-      }
-    }).catch(error => {
-      if(error && error.response){
-        return {error: error.response}
-      }
-      return {
-        error: "Unable to retrieve user lawyers!"
-      };
-    })
+      })
+      .catch(error => {
+        if (error && error.response) {
+          return { error: error.response };
+        }
+        return {
+          error: "Unable to retrieve user lawyers!"
+        };
+      });
   }
   return result;
 };
@@ -166,7 +169,8 @@ const deleteUserFileById = async params => {
                 return response.data.ok;
               })
               .catch(error => {
-                if(error && error.response) console.log("ERROR! " + error.response);
+                if (error && error.response)
+                  console.log("ERROR! " + error.response);
               });
             return res;
           };
@@ -174,7 +178,7 @@ const deleteUserFileById = async params => {
         }
       })
       .catch(error => {
-        if(error && error.response){
+        if (error && error.response) {
           console.log("File failed to delete!");
           console.log(error.response);
         }
