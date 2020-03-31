@@ -1,5 +1,6 @@
 const catchErrors = require("../util/catchErrors");
 const userDAO = require("../dao/UserDAO");
+const eventDAO = require("../dao/EventDAO");
 
 exports.getAll = async (req, res) =>
   catchErrors(res, async () => {

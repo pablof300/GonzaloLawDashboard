@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ClientDashboard.css";
 import NavBar from "../../util/NavBarComponent/NavBar";
 import FooterComponent from "../../util/FooterComponent/FooterComponent";
@@ -9,9 +9,31 @@ import PaymentCard from "../PaymentComponent/PaymentCard"
 import { verifyUser } from "../../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
+import Calendar from "../../calendar/Calendar";
+import {getEvents} from "../../../api/UserApi";
 
 const ClientDashboard = () => {
   const [isVerified, setIsVerified] = useState(true);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    setEventData();
+  }, []);
+
+  const setEventData = async () => {
+    if (events.length > 0) {
+      return;
+    }
+    let eventResponse = await getEvents();
+    console.log(eventResponse);
+    if (eventResponse.data) {
+      console.log("Successfully fetched event data");
+      setEvents(eventResponse.data);
+    } else {
+      console.log(eventResponse.error);
+      console.log("Unable to fetch event data");
+    }
+  };
 
   verifyUser().then(verified => {
     setIsVerified(verified);
@@ -33,13 +55,18 @@ const ClientDashboard = () => {
           </Header>
         </Grid.Row>
         <Grid.Row>
+          <ProgBarComponent />
+        </Grid.Row>
+        <Grid.Row>
           <UserDetailsComponent/>
         </Grid.Row>
         <Grid.Row>
-          <PaymentCard/>
-        </Grid.Row>
-        <Grid.Row>
-          <ProgBarComponent />
+          <Grid.Column width={8}>
+            <Calendar adminView={false} events={events} />
+          </Grid.Column>
+          <Grid.Column width={8}>
+            <PaymentCard />
+          </Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <FileComponent />
