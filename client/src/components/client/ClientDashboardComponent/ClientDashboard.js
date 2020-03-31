@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./ClientDashboard.css";
 import NavBar from "../../util/NavBarComponent/NavBar";
+import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
@@ -41,6 +42,7 @@ const ClientDashboard = () => {
         </Grid.Row>
       </Grid>
     </Container>
+    <FooterComponent/>
     </div>
   );
 };
