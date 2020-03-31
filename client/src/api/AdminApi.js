@@ -67,4 +67,23 @@ const addEvent = async (title, type, startDate, duration, notes, clientId) => {
   return axiosResponse;
 };
 
-export { getEvents, getAllClients, addEvent };
+const getCurrentAdmin = async () => {
+    let axiosResponse = await API.get("/admin/", {
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    })
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        if (error !== null && error.response) {
+          return { error: error.response };
+        }
+        return {
+          error: "Unable to retrieve user!"
+        };
+      });
+
+    return axiosResponse;
+  };
+
+export { getEvents, getAllClients, addEvent, getCurrentAdmin };
