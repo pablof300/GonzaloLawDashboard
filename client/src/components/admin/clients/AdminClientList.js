@@ -4,7 +4,7 @@ import AddClientForm from "./AddClientForm";
 import ClientCard from "./ClientCard";
 import Popup from "reactjs-popup";
 import "../Admin.css";
-import { getCurrentAdmin } from "../../../../src/api/AdminApi";
+import { getAllClients } from "../../../../src/api/AdminApi";
 
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
@@ -15,7 +15,7 @@ const ClientList = () => {
   const [clients, setClients] = useState(false);
 
   const loadUsers = async () => {
-    const lawyerClients  = (await getCurrentAdmin()).data.clients;
+    const lawyerClients  = await getAllClients();
     setClientList(lawyerClients);
     setClients(true);
   };
@@ -24,14 +24,12 @@ const ClientList = () => {
 
   const myClientList = [];
     if (clients) {
-          console.log(listOfClients);
-          for (let i = 0; i < listOfClients.length; i++) {
-            myClientList.push(listOfClients[i]);
+          for (let i = 0; i < listOfClients.data.length; i++) {
+            myClientList.push(listOfClients.data[i]);
           }
         }
        
-   const showClientList = myClientList.map(client => {
-    console.log(client)      
+   const showClientList = myClientList.map(client => {     
     return (
             <List.Item>
                   <List.Content floated="right">
@@ -43,6 +41,7 @@ const ClientList = () => {
                     >
                       <Container className="FormContainer">
                         <ClientCard 
+                        clientData = {client} 
                         clientName = {client.firstName + " " + client.secondName}
                         clientContact = {client.contact}
                         />
