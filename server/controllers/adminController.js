@@ -42,7 +42,7 @@ exports.removeClient = async (req, res) =>
 
 exports.addClient = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.addClient(req.adminId, req.params.clientId);
+    return adminDAO.addClient(req.adminId, req.body);
   });
 
 exports.getAllClients = async (req, res) =>

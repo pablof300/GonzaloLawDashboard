@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { Image, Item } from "semantic-ui-react";
 import "../Admin.css";
+import ClientCaseCard from "./ClientCases/ClientCaseCard";
 
 const ClientCard = (props) => {
   return(
@@ -20,6 +21,7 @@ const ClientCard = (props) => {
         <Item.Description>
         {"Phone: " + props.clientData.contact.cellPhone}
         </Item.Description>
+        <ClientCaseCard/>
       </Item.Content>
     </Item>
   </Item.Group>
