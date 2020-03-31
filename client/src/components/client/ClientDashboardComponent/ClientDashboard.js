@@ -4,6 +4,7 @@ import NavBar from "../../util/NavBarComponent/NavBar";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
+import PaymentCard from "../PaymentComponent/PaymentCard"
 import { verifyUser } from "../../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
@@ -32,6 +33,9 @@ const ClientDashboard = () => {
           </Grid.Row>
           <Grid.Row>
             <ProgBarComponent />
+          </Grid.Row>
+          <Grid.Row>
+            <PaymentCard />
           </Grid.Row>
           <Grid.Row>
             <FileComponent />

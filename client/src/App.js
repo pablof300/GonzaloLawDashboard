@@ -1,13 +1,13 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import Login from "./views/Login/Login";
-import "./views/Login/Login.css";
 import NotFound from "./views/NotFound";
 import NavBar from "./components/util/NavBarComponent/NavBar";
 import FooterComponent from "./components/util/FooterComponent/FooterComponent";
 import ClientDashboard from "./components/client/ClientDashboardComponent/ClientDashboard";
 import AdminDashboard from "./components/admin/dashboard/AdminDashboard";
 import AdminLogin from "./views/AdminLogin/AdminLogin";
+import "./views/Login/Login.css";
 
 const App = () => {
   return (
@@ -22,10 +22,11 @@ const App = () => {
         </Route>
         <Route component={NotFound} />
       </Switch>
-      <footer>
+      <footer className="footer">
         <FooterComponent />
       </footer>
     </div>
+
   );
 };
 
