@@ -21,7 +21,6 @@
 
 .Card {
   padding: 10px!important;
-  width: 100%!important;
 }
 
 .ClientCard {
@@ -38,12 +37,6 @@
   padding-top: 3vh!important;
 }
 
-.FormContainer {
-  border-radius: 1rem;
-  box-sizing: inherit;
-  padding-top: 9px!important;
-  padding: 9px;
-}
 
 .List-Header {
   background: inherit;

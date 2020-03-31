@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Button, Card, Icon, Image, List, Container } from "semantic-ui-react";
+import { Button, Card, Icon, Image, List, Container, Modal } from "semantic-ui-react";
 import AddClientForm from "./AddClientForm";
 import ClientCard from "./ClientCard";
 import Popup from "reactjs-popup";
@@ -73,20 +73,18 @@ const ClientList = () => {
       <List divided verticalAlign="middle">
         <List.Item className="List-Header">
           <List.Content floated="right">
-            <Popup
+            <Modal
               trigger={
                 <Button icon onClick={e => AddClient(e)}>
                   <Icon name="plus square outline" />
                 </Button>
               }
-              position="right center"
-              modal
-              closeOnDocumentClick
             >
-              <Container className="FormContainer">
-                <AddClientForm />
-              </Container>
-            </Popup>
+                <Modal.Header>Create a new client</Modal.Header>
+                <Modal.Content>
+                    <AddClientForm />
+                </Modal.Content>
+            </Modal>
           </List.Content>
           <List.Content id="content">Client List</List.Content>
         </List.Item>
