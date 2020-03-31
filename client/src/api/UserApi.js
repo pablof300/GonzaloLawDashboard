@@ -54,7 +54,7 @@ const getAllLawyersWorkingOnUserCase = async () => {
   let result = null;
   if (user) {
     const userID = user._id;
-    result = await API.get("/admin/:allAdmins").then(res => {
+    result = await API.get("/admin/getAll").then(res => {
       const lawyers = res.data.data;
       let userLawyers = [];
       for (let i = 0; i < lawyers.length; i++) {

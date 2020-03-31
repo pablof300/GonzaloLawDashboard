@@ -38,18 +38,10 @@ const getEvents = async () => {
 };
 
 const addEvent = async (title, type, startDate, duration, notes, clientId) => {
-  // console.log(title)
-  // console.log(type)
-  // console.log(startDate)
-  // console.log(duration)
-  // console.log(notes)
-  // console.log(clientId)
   let axiosResponse = await API.post(
     "/admin/events",
     {},
     {
-      // startDate: "Tue Mar 31 2020 09:06:08 GMT-0400 (Eastern Daylight Time)",
-      // duration: 2,
       params: {
         title: title,
         type: type,

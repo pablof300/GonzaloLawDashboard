@@ -36,6 +36,9 @@ const ClientDashboard = () => {
           <UserDetailsComponent/>
         </Grid.Row>
         <Grid.Row>
+          <PaymentCard/>
+        </Grid.Row>
+        <Grid.Row>
           <ProgBarComponent />
         </Grid.Row>
         <Grid.Row>

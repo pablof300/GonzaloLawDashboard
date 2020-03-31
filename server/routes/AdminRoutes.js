@@ -5,11 +5,8 @@ const passport = require("passport");
 
 router.get(
   "/getAll",
-  passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getAll
 );
-//get admins without checking they're logged in
-router.get("/:allAdmins",adminController.getAll);
 
 router.get(
   "/",

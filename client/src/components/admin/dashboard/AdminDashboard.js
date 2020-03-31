@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Container } from "semantic-ui-react";
+import {Grid, Container, Header, Icon} from "semantic-ui-react";
 import AdminNav from "../navbar/AdminNav";
 import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import AdminList from "../list/AdminToDoList";
@@ -47,6 +47,10 @@ const AdminDashboard = () => {
   return (
     <div>
       <AdminNav />
+      <Header className={"header"} as="h2" icon textAlign="center">
+        <Icon name="users" circular />
+        <Header.Content>Admin Dashboard</Header.Content>
+      </Header>
       <Container className="ContainerPaddingCorrection1">
         <Grid divided>
           <Grid.Row>
@@ -56,12 +60,6 @@ const AdminDashboard = () => {
             <Grid.Column width={4}>
               <ClientList />
             </Grid.Column>
-          </Grid.Row>
-
-          <Grid.Row>
-            <Container className="ContainerPaddingCorrection2">
-              <AdminList />
-            </Container>
           </Grid.Row>
         </Grid>
       </Container>

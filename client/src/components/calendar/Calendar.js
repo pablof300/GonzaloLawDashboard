@@ -11,6 +11,7 @@ const Calendar = props => {
   const [isMonthlyViewEnabled, setIsMonthlyViewEnabled] = useState(true);
   const [events, setEvents] = useState([]);
   const cal = useRef();
+  let  [,setState]=useState();
 
   useEffect(() => {
     setEvents(props.events);
@@ -25,24 +26,21 @@ const Calendar = props => {
   const addEventCallback = event => {
     let currentEvents = events;
     events.push(event);
-    cal.current
-      .getApi()
-      .addEvent({
+    setEvents(currentEvents);
+    setState({});
+  };
+
+  const getFormattedEvents = (events) => {
+    let formattedEvents = [];
+    events.forEach(event => {
+      formattedEvents.push({
         title: event.title,
         start: event.startDate,
         end: event.endDate
       });
-    setEvents(currentEvents);
-  };
-
-  let formattedEvents = [];
-  events.forEach(event => {
-    formattedEvents.push({
-      title: event.title,
-      start: event.startDate,
-      end: event.endDate
     });
-  });
+    return formattedEvents;
+  }
 
   return (
     <Card fluid>
@@ -51,7 +49,7 @@ const Calendar = props => {
           ref={cal}
           defaultView={isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek"}
           plugins={[dayGridPlugin, timeGridPlugin]}
-          events={formattedEvents}
+          events={getFormattedEvents(events)}
         />
       </Card.Content>
       <Card.Content extra>
