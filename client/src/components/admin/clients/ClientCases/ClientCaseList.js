@@ -14,8 +14,12 @@ const ClientCaseList = props => {
   };
 
   //restructure to return list of accordion components that is matched to each case
+  //use mapping function or something similar
   return (
     <Accordion>
+      {
+        //=========================
+      }
       <Accordion.Title
         active={activeIndex === 0}
         onClick={() => {
@@ -28,6 +32,9 @@ const ClientCaseList = props => {
       <Accordion.Content active={activeIndex === 0}>
         <ProgCard />
       </Accordion.Content>
+      {
+        //=========================
+      }
       <Accordion.Title
         active={activeIndex === 1}
         onClick={() => {
@@ -40,6 +47,9 @@ const ClientCaseList = props => {
       <Accordion.Content active={activeIndex === 1}>
         <ProgCard />
       </Accordion.Content>
+      {
+        //=========================
+      }
     </Accordion>
   );
 };

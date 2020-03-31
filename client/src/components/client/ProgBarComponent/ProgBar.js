@@ -2,81 +2,72 @@ import React, { useState } from "react";
 import { Step, Popup } from "semantic-ui-react";
 import { getCurrentUser } from "../../../../src/api/UserApi";
 
-/*
-This component takes in an array of case steps that will be retrieved from the database and passed down as props.
-It maps each of those case steps to a step component that will be rendered to the user.
-*/
-
 const ProgBar = props => {
-  const [userData, setUserData] = useState([]);
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  if (props.cases !== undefined && props.cases.length !== 0) {
+    const displayedCase = props.cases[0];
 
-  const loadUserData = async () => {
-    const user = (await getCurrentUser()).data;
-    setUserData(user);
-    setIsUserLoaded(true);
-  };
-  if (!isUserLoaded) {
-    loadUserData();
-  }
+    let activeStepSeen = false;
+    const steps = displayedCase.steps.map(function(curStep) {
+      if (curStep.completed === false && activeStepSeen === false) {
+        activeStepSeen = true;
+        return (
+          <Popup
+            trigger={
+              <Step active={true}>
+                <Step.Content>
+                  <Step.Title>{curStep.step}</Step.Title>
+                </Step.Content>
+              </Step>
+            }
+            position="top center"
+            positionFixed
+          >
+            <Popup.Header>{curStep.stepDescription}</Popup.Header>
+          </Popup>
+        );
+      } else if (curStep.completed === false && activeStepSeen === true) {
+        return (
+          <Popup
+            trigger={
+              <Step disabled={true}>
+                <Step.Content>
+                  <Step.Title>{curStep.step}</Step.Title>
+                </Step.Content>
+              </Step>
+            }
+            position="top center"
+            positionFixed
+          >
+            <Popup.Header>{curStep.stepDescription}</Popup.Header>
+          </Popup>
+        );
+      } else {
+        return (
+          <Popup
+            trigger={
+              <Step completed={true}>
+                <Step.Content>
+                  <Step.Title>{curStep.step}</Step.Title>
+                </Step.Content>
+              </Step>
+            }
+            position="top center"
+            positionFixed
+          >
+            <Popup.Header>{curStep.stepDescription}</Popup.Header>
+          </Popup>
+        );
+      }
+    });
 
-  return (
-    <Step.Group size="small" ordered>
-      <Popup
-        positionFixed
-        content="I am positioned to the top center"
-        position="top center"
-        trigger={
-          <Step completed>
-            <Step.Content>
-              <Step.Title>First Step</Step.Title>
-            </Step.Content>
-          </Step>
-        }
-      />
-
-      <Step active>
-        <Step.Content>
-          <Step.Title>Second step</Step.Title>
-        </Step.Content>
-      </Step>
-      <Step disabled>
-        <Step.Content>
-          <Step.Title>Third step</Step.Title>
-        </Step.Content>
-      </Step>
-    </Step.Group>
-  );
-
-  //get id for current user
-  const id = Cookies.get("jwt");
-
-  //pass id into case API to get all cases for that user
-  const cases = ["1", "2"]; //replace this with a default to 0th indexed casein db
-
-  const bar = cases.map(function(element) {
-    //check if step has been completed before returning it
     return (
-      <Popup
-        trigger={
-          <Step>
-            <Step.Content>
-              <Step.Title>Step Title</Step.Title>
-            </Step.Content>
-          </Step>
-        }
-        position="top center"
-      >
-        <Popup.Header>Step Description</Popup.Header>
-      </Popup>
+      <Step.Group size="small" ordered>
+        {steps}
+      </Step.Group>
     );
-  });
-
-  return (
-    <Step.Group size="small" ordered>
-      {bar}
-    </Step.Group>
-  );
+  } else {
+    return <p>No cases for current client.</p>;
+  }
 };
 
 export default ProgBar;
