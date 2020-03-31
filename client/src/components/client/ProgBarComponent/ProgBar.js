@@ -1,49 +1,32 @@
 import React, { useState } from "react";
 import { Step, Popup } from "semantic-ui-react";
+import { getCurrentUser} from "../../../../src/api/UserApi";
 
 /*
 This component takes in an array of case steps that will be retrieved from the database and passed down as props.
 It maps each of those case steps to a step component that will be rendered to the user.
 */
 
-const progBar = props => {
-  /*
-  const progBarItems = props.progBarItems.map(item => {
-    if (item.completed) {
-      return (
-        <Step completed>
-          <Step.Content>
-            <Step.Title>{item.title}</Step.Title>
-          </Step.Content>
-        </Step>
-      );
-    } else if (item.active) {
-      return (
-        <Step active>
-          <Step.Content>
-            <Step.Title>{item.title}</Step.Title>
-          </Step.Content>
-        </Step>
-      );
-    } else {
-      return (
-        <Step disabled>
-          <Step.Content>
-            <Step.Title>{item.title}</Step.Title>
-          </Step.Content>
-        </Step>
-      );
-    }
-  });
-  */
+const ProgBar = props => {
+  const [userData, setUserData] = useState([]);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
+
+  const loadUserData = async () => {
+    const user = (await getCurrentUser()).data;
+    setUserData(user);
+    setIsUserLoaded(true);
+  };
+  if (!isUserLoaded) {
+    loadUserData();
+  }
 
   return (
     <Step.Group  size="small" ordered>
     <Popup positionFixed
- content='I am positioned to the top center' position='top center' trigger={
+        content='I am positioned to the top center' position='top center' trigger={
        <Step completed>
         <Step.Content>
-          <Step.Title>First step</Step.Title>
+          <Step.Title>First Step</Step.Title>
         </Step.Content>
       </Step>
     }/>
@@ -62,4 +45,4 @@ const progBar = props => {
   );
 };
 
-export default progBar;
+export default ProgBar;
