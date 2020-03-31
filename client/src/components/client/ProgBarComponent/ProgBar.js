@@ -42,13 +42,13 @@ const progBar = props => {
         trigger={
           <Step>
             <Step.Content>
-              <Step.Title>element.</Step.Title>
+              <Step.Title>Step Title</Step.Title>
             </Step.Content>
           </Step>
         }
         position="top center"
       >
-        <Popup.Header>More Info</Popup.Header>
+        <Popup.Header>Step Description</Popup.Header>
       </Popup>
     );
   });

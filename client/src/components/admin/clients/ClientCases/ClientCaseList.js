@@ -23,7 +23,7 @@ const ClientCaseList = props => {
         }}
       >
         <Icon name="dropdown" />
-        Finance Case
+        Case Title Here
       </Accordion.Title>
       <Accordion.Content active={activeIndex === 0}>
         <ProgCard />
@@ -35,7 +35,7 @@ const ClientCaseList = props => {
         }}
       >
         <Icon name="dropdown" />
-        Litigation Case
+        Case Title Here
       </Accordion.Title>
       <Accordion.Content active={activeIndex === 1}>
         <ProgCard />
