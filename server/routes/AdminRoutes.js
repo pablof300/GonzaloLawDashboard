@@ -5,9 +5,9 @@ const passport = require("passport");
 
 router.get(
   "/getAll",
-  passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getAll
 );
+
 router.get(
   "/",
   passport.authenticate("adminLoggedIn", { session: false }),
@@ -17,6 +17,11 @@ router.get(
   "/events",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getEvents
+);
+router.post(
+    "/events",
+    passport.authenticate("adminLoggedIn", { session: false }),
+    adminController.addEvent
 );
 router.put(
   "/",

@@ -31,16 +31,24 @@ const MyAccount = () => {
   const getFile = e => {
     e.preventDefault();
     const file = e.target.files;
-    let fileParts;
-    if (file[0] && file[0].name) {
-      fileParts = file[0].name.split(".");
-    }
-    const fileName = fileParts[0];
-    const fileType = fileParts[1];
-    if (checkImageType(fileType.toLowerCase())) {
-        uploadUserProfilePicture(fileName, fileType, file);
-    } else {
-      alert("ERROR: Please upload a valid image");
+    if(file){
+      let fileParts;
+      if (file[0].name) {
+        fileParts = file[0].name.split(".");
+      }
+      const fileName = fileParts[0];
+      const fileType = fileParts[1];
+      if (checkImageType(fileType.toLowerCase())) {
+        const params = {
+          fileName: fileName,
+          fileType: fileType,
+          file: file,
+          userID: userData._id,
+        }
+          uploadUserProfilePicture(params);
+      } else {
+        alert("ERROR: Please upload a valid image");
+      }
     }
   };
 

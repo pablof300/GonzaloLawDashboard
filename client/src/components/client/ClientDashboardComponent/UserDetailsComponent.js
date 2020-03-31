@@ -10,7 +10,7 @@ const panes = [
 
 const UserDetailsComponent = () => {
   return (
-    <Container>
+    <Container style={{marginBottom: '-15vh'}}>
       <Tab
         renderActiveOnly={true}
         menu={{ fluid: true, vertical: true, tabular: true }}
