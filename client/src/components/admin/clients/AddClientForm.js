@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Button, Form, Icon, Input, List, Modal } from "semantic-ui-react";
+import { Button, Form, Icon, Input, Modal } from "semantic-ui-react";
 import { addClient } from "../../../api/AdminApi";
 
-const AddClientForm = () => {
+const AddClientForm = (props) => {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
   const [firstName, setFirstName] = useState(null);
@@ -24,8 +24,8 @@ const AddClientForm = () => {
       username,
       password,
       firstName,
-      middleName,
       lastName,
+      middleName,
       otherName,
       street,
       city,
@@ -40,6 +40,7 @@ const AddClientForm = () => {
     console.log(addClientResponse);
     if (addClientResponse.data) {
       alert("Successfully added new client!");
+      props.addClientCallback(addClientResponse.data)
       setOpen(false);
     } else {
       alert("Failed to add client, please try again!");

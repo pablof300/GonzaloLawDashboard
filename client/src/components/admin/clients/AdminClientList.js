@@ -23,9 +23,15 @@ const ClientList = () => {
 
   const loadUsers = async () => {
     const lawyerClients = await getAllClients();
-    setClientList(lawyerClients);
+    setClientList(lawyerClients.data);
     setClients(true);
   };
+
+  const addClientCallback = (client) => {
+    let currentClients = listOfClients;
+    currentClients.push(client)
+    setClientList(currentClients)
+  }
 
   if (!clients) {
     loadUsers();
@@ -33,8 +39,8 @@ const ClientList = () => {
 
   const myClientList = [];
   if (clients) {
-    for (let i = 0; i < listOfClients.data.length; i++) {
-      myClientList.push(listOfClients.data[i]);
+    for (let i = 0; i < listOfClients.length; i++) {
+      myClientList.push(listOfClients[i]);
     }
   }
 
@@ -79,7 +85,7 @@ const ClientList = () => {
       <List divided verticalAlign="middle">
         <List.Item className="List-Header">
           <List.Content floated="right">
-            <AddClientForm />
+            <AddClientForm addClientCallback={addClientCallback} />
           </List.Content>
           <List.Content id="content">Client List</List.Content>
         </List.Item>
