@@ -1,0 +1,28 @@
+.header {
+  border-color: rgba(34,36,38,.1)!important;
+  border-bottom: 1px solid;
+  padding-top: 0.5rem;
+  padding-bottom: 1.12rem;
+}
+
+.ui.celled.grid.container {
+  margin-top: 0!important;
+  padding-top: 0!important;
+  padding-bottom: 0!important;
+}
+
+.three.wide.column {
+  padding: 0!important;
+}
+
+.thirteen.wide.column {
+  padding: 0!important;
+}
+
+.container {
+  margin-top: 0!important;
+}
+
+.gridCSS {
+  margin-top: 0!important;
+}
