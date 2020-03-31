@@ -13,7 +13,10 @@ import {
 } from "semantic-ui-react";
 import "./FileComponent.css";
 import FileUploadComponent from "./FileUploadComponent";
-import { getAllUserFiles, deleteUserFileById } from "../../../../src/api/UserApi";
+import {
+  getAllUserFiles,
+  deleteUserFileById
+} from "../../../../src/api/UserApi";
 
 const FileComponent = () => {
   const [listOfFiles, setListOfFiles] = useState([]);
@@ -27,7 +30,11 @@ const FileComponent = () => {
   });
   const [isFilesPopulated, setIsFilesPopulated] = useState(false);
 
-  let itemsPerPage = 5, totalPages, startIndex, endIndex, allFileListInPagination = [];
+  let itemsPerPage = 5,
+    totalPages,
+    startIndex,
+    endIndex,
+    allFileListInPagination = [];
 
   const loadFiles = async () => {
     const data = await getAllUserFiles();
@@ -216,7 +223,7 @@ const FileComponent = () => {
                     <div>
                       <Popup
                         content="Add supporting files"
-                        position='top right'
+                        position="top right"
                         positionFixed
                         trigger={
                           <Button

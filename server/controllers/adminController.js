@@ -1,4 +1,5 @@
 const adminDAO = require("../dao/AdminDAO");
+const eventDAO = require("../dao/EventDAO");
 const catchErrors = require("../util/catchErrors.js");
 
 exports.getAll = async (req, res) => {
@@ -51,5 +52,16 @@ exports.getAllClients = async (req, res) =>
 
 exports.getEvents = async (req, res) =>
   catchErrors(res, async () => {
-    return eventDAO.getEventsByAdmin(req.adminID);
+    return eventDAO.getEventsByAdmin(req.adminId);
   });
+
+exports.addEvent = async (req, res) =>
+    catchErrors(res, async () => {
+        let startDate = new Date(req.query.startDate);
+        let endDateTime = new Date(req.query.startDate).getTime();
+        endDateTime += (req.query.duration * 60 * 1000);
+
+        let event = { title: req.query.title, type: req.query.type, startDate: startDate, endDate: new Date(endDateTime), notes: req.query.notes, admins: [req.adminId], clients: [req.query.clientId]}
+        console.log(event)
+        return eventDAO.addEvent(event)
+    });

@@ -50,23 +50,22 @@ const uploadUserProfilePicture = (fileName, fileType, file) => {
       };
 
       API.put(signedRequest, file[0], options)
-          .then(result => {
-            console.log("We got response from s3");
+        .then(result => {
+          console.log("We got response from s3");
 
-            const userData = {
-              imageUrl: url
-            };
-            updateUserData(userData).then(res => {
-              if (res) {
-                alert("Profile Picture updated successfully");
-                console.log("Profile Picture updated successfully");
-              }
-            });
-          })
-          .catch(error => {
-            alert(JSON.stringify(error));
+          const userData = {
+            imageUrl: url
+          };
+          updateUserData(userData).then(res => {
+            if (res) {
+              alert("Profile Picture updated successfully");
+              console.log("Profile Picture updated successfully");
+            }
           });
-     
+        })
+        .catch(error => {
+          alert(JSON.stringify(error));
+        });
     })
     .catch(error => {
       alert(JSON.stringify(error));
@@ -139,21 +138,21 @@ const updateUserData = async data => {
 };
 
 const getEvents = async () => {
-    let axiosResponse = await API.get("/user/events", {
-        headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  let axiosResponse = await API.get("/user/events", {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
     })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            if (error.response) {
-                return { error: error.response.data.error };
-            }
-            return {
-                error: "Unable to retrieve events!"
-            };
-        });
-    return axiosResponse;
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve events!"
+      };
+    });
+  return axiosResponse;
 };
 
 export {

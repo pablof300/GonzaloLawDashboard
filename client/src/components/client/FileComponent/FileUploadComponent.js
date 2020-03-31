@@ -108,16 +108,18 @@ const FileUploadComponent = props => {
                   size: fileSize,
                   url: url
                 };
-                axios.post("/files", fileToStore, {
-                  headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
-                }).then(res => {
-                  setPortalProp({
-                    color: "green",
-                    buttonText: "Done!",
-                    text: "Uploaded Successfully"
+                axios
+                  .post("/files", fileToStore, {
+                    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+                  })
+                  .then(res => {
+                    setPortalProp({
+                      color: "green",
+                      buttonText: "Done!",
+                      text: "Uploaded Successfully"
+                    });
+                    props.setIsFilesPopulated(false);
                   });
-                  props.setIsFilesPopulated(false);
-                });
               };
               postFileInDatabase();
             })

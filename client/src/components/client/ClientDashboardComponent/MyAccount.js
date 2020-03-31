@@ -38,7 +38,7 @@ const MyAccount = () => {
     const fileName = fileParts[0];
     const fileType = fileParts[1];
     if (checkImageType(fileType.toLowerCase())) {
-        uploadUserProfilePicture(fileName, fileType, file);
+      uploadUserProfilePicture(fileName, fileType, file);
     } else {
       alert("ERROR: Please upload a valid image");
     }
@@ -67,7 +67,7 @@ const MyAccount = () => {
               />
               <Popup
                 content="Click to Change Profile Picture"
-                position='top center'
+                position="top center"
                 trigger={
                   <div style={{ marginTop: 20 }}>
                     <label for="file" class="ui icon button">

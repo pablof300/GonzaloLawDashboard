@@ -18,6 +18,11 @@ router.get(
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getEvents
 );
+router.post(
+    "/events",
+    passport.authenticate("adminLoggedIn", { session: false }),
+    adminController.addEvent
+);
 router.put(
   "/",
   passport.authenticate("adminLoggedIn", { session: false }),
