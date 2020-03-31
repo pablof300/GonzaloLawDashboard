@@ -2,7 +2,7 @@ import API from "./BaseApi.js";
 import Cookies from "js-cookie";
 
 const getCurrentUser = async () => {
-  let axiosResponse = await API.get("/user/", {
+  let axiosResponse = await API.get("/user", {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {
@@ -23,7 +23,7 @@ const getCurrentUser = async () => {
 const getAllUserFiles = async () => {
   const user = (await getCurrentUser()).data;
   let allFiles = [];
-  if(user.files){
+  if (user && user.files) {
     const filesID = user.files;
     for (let i = 0; i < filesID.length; i++) {
       const data = (await getUserFileById(filesID[i])).data;
@@ -32,13 +32,13 @@ const getAllUserFiles = async () => {
       }
     }
   }
- 
+
   return allFiles;
 };
 
 const checkIfUserUploadingFileExist = async (fileName, fileType) => {
   const user = (await getCurrentUser()).data;
-  if(user.files){
+  if (user && user.files) {
     const filesID = user.files;
     for (let i = 0; i < filesID.length; i++) {
       const data = (await getUserFileById(filesID[i])).data;
@@ -55,25 +55,34 @@ const getAllLawyersWorkingOnUserCase = async () => {
   let result = null;
   if (user) {
     const userID = user._id;
-    result = await API.get("/admin/:allAdmins").then(res => {
+    result = await API.get("/admin/:allAdmins", {
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }).then(res => {
       const lawyers = res.data.data;
-      let userLawyers = [];
-      for (let i = 0; i < lawyers.length; i++) {
-        if (lawyers[i] && lawyers[i].clients) {
-          const lawyer = lawyers[i];
-          const clients = lawyers[i].clients;
-          for (let j = 0; j < clients.length; j++) {
-            if (clients[j] === userID) {
-              userLawyers.push(lawyer);
-              break;
+      if(lawyers){
+        let userLawyers = [];
+        for (let i = 0; i < lawyers.length; i++) {
+          if (lawyers[i] && lawyers[i].clients) {
+            const lawyer = lawyers[i];
+            const clients = lawyers[i].clients;
+            for (let j = 0; j < clients.length; j++) {
+              if (clients[j] === userID) {
+                userLawyers.push(lawyer);
+                break;
+              }
             }
           }
         }
+        return userLawyers;
       }
-      return userLawyers;
-    });
+    }).catch(error => {
+      if(error && error.response){
+        return {error: error.response}
+      }
+      return {
+        error: "Unable to retrieve user lawyers!"
+      };
+    })
   }
-
   return result;
 };
 
@@ -139,48 +148,52 @@ const getUserFileById = async id => {
 const deleteUserFileById = async params => {
   const user = (await getCurrentUser()).data;
   let result = false;
-  result = await API.delete("/fileAws", {
-    data: {
-      fileName: params.fileName,
-      userID: user._id,
-      folder: params.folder
-    }
-  })
-    .then(res => {
-      if (res.data.success) {
-        const deleteFromDB = async () => {
-          const res = await API.delete(`/files/${params.id}`, {
-            headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
-          })
-            .then(response => {
-              return response.data.ok;
-            })
-            .catch(error => {
-              console.log("ERROR! " + error);
-            });
-          return res;
-        };
-        return deleteFromDB();
+  if (user) {
+    result = await API.delete("/fileAws", {
+      data: {
+        fileName: params.fileName,
+        userID: user._id,
+        folder: params.folder
       }
     })
-    .catch(error => {
-      console.log("File failed to delete!");
-      console.log(error);
-      result = false;
-    });
+      .then(res => {
+        if (res.data.success) {
+          const deleteFromDB = async () => {
+            const res = await API.delete(`/files/${params.id}`, {
+              headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+            })
+              .then(response => {
+                return response.data.ok;
+              })
+              .catch(error => {
+                if(error && error.response) console.log("ERROR! " + error.response);
+              });
+            return res;
+          };
+          return deleteFromDB();
+        }
+      })
+      .catch(error => {
+        if(error && error.response){
+          console.log("File failed to delete!");
+          console.log(error.response);
+        }
+        result = false;
+      });
+  }
 
   return result;
 };
 
 const updateUserData = async data => {
-  let axiosResponse = await API.put("/user/:id", data, {
+  let axiosResponse = await API.put("/user", data, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {
       return response.data;
     })
     .catch(error => {
-      if (error.response) {
+      if (error !== null && error.response) {
         return { error: error.response.data.error };
       }
       return {
@@ -192,21 +205,21 @@ const updateUserData = async data => {
 };
 
 const getEvents = async () => {
-    let axiosResponse = await API.get("/user/events", {
-        headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  let axiosResponse = await API.get("/user/events", {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
     })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            if (error.response) {
-                return { error: error.response.data.error };
-            }
-            return {
-                error: "Unable to retrieve events!"
-            };
-        });
-    return axiosResponse;
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve events!"
+      };
+    });
+  return axiosResponse;
 };
 
 export {

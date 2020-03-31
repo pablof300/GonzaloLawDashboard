@@ -30,8 +30,11 @@ const MyTeam = () => {
 
   const loadTeam = async () => {
     const userLawyers = await getAllLawyersWorkingOnUserCase();
-    setListOfLawyers(userLawyers);
-    setUserLawyers(true);
+    if(userLawyers){
+      setListOfLawyers(userLawyers);
+      setUserLawyers(true);
+    }
+    
   };
 
   if (!userLawyers) {
@@ -72,17 +75,19 @@ const MyTeam = () => {
   };
 
   const performTeamPagination = () => {
-    if (listOfLawyers.length % itemsPerPage === 0) {
-      totalPages = listOfLawyers.length / itemsPerPage;
-    } else {
-      totalPages = parseInt(listOfLawyers.length / itemsPerPage) + 1;
-    }
+    if (listOfLawyers) {
+      if (listOfLawyers.length % itemsPerPage === 0) {
+        totalPages = listOfLawyers.length / itemsPerPage;
+      } else {
+        totalPages = parseInt(listOfLawyers.length / itemsPerPage) + 1;
+      }
 
-    startIndex = (currentPage - 1) * itemsPerPage;
-    endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
+      startIndex = (currentPage - 1) * itemsPerPage;
+      endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
 
-    for (let i = startIndex; i < endIndex; i++) {
-      allTeamListInPagination.push(listOfLawyers[i]);
+      for (let i = startIndex; i < endIndex; i++) {
+        allTeamListInPagination.push(listOfLawyers[i]);
+      }
     }
   };
 

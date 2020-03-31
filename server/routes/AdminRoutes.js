@@ -8,8 +8,8 @@ router.get(
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getAll
 );
-//get admins without checking they're logged in
-router.get("/:allAdmins",adminController.getAll);
+
+router.get("/:allAdmins", passport.authenticate("loggedIn", { session: false }),adminController.getAll);
 
 router.get(
   "/",

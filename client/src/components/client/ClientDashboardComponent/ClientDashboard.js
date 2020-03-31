@@ -22,23 +22,6 @@ const ClientDashboard = () => {
   return (
     <div>
       <NavBar />
-      <Container className={"container"}>
-        <Grid centered>
-          <Grid.Row>
-            <Header className={"header"} as="h2" icon textAlign="center">
-              <Icon name="users" circular />
-              <Header.Content>Client Dashboard</Header.Content>
-            </Header>
-          </Grid.Row>
-          <Grid.Row>
-            <ProgBarComponent />
-          </Grid.Row>
-          <Grid.Row>
-            <FileComponent />
-          </Grid.Row>
-        </Grid>
-      </Container>
-    <NavBar/>
     <Container className={"container"}>
       <Grid centered>
         <Grid.Row>
