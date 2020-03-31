@@ -1,23 +1,78 @@
 import API from "./BaseApi.js";
 import Cookies from "js-cookie";
 
-const getEvents = async () => {
-    console.log("Doing this?")
-    let axiosResponse = await API.get("/admin/events", {
-        headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+const getAllClients = async () => {
+  let axiosResponse = await API.get("/admin/clients", {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
     })
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            if (error.response) {
-                return { error: error.response.data.error };
-            }
-            return {
-                error: "Unable to retrieve events!"
-            };
-        });
-    return axiosResponse;
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve clients!"
+      };
+    });
+  return axiosResponse;
 };
 
-export { getEvents };
+const getEvents = async () => {
+  let axiosResponse = await API.get("/admin/events", {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve events!"
+      };
+    });
+  return axiosResponse;
+};
+
+const addEvent = async (title, type, startDate, duration, notes, clientId) => {
+  // console.log(title)
+  // console.log(type)
+  // console.log(startDate)
+  // console.log(duration)
+  // console.log(notes)
+  // console.log(clientId)
+  let axiosResponse = await API.post(
+    "/admin/events",
+    {},
+    {
+      // startDate: "Tue Mar 31 2020 09:06:08 GMT-0400 (Eastern Daylight Time)",
+      // duration: 2,
+      params: {
+        title: title,
+        type: type,
+        startDate: startDate,
+        duration: duration,
+        clientId: clientId,
+        notes: notes
+      },
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    }
+  )
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve events!"
+      };
+    });
+  return axiosResponse;
+};
+
+export { getEvents, getAllClients, addEvent };

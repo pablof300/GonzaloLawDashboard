@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid, Container } from "semantic-ui-react";
 import AdminNav from "../navbar/AdminNav";
 import FooterComponent from "../../util/FooterComponent/FooterComponent";
@@ -14,36 +14,36 @@ import { Redirect } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [isVerified, setIsVerified] = useState(true);
-  const [events, setEvents] = useState([])
+  const [events, setEvents] = useState([]);
 
   verifyAdmin().then(verified => {
     setIsVerified(verified);
-  })
+  });
 
   useEffect(() => {
-      setEventData()
-  });
+    setEventData();
+  }, []);
 
   const setEventData = async () => {
     if (events.length > 0) {
-      return
+      return;
     }
-    let eventResponse = await getEvents()
-    console.log(eventResponse)
+    let eventResponse = await getEvents();
+    console.log(eventResponse);
     if (eventResponse.data) {
       console.log("Successfully fetched event data");
       setEvents(eventResponse.data);
     } else {
-      console.log(eventResponse.error)
-      console.log("Unable to fetch event data")
-    };
+      console.log(eventResponse.error);
+      console.log("Unable to fetch event data");
+    }
   };
 
   if (!isVerified) {
     return <Redirect to="/adminlogin" />;
   }
 
-  console.log(events)
+  console.log(events);
   return (
     <div>
       <AdminNav />

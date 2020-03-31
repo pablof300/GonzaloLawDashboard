@@ -8,6 +8,10 @@ exports.getEventsByAdmin = async adminId => {
   return events;
 };
 
+exports.addEvent = async eventParams => {
+  return await new Event(eventParams).save();
+};
+
 exports.getEventsByUser = async adminId => {
   const events = await Event.find({ clients: adminId });
   if (!events) throw new NotFoundError();

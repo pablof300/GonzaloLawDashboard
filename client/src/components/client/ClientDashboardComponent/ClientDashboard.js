@@ -5,9 +5,10 @@ import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
+import PaymentCard from "../PaymentComponent/PaymentCard"
 import { verifyUser } from "../../../api/AuthApi";
 import { Redirect } from "react-router-dom";
-import UserDetailsComponent from './UserDetailsComponent';
+import UserDetailsComponent from "./UserDetailsComponent";
 
 const ClientDashboard = () => {
   const [isVerified, setIsVerified] = useState(true);

@@ -50,7 +50,6 @@ const MyAccount = () => {
         alert("ERROR: Please upload a valid image");
       }
     }
-   
   };
 
   return (
