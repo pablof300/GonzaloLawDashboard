@@ -4,7 +4,7 @@ const router = express.Router();
 const passport = require("passport");
 
 router.get(
-  "/",
+  "/all",
   passport.authenticate("loggedIn", { session: false }),
   caseController.getAll
 );
@@ -19,7 +19,7 @@ router.put(
   caseController.update
 );
 router.post(
-  "/", 
+  "/",
   passport.authenticate("loggedIn", { session: false }),
   caseController.create
 );
@@ -28,7 +28,5 @@ router.delete(
   passport.authenticate("adminLoggedIn", { session: false }),
   caseController.delete
 );
-
-
 
 module.exports = router;

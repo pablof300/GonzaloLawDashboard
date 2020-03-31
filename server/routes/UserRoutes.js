@@ -30,32 +30,32 @@ router.delete(
 
 router.get(
   "/:id/cases",
-  passport.authenticate("loggedIn", { session: false}),
+  passport.authenticate("loggedIn", { session: false }),
   userController.getCases
 );
 
 router.get(
   "/:id/:caseid",
-  passport.authenticate("adminLoggedIn", { session: false}),
+  passport.authenticate("adminLoggedIn", { session: false }),
   userController.getCase
-); 
+);
 
 router.post(
   "/:id/cases",
-  passport.authenticate("adminLoggedIn", { session: false}),
+  passport.authenticate("adminLoggedIn", { session: false }),
   userController.createCase
 );
 
 router.put(
   "/:id/:caseid",
-  passport.authenticate("adminLoggedIn", { session: false}),
+  passport.authenticate("adminLoggedIn", { session: false }),
   userController.updateCase
 );
 
 router.delete(
-"/:id/:caseid",
-passport.authenticate("adminLoggedIn", { session: false}),
-userController.deleteCase
+  "/:id/:caseid",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  userController.deleteCase
 );
 
 module.exports = router;
