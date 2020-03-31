@@ -2,8 +2,8 @@
   margin-top: 10vh !important;
   padding-bottom: 20vh !important;
 }
-.footer{
-  position: fixed;
+.grey menu{
+  position: absolute;
   bottom: 0;
   width: 100%;
   text-align: center;

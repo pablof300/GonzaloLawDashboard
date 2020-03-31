@@ -37,6 +37,25 @@ const getEvents = async () => {
   return axiosResponse;
 };
 
+const getCurrentAdmin = async () => {
+    let axiosResponse = await API.get("/admin/", {
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    })
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        if (error !== null && error.response) {
+          return { error: error.response };
+        }
+        return {
+          error: "Unable to retrieve user!"
+        };
+      });
+
+    return axiosResponse;
+  };
+
 const addEvent = async (title, type, startDate, duration, notes, clientId) => {
   let axiosResponse = await API.post(
     "/admin/events",
