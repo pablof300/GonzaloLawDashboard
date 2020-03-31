@@ -22,9 +22,9 @@ const App = () => {
         </Route>
         <Route component={NotFound} />
       </Switch>
-      <footer>
-        <FooterComponent />
-      </footer>
+      
+        
+      
     </div>
   );
 };
