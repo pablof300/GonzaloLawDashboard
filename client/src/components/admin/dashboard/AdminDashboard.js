@@ -55,7 +55,7 @@ const AdminDashboard = () => {
         <Grid divided>
           <Grid.Row>
             <Grid.Column width={12}>
-              <Calendar events={events} />
+              <Calendar adminView={true} events={events} />
             </Grid.Column>
             <Grid.Column width={4}>
               <ClientList />

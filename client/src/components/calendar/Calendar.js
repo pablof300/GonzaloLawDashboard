@@ -53,7 +53,9 @@ const Calendar = props => {
         />
       </Card.Content>
       <Card.Content extra>
-        <AddEvent addEventCallback={addEventCallback} />
+        {props.adminView &&
+          <AddEvent addEventCallback={addEventCallback} />
+        }
         <Button
           color={"green"}
           onClick={() => setIsMonthlyViewEnabled(!isMonthlyViewEnabled)}

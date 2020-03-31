@@ -12,7 +12,7 @@ interface Event {
 
 const eventData: Event[] = [
     {
-        title: "Mr. Trevor",
+        title: "Mr. Estrada",
         type: 'Client Appointment',
         startDate: new Date("2020-03-25T08:00:00"),
         endDate: new Date("2020-03-25T09:00:00"),
