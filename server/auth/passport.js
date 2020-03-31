@@ -107,11 +107,10 @@ passport.use(
       passReqToCallback: true
     },
     async (req, jwtPayload, done) => {
-      req.adminID = jwtPayload.id;
+      req.adminId = jwtPayload.id;
       if (await adminDAO.get(jwtPayload.id)) {
         return done(null, true);
       } else {
-        console.log("yaSsS!?");
         return done("Invalid token?");
       }
     }

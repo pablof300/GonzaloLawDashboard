@@ -6,7 +6,7 @@ import NotFound from "./views/NotFound";
 import NavBar from "./components/util/NavBarComponent/NavBar";
 import FooterComponent from "./components/util/FooterComponent/FooterComponent";
 import ClientDashboard from "./components/client/ClientDashboardComponent/ClientDashboard";
-import AdminDashboard from "./components/admin/AdminComponents/AdminDashboard";
+import AdminDashboard from "./components/admin/dashboard/AdminDashboard";
 import AdminLogin from "./views/AdminLogin/AdminLogin";
 
 const App = () => {

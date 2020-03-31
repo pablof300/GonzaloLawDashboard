@@ -18,7 +18,6 @@ exports.get = async id => {
   if (!user) {
     console.log("Could not find an user for the given id!");
   }
-
   return user;
 };
 
@@ -27,6 +26,24 @@ exports.getByUsername = async username => {
   if (!user) throw new NotFoundError();
 
   return user;
+};
+
+exports.addFileToUser = async (id, data) => {
+  await User.findOneAndUpdate({ _id: id }, { $push: { files: data._id } }).exec(
+    (err, data) => {
+      if (err) console.log("error: " + err);
+    }
+  );
+  return exports.get(id).files;
+};
+
+exports.deleteFileById = async (id, fileID) => {
+  await User.findOneAndUpdate({ _id: id }, { $pull: { files: fileID } }).exec(
+    (err, data) => {
+      if (err) console.log("error: " + err);
+    }
+  );
+  return exports.get(id).files;
 };
 
 exports.update = async (id, updatedData) => {

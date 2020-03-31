@@ -1,15 +1,16 @@
-const userDAO = require("../dao/UserDAO");
 const catchErrors = require("../util/catchErrors");
+const userDAO = require("../dao/UserDAO");
 
 exports.getAll = async (req, res) =>
   catchErrors(res, async () => {
     return userDAO.getAll();
   });
 
-exports.get = async (req, res) =>
+exports.get = async (req, res) => {
   catchErrors(res, async () => {
     return userDAO.get(req.userId);
   });
+};
 
 exports.update = async (req, res) =>
   catchErrors(res, async () => {
@@ -24,6 +25,11 @@ exports.create = async (req, res) =>
 exports.delete = async (req, res) =>
   catchErrors(res, async () => {
     return userDAO.delete(req.userId);
+  });
+
+exports.getEvents = async (req, res) =>
+  catchErrors(res, async () => {
+    return eventDAO.getEventsByUser(req.userId);
   });
 
 exports.getCases = async (req, res) =>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Step } from "semantic-ui-react";
+import { Step, Popup } from "semantic-ui-react";
 
 /*
 This component takes in an array of case steps that will be retrieved from the database and passed down as props.
@@ -38,12 +38,16 @@ const progBar = props => {
   */
 
   return (
-    <Step.Group style={{ overflow: "auto" }} size="small" ordered>
-      <Step completed>
+    <Step.Group  size="small" ordered>
+    <Popup positionFixed
+ content='I am positioned to the top center' position='top center' trigger={
+       <Step completed>
         <Step.Content>
           <Step.Title>First step</Step.Title>
         </Step.Content>
       </Step>
+    }/>
+     
       <Step active>
         <Step.Content>
           <Step.Title>Second step</Step.Title>
