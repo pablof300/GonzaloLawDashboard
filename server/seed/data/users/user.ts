@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 interface User {
     username: string;
     password: string;
+    cases:  Types.ObjectId[];
     firstName: string;
     secondName: String;
     middleName: String;
@@ -30,6 +31,7 @@ const usersData: User[] = [
         password: "123456",
         firstName: "Pablo",
         secondName: "Estrada",
+        cases: [new Types.ObjectId('16cb91bdc3464f14678934ca')],
         middleName: "White",
         otherName: "BoneCracker",
         imageUrl: "https://react.semantic-ui.com/images/wireframe/square-image.png",
@@ -53,6 +55,7 @@ const usersData: User[] = [
         password: "Jesus100",
         firstName: "Edward",
         secondName: "Mensah",
+        cases: [new Types.ObjectId('16cb91bdc3464f14678934ca')],
         middleName: "Dubi",
         otherName: "Cat",
         imageUrl: "https://react.semantic-ui.com/images/wireframe/square-image.png",
@@ -76,6 +79,7 @@ const usersData: User[] = [
         password: "peter",
         firstName: "Peter",
         secondName: "Brown",
+        cases: [new Types.ObjectId('16cb91bdc3464f14678934ca')],
         middleName: "White",
         otherName: "BoneCracker",
         imageUrl: "https://react.semantic-ui.com/images/wireframe/square-image.png",
@@ -99,6 +103,7 @@ const usersData: User[] = [
         password: "Jesus100",
         firstName: "Edward",
         secondName: "Mensah",
+        cases: [new Types.ObjectId('16cb91bdc3464f14678934ca')],
         middleName: "Dubi",
         otherName: "BoneCracker",
         imageUrl: "https://react.semantic-ui.com/images/wireframe/square-image.png",
