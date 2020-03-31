@@ -5,6 +5,7 @@ const Schema = new mongoose.Schema({
   type: { type: String, required: true },
   startDate: { type: Date, required: true },
   endDate: { type: Date, required: true },
+  notes: { type: String, required: true },
   admins: [
     {
       type: mongoose.Schema.Types.ObjectId,
