@@ -8,6 +8,7 @@ const ClientCard = props => {
     <Item.Group>
       <Item>
         <Item.Image size="tiny" src={props.clientData.imageUrl} />
+
         <Item.Content>
           <Item.Header className="ClientCard">{props.clientName}</Item.Header>
           <Item.Meta>Contact Information</Item.Meta>
@@ -17,7 +18,7 @@ const ClientCard = props => {
           <Item.Description>
             {"Phone: " + props.clientData.contact.cellPhone}
           </Item.Description>
-          <ClientCaseCard />
+          <ClientCaseCard clientData={props.clientData} />
         </Item.Content>
       </Item>
     </Item.Group>

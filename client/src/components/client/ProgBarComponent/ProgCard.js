@@ -39,7 +39,27 @@ const ProgCard = props => {
       </Card>
     );
   } else {
-    return <p>Still working on integration for admin dashboard.</p>;
+    //if user is admin
+    console.log(props.case);
+    return (
+      <Card fluid>
+        <Card.Content>
+          <Card.Header
+            style={{ backgroundColor: "transparent" }}
+            textAlign={"center"}
+          >
+            Case Progress
+          </Card.Header>
+          <div class="ui grid">
+            <div class="centered row">
+              <Card.Description>
+                <ProgBar case={props.case} />
+              </Card.Description>
+            </div>
+          </div>
+        </Card.Content>
+      </Card>
+    );
   }
 };
 
