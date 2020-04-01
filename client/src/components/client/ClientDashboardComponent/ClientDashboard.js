@@ -55,7 +55,7 @@ const ClientDashboard = () => {
           </Header>
         </Grid.Row>
         <Grid.Row>
-          <ProgBarComponent />
+          <ProgBarComponent isClient={true} />
         </Grid.Row>
         <Grid.Row>
           <UserDetailsComponent/>

@@ -14,7 +14,12 @@ exports.getAll = async () => {
 };
 
 exports.get = async id => {
-  const user = await User.findById(id);
+  const user = await User.findById(id)
+      .populate("cases")
+      .exec()
+      .then(data => {
+        return data;
+      });
   if (!user) {
     console.log("Could not find an user for the given id!");
   }
