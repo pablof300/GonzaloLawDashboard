@@ -52,8 +52,8 @@ const usersData: User[] = [
     },
     {
         username: "robert",
-        password: "Jesus100",
-        firstName: "Edward",
+        password: "robert",
+        firstName: "Robert",
         secondName: "Mensah",
         cases: [new Types.ObjectId('16cb91bdc3464f14678934ca')],
         middleName: "Dubi",

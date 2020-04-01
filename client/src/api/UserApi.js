@@ -55,7 +55,7 @@ const getAllLawyersWorkingOnUserCase = async () => {
   let result = null;
   if (user) {
     const userID = user._id;
-    result = await API.get("/admin/:allAdmins", {
+    result = await API.get("/admin/allAdmins", {
       headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
     })
       .then(res => {

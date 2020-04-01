@@ -10,7 +10,7 @@ router.get(
 );
 
 router.get(
-  "/:allAdmins",
+  "/allAdmins",
   passport.authenticate("loggedIn", { session: false }),
   adminController.getAll
 );
