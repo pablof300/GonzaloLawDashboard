@@ -1,4 +1,5 @@
 const adminController = require("../controllers/adminController");
+const caseController = require("../controllers/caseController");
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
@@ -57,6 +58,12 @@ router.post(
   "/client",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.addClient
+);
+
+router.get(
+  "/case/:id",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  caseController.get
 );
 
 module.exports = router;

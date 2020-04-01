@@ -21,7 +21,9 @@ const ClientCard = (props) => {
         <Item.Description>
         {"Phone: " + props.clientData.contact.cellPhone}
         </Item.Description>
-        <ClientCaseCard/>
+        <ClientCaseCard
+        clientData = {props.clientData}
+        />
       </Item.Content>
     </Item>
   </Item.Group>

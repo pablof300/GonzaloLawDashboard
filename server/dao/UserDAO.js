@@ -90,7 +90,7 @@ exports.getCases = async id => {
   if (!user) {
     throw new NotFoundError();
   }
-  return usfer.cases;
+  return user.cases;
 };
 
 exports.getCase = async (id, caseid) => {
