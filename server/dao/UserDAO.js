@@ -15,11 +15,19 @@ exports.getAll = async () => {
 
 exports.get = async id => {
   const user = await User.findById(id)
+<<<<<<< HEAD
     .populate("cases")
     .exec()
     .then(data => {
       return data;
     });
+=======
+      .populate("cases")
+      .exec()
+      .then(data => {
+        return data;
+      });
+>>>>>>> f7c092c9272d6e4ec8c514b5868ee3b3883e6f14
   if (!user) {
     console.log("Could not find an user for the given id!");
   }

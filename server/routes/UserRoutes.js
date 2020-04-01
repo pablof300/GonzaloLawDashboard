@@ -45,8 +45,6 @@ router.put(
   passport.authenticate("loggedIn", { session: false }),
   userController.update
 );
-
-router.post("/", userController.create);
 router.delete(
   "/",
   passport.authenticate("loggedIn", { session: false }),

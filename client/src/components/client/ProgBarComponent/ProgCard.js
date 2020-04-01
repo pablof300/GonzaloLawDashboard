@@ -20,6 +20,7 @@ const ProgCard = props => {
     const cases = userData.cases;
 
     return (
+<<<<<<< HEAD
       <Card fluid>
         <Card.Content>
           <Card.Header
@@ -37,6 +38,25 @@ const ProgCard = props => {
           </div>
         </Card.Content>
       </Card>
+=======
+        <Card fluid>
+          <Card.Content>
+            <Card.Header
+                style={{ backgroundColor: "transparent" }}
+                textAlign={"center"}
+            >
+              Case Progress
+            </Card.Header>
+            <div class="ui grid">
+              <div class="centered row">
+                <Card.Description>
+                  <ProgBar cases={cases} />
+                </Card.Description>
+              </div>
+            </div>
+          </Card.Content>
+        </Card>
+>>>>>>> f7c092c9272d6e4ec8c514b5868ee3b3883e6f14
     );
   } else {
     return <p>Still working on integration for admin dashboard.</p>;

@@ -53,8 +53,8 @@ router.put(
   adminController.removeClient
 );
 
-router.put(
-  "/add/:clientId",
+router.post(
+  "/client",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.addClient
 );

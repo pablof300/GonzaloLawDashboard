@@ -1,26 +1,36 @@
-import React from "react";
+import React, {useState} from "react";
 import { Image, Item } from "semantic-ui-react";
 import ClientCaseCard from "./ClientCases/ClientCaseCard.js";
 import "../Admin.css";
+import ClientCaseCard from "./ClientCases/ClientCaseCard";
 
-const ClientCard = () => (
+const ClientCard = (props) => {
+  return(
   <Item.Group>
     <Item>
       <Item.Image
         size="tiny"
-        src="https://i.groupme.com/200x150.jpeg.6f275572e9ac4e74a548e82d18d96202.avatar"
+        src={props.clientData.imageUrl}
       />
       <Item.Content>
-        <Item.Header className="ClientCard">Hutch VanDyke</Item.Header>
-        <Item.Meta>Description</Item.Meta>
+        <Item.Header className="ClientCard">{props.clientName}</Item.Header>
+        <Item.Meta>Contact Information</Item.Meta>
         <Item.Description>
-          <Image src="https://react.semantic-ui.com/images/wireframe/short-paragraph.png" />
+        {"Email: " + props.clientData.contact.email}
         </Item.Description>
+<<<<<<< HEAD
         <Item.Extra>Additional Details</Item.Extra>
         <ClientCaseCard />
+=======
+        <Item.Description>
+        {"Phone: " + props.clientData.contact.cellPhone}
+        </Item.Description>
+        <ClientCaseCard/>
+>>>>>>> f7c092c9272d6e4ec8c514b5868ee3b3883e6f14
       </Item.Content>
     </Item>
   </Item.Group>
 );
+}
 
 export default ClientCard;

@@ -1,68 +1,80 @@
-import React, {useState} from "react";
-import { Button, Card, Icon, Image, List, Container } from "semantic-ui-react";
+import React, { useState } from "react";
+import {
+  Button,
+  Card,
+  Icon,
+  Image,
+  List,
+  Container,
+  Modal
+} from "semantic-ui-react";
 import AddClientForm from "./AddClientForm";
 import ClientCard from "./ClientCard";
 import Popup from "reactjs-popup";
 import "../Admin.css";
-import { getCurrentAdmin } from "../../../../src/api/AdminApi";
+import { getAllClients } from "../../../../src/api/AdminApi";
 
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
-
 
 const ClientList = () => {
   const [listOfClients, setClientList] = useState([]);
   const [clients, setClients] = useState(false);
 
   const loadUsers = async () => {
-    const lawyerClients  = (await getCurrentAdmin()).data.clients;
-    setClientList(lawyerClients);
+    const lawyerClients = await getAllClients();
+    setClientList(lawyerClients.data);
     setClients(true);
   };
 
-  if (!clients) {loadUsers();}
+  const addClientCallback = (client) => {
+    let currentClients = listOfClients;
+    currentClients.push(client)
+    setClientList(currentClients)
+  }
+
+  if (!clients) {
+    loadUsers();
+  }
 
   const myClientList = [];
-    if (clients) {
-          console.log(listOfClients);
-          for (let i = 0; i < listOfClients.length; i++) {
-            myClientList.push(listOfClients[i]);
-          }
-        }
-       
-   const showClientList = myClientList.map(client => {
-    console.log(client)      
-    return (
-            <List.Item>
-                  <List.Content floated="right">
-                    <Popup
-                      trigger={<Button onClick={e => ViewClient(e)}>View</Button>}
-                      position="right center"
-                      modal
-                      closeOnDocumentClick
-                    >
-                      <Container className="FormContainer">
-                        <ClientCard 
-                        clientName = {client.firstName + " " + client.secondName}
-                        clientContact = {client.contact}
-                        />
-                      </Container>
-                    </Popup>
-                  </List.Content>
-                  <Image
-                    avatar
-                    src= { !(client && client.imageUrl) ? defaultProfile : client.imageUrl} 
-                  />
-                  <List.Content>{ !(client && client.firstName && client.secondName) ? "nuttin loaded" : client.firstName + " " + client.secondName}</List.Content>
-                </List.Item>
-          );
-        });
-    
-  
-
-  function AddClient(e) {
-    console.log("add client happening.");
+  if (clients) {
+    for (let i = 0; i < listOfClients.length; i++) {
+      myClientList.push(listOfClients[i]);
+    }
   }
+
+  const showClientList = myClientList.map(client => {
+    return (
+      <List.Item>
+        <List.Content floated="right">
+          <Popup
+            trigger={<Button onClick={e => ViewClient(e)}>View</Button>}
+            position="right center"
+            modal
+            closeOnDocumentClick
+          >
+            <Container className="FormContainer">
+              <ClientCard
+                clientData={client}
+                clientName={client.firstName + " " + client.secondName}
+                clientContact={client.contact}
+              />
+            </Container>
+          </Popup>
+        </List.Content>
+        <Image
+          avatar
+          src={!(client && client.imageUrl) ? defaultProfile : client.imageUrl}
+        />
+        <List.Content>
+          {!(client && client.firstName && client.secondName)
+            ? "nuttin loaded"
+            : client.firstName + " " + client.secondName}
+        </List.Content>
+      </List.Item>
+    );
+  });
 
   function ViewClient(e) {
     console.log("view client happening.");
@@ -73,20 +85,7 @@ const ClientList = () => {
       <List divided verticalAlign="middle">
         <List.Item className="List-Header">
           <List.Content floated="right">
-            <Popup
-              trigger={
-                <Button icon onClick={e => AddClient(e)}>
-                  <Icon name="plus square outline" />
-                </Button>
-              }
-              position="right center"
-              modal
-              closeOnDocumentClick
-            >
-              <Container className="FormContainer">
-                <AddClientForm />
-              </Container>
-            </Popup>
+            <AddClientForm addClientCallback={addClientCallback} />
           </List.Content>
           <List.Content id="content">Client List</List.Content>
         </List.Item>

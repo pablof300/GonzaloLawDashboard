@@ -42,7 +42,7 @@ exports.removeClient = async (req, res) =>
 
 exports.addClient = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.addClient(req.adminId, req.params.clientId);
+    return adminDAO.addClient(req.adminId, req.body);
   });
 
 exports.getAllClients = async (req, res) =>
@@ -61,7 +61,7 @@ exports.addEvent = async (req, res) =>
         let endDateTime = new Date(req.query.startDate).getTime();
         endDateTime += (req.query.duration * 60 * 1000);
 
-        let event = { title: req.query.title, type: req.query.type, startDate: startDate, endDate: new Date(endDateTime), notes: req.query.notes, admins: [req.adminId], clients: [req.query.clientId]}
+        let event = { title: req.query.title, type: req.query.type, startDate: startDate, endDate: new Date(endDateTime), notes: req.query.notes, admins: [req.adminId], users: [req.query.clientId]}
         console.log(event)
         return eventDAO.addEvent(event)
     });

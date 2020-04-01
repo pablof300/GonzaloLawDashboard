@@ -62,18 +62,18 @@ exports.removeClient = async (id, client) => {
   return admin;
 };
 
-exports.addClient = async (id, client) => {
-  const user = await User.findById(client);
+exports.addClient = async (id, clientData) => {
+  const user = await User.create(clientData);
   if (!user) throw new NotFoundError();
 
   const admin = await Admin.findByIdAndUpdate(
     id,
-    { $addToSet: { clients: [client] } },
+    { $addToSet: { clients: [user] } },
     { new: true },
     function(err, data) {}
   );
 
-  return admin;
+  return user;
 };
 
 // TODO:

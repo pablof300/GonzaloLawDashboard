@@ -18,11 +18,6 @@ exports.update = async (req, res) =>
     return userDAO.update(req.userId, req.body);
   });
 
-exports.create = async (req, res) =>
-  catchErrors(res, async () => {
-    return userDAO.create(req.body);
-  });
-
 exports.delete = async (req, res) =>
   catchErrors(res, async () => {
     return userDAO.delete(req.userId);
