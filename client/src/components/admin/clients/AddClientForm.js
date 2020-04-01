@@ -27,6 +27,18 @@ class AddClientForm extends Component {
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
+            label="Username"
+            placeholder="Username"
+          />
+          <Form.Field
+            control={Input}
+            label="Password"
+            placeholder="Password"
+          />
+        </Form.Group>
+        <Form.Group widths="equal">
+          <Form.Field
+            control={Input}
             label="First name"
             placeholder="First name"
           />

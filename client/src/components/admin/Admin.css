@@ -52,3 +52,35 @@
 .Text {
   font-size: 1.28571429rem;
 }
+
+
+/* Below is some CSS for some specific stuff, I can organize the file better if need be though - Tyler*/
+
+.RemoveFormContainer {
+  border-radius: 1rem;
+  height: 0px;
+  padding-top: 2px!important;
+  padding: 2px;
+}
+
+.large.negative.left.floated.ui.button{
+  position: relative;
+  top: 30px;
+  left: 250px;
+  padding-left: 30px;
+  padding-right: 30px; 
+}
+
+.ui.large.right.floated.button{
+  position: relative;
+  top: 30px;
+  right: 250px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+ .negative.ui.button{
+  position: absolute;
+  float: right;
+  bottom: 5px;
+ }

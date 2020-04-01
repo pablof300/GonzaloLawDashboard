@@ -15,6 +15,10 @@ exports.getAll = async () => {
   return await Admin.find({}).exec(); //why exec?
 };
 
+exports.getAll = async () => {
+  return await User.find({}).exec(); //why exec?
+};
+
 exports.get = async id => {
   const admin = await Admin.findById(id);
   if (!admin) {
