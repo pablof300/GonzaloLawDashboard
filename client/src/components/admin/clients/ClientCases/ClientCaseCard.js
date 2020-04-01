@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Button, Icon } from "semantic-ui-react";
 import ClientCaseList from "./ClientCaseList.js";
 import EditCaseForm from "./EditCaseForm.js";
-import { props } from "bluebird";
 
 const ClientCaseCard = (props) => {
   return (
