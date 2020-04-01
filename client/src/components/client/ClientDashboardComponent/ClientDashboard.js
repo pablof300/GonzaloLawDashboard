@@ -45,7 +45,6 @@ const ClientDashboard = () => {
 
   return (
     <div>
-<<<<<<< HEAD
       <NavBar />
       <Container className={"container"}>
         <Grid centered>
@@ -75,37 +74,6 @@ const ClientDashboard = () => {
         </Grid>
       </Container>
       <FooterComponent />
-=======
-    <NavBar/>
-    <Container className={"container"}>
-      <Grid centered>
-        <Grid.Row>
-          <Header className={"header"} as="h2" icon textAlign="center">
-            <Icon name="users" circular />
-            <Header.Content>Client Dashboard</Header.Content>
-          </Header>
-        </Grid.Row>
-        <Grid.Row>
-          <ProgBarComponent isClient={true} />
-        </Grid.Row>
-        <Grid.Row>
-          <UserDetailsComponent/>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={8}>
-            <Calendar adminView={false} events={events} />
-          </Grid.Column>
-          <Grid.Column width={8}>
-            <PaymentCard />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <FileComponent />
-        </Grid.Row>
-      </Grid>
-    </Container>
-    <FooterComponent/>
->>>>>>> f7c092c9272d6e4ec8c514b5868ee3b3883e6f14
     </div>
   );
 };
