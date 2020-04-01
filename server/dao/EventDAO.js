@@ -14,6 +14,8 @@ exports.addEvent = async eventParams => {
 
 exports.getEventsByUser = async userId => {
   const events = await Event.find({ users: userId });
+  console.log("Found events")
+  console.log(events)
   if (!events) throw new NotFoundError();
 
   return events;
