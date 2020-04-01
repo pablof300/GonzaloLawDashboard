@@ -14,8 +14,10 @@ const MyAccount = () => {
 
   const loadUserData = async () => {
     const user = (await getCurrentUser()).data;
-    setUserData(user);
-    setIsUserLoaded(true);
+    if (user) {
+      setUserData(user);
+      setIsUserLoaded(true);
+    }
   };
   if (!isUserLoaded) {
     loadUserData();
@@ -31,7 +33,7 @@ const MyAccount = () => {
   const getFile = e => {
     e.preventDefault();
     const file = e.target.files;
-    if(file){
+    if (file && userData) {
       let fileParts;
       if (file[0].name) {
         fileParts = file[0].name.split(".");
@@ -43,12 +45,14 @@ const MyAccount = () => {
           fileName: fileName,
           fileType: fileType,
           file: file,
-          userID: userData._id,
-        }
-          uploadUserProfilePicture(params);
+          userID: userData._id
+        };
+        uploadUserProfilePicture(params);
       } else {
         alert("ERROR: Please upload a valid image");
       }
+    } else {
+      alert("ERROR: Either the file is corrupted or no user is logged in.");
     }
   };
 
@@ -68,14 +72,18 @@ const MyAccount = () => {
           <Grid.Row>
             <Grid.Column width={4}>
               <Image
-                src={!userData.imageUrl ? defaultImage : userData.imageUrl}
+                src={
+                  !(userData && userData.imageUrl)
+                    ? defaultImage
+                    : userData.imageUrl
+                }
                 size="huge"
                 rounded
                 fluid
               />
               <Popup
                 content="Click to Change Profile Picture"
-                position='top center'
+                position="top center"
                 trigger={
                   <div style={{ marginTop: 20 }}>
                     <label for="file" class="ui icon button">
@@ -114,7 +122,9 @@ const MyAccount = () => {
 
                   <Form.Group className="wrap" unstackable>
                     <Form.Input
-                      className={!userData.middleName ? "hidden" : ""}
+                      className={
+                        !(userData && userData.middleName) ? "hidden" : ""
+                      }
                       label="Middle name"
                       labelPosition="left"
                       placeholder="Middle name"
@@ -122,7 +132,9 @@ const MyAccount = () => {
                       value={!userData ? "" : userData.middleName}
                     />
                     <Form.Input
-                      className={!userData.otherName ? "hidden" : ""}
+                      className={
+                        !(userData && userData.otherName) ? "hidden" : ""
+                      }
                       label="Other name"
                       placeholder="Other name"
                       labelPosition="left"
@@ -132,7 +144,9 @@ const MyAccount = () => {
                   </Form.Group>
 
                   <Form.Input
-                    className={!userData.birthDate ? "hidden" : "wrap"}
+                    className={
+                      !(userData && userData.birthDate) ? "hidden" : "wrap"
+                    }
                     label="Birth Date"
                     labelPosition="left"
                     placeholder="mm/dd/yy"
@@ -155,13 +169,17 @@ const MyAccount = () => {
                     placeholder="Phone Number"
                     readOnly
                     value={
-                      !userData.contact ? null : userData.contact.cellPhone
+                      !(userData && userData.contact)
+                        ? null
+                        : userData.contact.cellPhone
                     }
                   />
 
                   <Form.Group className="wrap" unstackable>
                     <Form.Input
-                      className={!userData.workPhone ? "hidden" : ""}
+                      className={
+                        !(userData && userData.workPhone) ? "hidden" : ""
+                      }
                       label="Work Phone"
                       labelPosition="left"
                       placeholder="Work Phone"
@@ -169,7 +187,9 @@ const MyAccount = () => {
                       value={!userData ? "" : userData.workPhone}
                     />
                     <Form.Input
-                      className={!userData.homePhone ? "hidden" : ""}
+                      className={
+                        !(userData && userData.homePhone) ? "hidden" : ""
+                      }
                       label="Home Phone"
                       placeholder="Home Phone"
                       labelPosition="left"
@@ -194,14 +214,20 @@ const MyAccount = () => {
                   placeholder="Street"
                   labelPosition="left"
                   readOnly
-                  value={!userData.address ? "" : userData.address.street}
+                  value={
+                    !(userData && userData.address)
+                      ? ""
+                      : userData.address.street
+                  }
                 />
                 <Form.Input
                   label="City"
                   placeholder="City"
                   labelPosition="left"
                   readOnly
-                  value={!userData.address ? "" : userData.address.city}
+                  value={
+                    !(userData && userData.address) ? "" : userData.address.city
+                  }
                 />
               </Form.Group>
               <Form.Group className="wrap" unstackable>
@@ -210,14 +236,20 @@ const MyAccount = () => {
                   placeholder="State"
                   labelPosition="left"
                   readOnly
-                  value={!userData.address ? "" : userData.address.state}
+                  value={
+                    !(userData && userData.address)
+                      ? ""
+                      : userData.address.state
+                  }
                 />
                 <Form.Input
                   label="Zip"
                   placeholder="Zip"
                   labelPosition="left"
                   readOnly
-                  value={!userData.address ? "" : userData.address.zip}
+                  value={
+                    !(userData && userData.address) ? "" : userData.address.zip
+                  }
                 />
               </Form.Group>
             </Form>
@@ -234,7 +266,9 @@ const MyAccount = () => {
                 labelPosition="left"
                 placeholder="Email"
                 readOnly
-                value={!userData.contact ? "" : userData.contact.email}
+                value={
+                  !(userData && userData.contact) ? "" : userData.contact.email
+                }
               />
             </Form>
           </Grid.Row>

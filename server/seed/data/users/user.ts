@@ -51,7 +51,7 @@ const usersData: User[] = [
         _id: new Types.ObjectId("5e37ac71d0ba8b3dd080516a")
     },
     {
-        username: "edward",
+        username: "robert",
         password: "Jesus100",
         firstName: "Edward",
         secondName: "Mensah",

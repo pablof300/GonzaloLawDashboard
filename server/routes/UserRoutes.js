@@ -45,6 +45,7 @@ router.put(
   passport.authenticate("loggedIn", { session: false }),
   userController.update
 );
+
 router.delete(
   "/",
   passport.authenticate("loggedIn", { session: false }),
