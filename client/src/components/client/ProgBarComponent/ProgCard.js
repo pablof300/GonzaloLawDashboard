@@ -1,66 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { Card } from "semantic-ui-react";
 import ProgBar from "./ProgBar.js";
-import { getCurrentUser } from "../../../../src/api/UserApi";
 
-const ProgCard = props => {
-  const [userData, setUserData] = useState([]);
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
+const ProgCard = (props) => {
+  const case_ = props.case_;
 
-  if (props.isClient === true) {
-    const loadUserData = async () => {
-      const user = (await getCurrentUser()).data;
-      setUserData(user);
-      setIsUserLoaded(true);
-    };
-    if (!isUserLoaded) {
-      loadUserData();
-    }
-
-    const cases = userData.cases;
-
-    return (
-      <Card fluid>
-        <Card.Content>
-          <Card.Header
-            style={{ backgroundColor: "transparent" }}
-            textAlign={"center"}
-          >
-            Case Progress
-          </Card.Header>
-          <div class="ui grid">
-            <div class="centered row">
-              <Card.Description>
-                <ProgBar cases={cases} />
-              </Card.Description>
-            </div>
+  return (
+    <Card fluid>
+      <Card.Content>
+        <Card.Header
+          style={{ backgroundColor: "transparent" }}
+          textAlign={"center"}
+        >
+          Case Progress
+        </Card.Header>
+        <div class="ui grid">
+          <div class="centered row">
+            <Card.Description>
+              <ProgBar case_={case_} />
+            </Card.Description>
           </div>
-        </Card.Content>
-      </Card>
-    );
-  } else {
-    //if user is admin
-    console.log(props.case);
-    return (
-      <Card fluid>
-        <Card.Content>
-          <Card.Header
-            style={{ backgroundColor: "transparent" }}
-            textAlign={"center"}
-          >
-            Case Progress
-          </Card.Header>
-          <div class="ui grid">
-            <div class="centered row">
-              <Card.Description>
-                <ProgBar case={props.case} />
-              </Card.Description>
-            </div>
-          </div>
-        </Card.Content>
-      </Card>
-    );
-  }
+        </div>
+      </Card.Content>
+    </Card>
+  );
 };
 
 export default ProgCard;

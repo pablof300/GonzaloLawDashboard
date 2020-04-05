@@ -3,7 +3,7 @@ import { Accordion, Icon } from "semantic-ui-react";
 import ProgCard from "../../../client/ProgBarComponent/ProgCard.js";
 import { getCaseById } from "../../../../../src/api/AdminApi";
 
-const ClientCaseList = props => {
+const ClientCaseList = (props) => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [userCaseData, setUserCaseData] = useState(null);
   const [cases, setCases] = useState(false);
@@ -20,15 +20,16 @@ const ClientCaseList = props => {
     loadCases();
   }
 
-  const toggleActive = index => {
+  const toggleActive = (index) => {
     if (index === activeIndex) {
       setActiveIndex(-1);
     } else {
       setActiveIndex(index);
     }
   };
+
   if (!userCaseData) {
-    return <div></div>;
+    return <p>Awaiting case data...</p>;
   }
   //restructure to return list of accordion components that is matched to each case
   //use mapping function or something similar
@@ -47,7 +48,7 @@ const ClientCaseList = props => {
         {userCaseData.type}
       </Accordion.Title>
       <Accordion.Content active={activeIndex === 0}>
-        <ProgCard case={userCaseData} />
+        <ProgCard case_={userCaseData} />
       </Accordion.Content>
     </Accordion>
   );

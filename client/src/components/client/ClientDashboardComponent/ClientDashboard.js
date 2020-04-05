@@ -11,10 +11,22 @@ import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
 import Calendar from "../../calendar/Calendar";
 import { getEvents } from "../../../api/UserApi";
+import { getCurrentUser } from "../../../api/UserApi";
 
 const ClientDashboard = () => {
   const [isVerified, setIsVerified] = useState(true);
   const [events, setEvents] = useState([]);
+  const [userData, setUserData] = useState([]);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
+
+  const loadUserData = async () => {
+    const user = (await getCurrentUser()).data;
+    setUserData(user);
+    setIsUserLoaded(true);
+  };
+  if (!isUserLoaded) {
+    loadUserData();
+  }
 
   useEffect(() => {
     setEventData();
@@ -35,7 +47,7 @@ const ClientDashboard = () => {
     }
   };
 
-  verifyUser().then(verified => {
+  verifyUser().then((verified) => {
     setIsVerified(verified);
   });
 
@@ -55,7 +67,9 @@ const ClientDashboard = () => {
             </Header>
           </Grid.Row>
           <Grid.Row>
-            <ProgBarComponent isClient={true} />
+            {!!userData && !!userData.cases && userData.cases.length > 0 && (
+              <ProgBarComponent case_={userData.cases[0]} />
+            )}
           </Grid.Row>
           <Grid.Row>
             <UserDetailsComponent />
