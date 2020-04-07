@@ -9,6 +9,7 @@ import PaymentCard from "../PaymentComponent/PaymentCard";
 import { verifyUser } from "../../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
+import CaseDetailsComponent from "./CaseDetailsComponent";
 import Calendar from "../../calendar/Calendar";
 import { getEvents } from "../../../api/UserApi";
 
@@ -55,7 +56,7 @@ const ClientDashboard = () => {
             </Header>
           </Grid.Row>
           <Grid.Row>
-            <ProgBarComponent isClient={true} />
+            <CaseDetailsComponent />
           </Grid.Row>
           <Grid.Row>
             <UserDetailsComponent />

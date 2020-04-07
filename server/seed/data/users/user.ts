@@ -31,7 +31,7 @@ const usersData: User[] = [
         password: "123456",
         firstName: "Pablo",
         secondName: "Estrada",
-        cases: [new Types.ObjectId('16cb91bdc3464f14678934ca')],
+        cases: [new Types.ObjectId('16cb91bdc3464f14678934ca'), new Types.ObjectId('16cb91bdc3464f14678934cb'), new Types.ObjectId('16cb91bdc3464f14678934df')],
         middleName: "White",
         otherName: "BoneCracker",
         imageUrl: "https://react.semantic-ui.com/images/wireframe/square-image.png",
