@@ -68,7 +68,7 @@ const MyAccount = () => {
       setOpenCodeDialog(true);
       const toEmail = userData.contact.email;
       const mailOptions = {
-        from: "NoReply@gmail.com",
+        from: "michaelbrown7899@gmail.com",
         to: toEmail,
         subject: "Reset Password",
         html: "",
@@ -129,6 +129,7 @@ const MyAccount = () => {
   };
 
   const currPass = (e) => {
+    e.preventDefault();
     if (!clearErrors) {
       setCurrPasswordError(false);
       setConfirmNewPasswordError(false);
@@ -139,9 +140,12 @@ const MyAccount = () => {
     setCurrPassword(e.target.value);
   };
 
-  const getLogoUrl = (e) => {};
+  const getLogoUrl = (e) => {
+    e.preventDefault();
+  };
 
   const newPass = (e) => {
+    e.preventDefault();
     if (!clearErrors) {
       setCurrPasswordError(false);
       setConfirmNewPasswordError(false);
@@ -152,6 +156,7 @@ const MyAccount = () => {
   };
 
   const newConfirmPass = (e) => {
+    e.preventDefault();
     if (!clearErrors) {
       setCurrPasswordError(false);
       setConfirmNewPasswordError(false);
@@ -162,13 +167,14 @@ const MyAccount = () => {
   };
 
   const checkCode = async () => {
-    if (userData) {
+    if (userData && code) {
       const res = await checkIfCodeExistOrHasNotExpired(code, userData._id);
       console.log(res);
       if (res) {
         setVerifyCode(true);
         setOpenCodeDialog(false);
         setVerifyError(false);
+        setCode(null)
         setCurrPassword(userData.password);
       } else {
         setVerifyCode(false);
@@ -215,7 +221,15 @@ const MyAccount = () => {
     }
   };
 
+  const handleDialogCancel = () => {
+    setOpenCodeDialog(false)
+    setVerifyError(true);
+    setCode(null)
+  }
+
   const getCode = (e) => {
+    e.preventDefault();
+    setVerifyError(false)
     setCode(e.target.value);
   };
 
@@ -374,9 +388,9 @@ const MyAccount = () => {
                 <Form widths="equal">
                   <Form.Input
                     className="wrap"
-                    label="Logo Url"
+                    label="Logo URL"
                     type="text"
-                    placeholder="Logo Url"
+                    placeholder="Logo URL"
                     labelPosition="left"
                     value={logoUrl}
                     onChange={getLogoUrl}
@@ -404,7 +418,7 @@ const MyAccount = () => {
               </Grid.Row>
             </Grid.Column>
 
-            <Grid.Column floated="right" width={7}>
+            <Grid.Column floated="right" width={5}>
               <p>Company Logo</p>
               <Image
                 src={
@@ -643,7 +657,7 @@ const MyAccount = () => {
                         </Form>
                         <Button
                           floated="right"
-                          onClick={() => setOpenCodeDialog(false)}
+                          onClick={handleDialogCancel}
                           content="Cancel"
                           primary
                         />

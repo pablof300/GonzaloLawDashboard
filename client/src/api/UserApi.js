@@ -32,7 +32,7 @@ const sendEmail = async (params) => {
         if (res.data && res.data.data) {
           const data = res.data.data;
           const code = data.code;
-          const message = `<h3>Hi ${user.firstName},</h3> <p>Use the code below to reset your password.</p> <p><h2><b>${code}</b></h2></p>`
+          const message = `<h3>Hi ${user.firstName},</h3> <p>Use the code below to help reset your password.</p> <p><h2><b>${code}</b></h2></p>`
           params.html = message;
           const sEmail = async () => {
             const emailSend = await API.post("codes/mail",params, {

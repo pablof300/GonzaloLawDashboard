@@ -1,37 +1,47 @@
 const Code = require("../models/Code.js").Code;
 
-
-
-
 exports.codeExist = async (code, id) => {
   const userCode = await Code.findOne({ code: code, userID: id });
   if (userCode) {
-    const timeSent = userCode.sendTime
+    const expiredTime = userCode.expireTime;
     const d = new Date();
-
-    let diff =(d.getTime() - timeSent) / (1000);
-    console.log(diff)
-    let results =  Math.abs(Math.round(diff));
-    console.log(results)
-    if(results <= 600){
+    let diff = expiredTime - d.getTime();
+    if (diff >= 0) {
+      await Code.deleteOne(userCode, (err) => {
+        if (err) console.log(err);
+      });
+      await deleteExpiredCodes();
+      
       return true;
     }
+
     return false;
   }
   return false;
 };
 
-exports.deleteCode = async () => {
-  
-}
+const deleteExpiredCodes = async () => {
+  const date = new Date();
+  const res = await Code.deleteMany(
+    { expireTime: { $lt: date.getTime() } },
+    (err, data) => {
+      if (err) return err;
+      return data;
+    })
+
+  return res;
+};
 
 exports.createCode = async (id) => {
-  const code = Math.random().toString().slice(2,8);
-  const date = new Date();
+  await deleteExpiredCodes();
+  const code = Math.random().toString().slice(2, 9);
+  const sendDate = new Date();
+  const expireTime = 600000 + sendDate.getTime();
   let data = {
-      code: code,
-      sendTime: date.getTime(),
-      userID : id,
-  }
+    code: code,
+    sendTime: sendDate.getTime(),
+    expireTime: expireTime,
+    userID: id,
+  };
   return await new Code(data).save();
 };
