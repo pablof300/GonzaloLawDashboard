@@ -40,6 +40,7 @@
     "morgan": "^1.9.1",
     "multiparty": "^4.2.1",
     "node-quickbooks": "^2.0.33",
+    "nodemailer": "^6.4.6",
     "nodemon": "^1.18.10",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",

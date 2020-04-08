@@ -19,6 +19,11 @@ const Schema = new mongoose.Schema({
     cellPhone: { type: Number },
     email: { type: String }
   },
+  company:{
+      companyName: {type: String},
+      companyLogoUrl: {type: String},
+      website: {type: String}
+  },
   birthDate: { type: String },
   imageUrl: { type: String },
   files: [

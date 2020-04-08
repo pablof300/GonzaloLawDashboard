@@ -86,6 +86,8 @@ exports.delete = async id => {
   return user;
 };
 
+
+
 exports.deleteAll = async () => {
   await User.deleteMany();
 };

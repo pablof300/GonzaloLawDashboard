@@ -29,7 +29,7 @@ const MyTeam = () => {
     allTeamListInPagination = [];
 
   const loadTeam = async () => {
-    const userLawyers = await getAllLawyersWorkingOnUserCase();
+    const userLawyers = (await getAllLawyersWorkingOnUserCase()).data;
     if (userLawyers) {
       setListOfLawyers(userLawyers);
       setUserLawyers(true);
