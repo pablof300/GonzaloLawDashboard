@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./ClientDashboard.css";
+import "./UserDetails.css";
 import NavBar from "../../util/NavBarComponent/NavBar";
 import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
@@ -11,6 +12,7 @@ import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
 import Calendar from "../../calendar/Calendar";
 import { getEvents } from "../../../api/UserApi";
+
 
 const ClientDashboard = () => {
   const [isVerified, setIsVerified] = useState(true);
@@ -57,7 +59,7 @@ const ClientDashboard = () => {
           <Grid.Row>
             <ProgBarComponent isClient={true} />
           </Grid.Row>
-          <Grid.Row>
+          <Grid.Row className="LeftTab">
             <UserDetailsComponent />
           </Grid.Row>
           <Grid.Row>

@@ -17,3 +17,11 @@ exports.getAWSBucket = () => {
 exports.getJWTSecret = () => {
   return process.env.JWT_SECRET || require("./config").jwtSecret;
 };
+
+exports.getIntuitClientID = () => {
+  return process.env.INTUIT_CLIENT_ID || require("./config").QB.intuitClientID;
+};
+
+exports.getIntuitClientSecret = () => {
+  return process.env.INTUIT_CLIENT_SECRET || require("./config").QB.intuitClientSecret;
+};
