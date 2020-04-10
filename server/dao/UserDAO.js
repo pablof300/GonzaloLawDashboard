@@ -26,6 +26,14 @@ exports.get = async id => {
   return user;
 };
 
+exports.getById = async id => {
+  const user = await User.findById(id)
+  if (!user) {
+    console.log("Could not find an user for the given id!");
+  }
+  return user;
+};
+
 exports.getByUsername = async username => {
   const user = await User.findOne({ username: username });
   if (!user) throw new NotFoundError();

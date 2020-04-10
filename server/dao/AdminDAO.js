@@ -23,6 +23,14 @@ exports.get = async id => {
   return admin;
 };
 
+exports.getById = async id => {
+  const admin = await Admin.findById(id);
+  if (!admin) {
+    console.log("Could not find an admin for the given id!");
+  }
+  return admin;
+};
+
 exports.getByUsername = async username => {
   const admin = await Admin.findOne({ username: username });
   if (!admin) throw new NotFoundError();

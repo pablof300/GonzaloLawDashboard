@@ -181,6 +181,23 @@ const addCase = async (
   return axiosResponse;
 };
 
+const getAdminById = async (id) => {
+  let axiosResponse = await API.get(`/admin/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve case!"
+      };
+    });
+  return axiosResponse;
+};
 
 const getCurrentAdmin = async () => {
   let axiosResponse = await API.get("/admin/", {
@@ -201,4 +218,4 @@ const getCurrentAdmin = async () => {
   return axiosResponse;
 };
 
-export { getEvents, getAllClients, addEvent, addClient, getCaseById, addCase };
+export { getEvents, getAllClients, addEvent, addClient, getCaseById, addCase, getAdminById };
