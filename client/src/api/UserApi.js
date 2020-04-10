@@ -20,6 +20,20 @@ const getCurrentUser = async () => {
   return axiosResponse;
 };
 
+const sendMessageToTeam = async (params) => {
+  API.post(`/user/message`, params , {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  }).then(res => {
+    return res;
+  }).catch(err=> {
+    return err
+  })
+    return true;
+}
+
+
+
+
 const sendEmail = async (params) => {
   const user = (await getCurrentUser()).data;
   let result = null;
@@ -33,6 +47,8 @@ const sendEmail = async (params) => {
           const data = res.data.data;
           const code = data.code;
           const message = `<h3>Hi ${user.firstName},</h3> <p>Use the code below to help reset your password.</p> <p><h2><b>${code}</b></h2></p>`
+          const from  = "GonzaloLaw <no-eply@mail.gonzalolaw.com>";
+          params.from = from
           params.html = message;
           const sEmail = async () => {
             const emailSend = await API.post("codes/mail",params, {
@@ -302,4 +318,5 @@ export {
   getAllLawyersWorkingOnUserCase,
   checkIfUserUploadingFileExist,
   checkIfCodeExistOrHasNotExpired,
+  sendMessageToTeam,
 };

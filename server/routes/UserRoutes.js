@@ -72,6 +72,12 @@ router.post(
   userController.createCase
 );
 
+router.post(
+  "/message",
+  passport.authenticate("loggedIn", { session: false }),
+  userController.sendMessage
+);
+
 
 
 router.put(

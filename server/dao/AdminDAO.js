@@ -28,7 +28,6 @@ exports.getUserLawyers = async (id) => {
     { clients: { $in: [id] } },
     "firstName secondName middleName contact imageUrl");
     if(userLawyers){
-      console.log(userLawyers)
       return userLawyers
     }
     return null;

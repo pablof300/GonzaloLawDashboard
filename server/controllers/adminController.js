@@ -12,7 +12,6 @@ exports.getUserLawyers = async (req, res) => {
   catchErrors(res, async () => {
     const userID = req.params.id;
     const law = await adminDAO.getUserLawyers(userID);
-    console.log(law)
     return law;
   });
 }

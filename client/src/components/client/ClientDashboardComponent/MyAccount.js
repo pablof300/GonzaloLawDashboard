@@ -68,8 +68,8 @@ const MyAccount = () => {
       setOpenCodeDialog(true);
       const toEmail = userData.contact.email;
       const mailOptions = {
-        from: "michaelbrown7899@gmail.com",
         to: toEmail,
+        from: "",
         subject: "Reset Password",
         html: "",
       };
