@@ -8,5 +8,6 @@ router.get("/invoices", paymentsController.getInvoices);
 router.post("/invoice", paymentsController.createInvoice);
 router.get("/invoice/pdf", paymentsController.getInvoicePdf);
 router.get("/callback", paymentsController.callback);
+router.get("/status", paymentsController.isPaymentOnline);
 
 module.exports = router;
