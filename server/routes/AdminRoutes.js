@@ -1,4 +1,5 @@
 const adminController = require("../controllers/adminController");
+const paymentsController = require("../controllers/paymentsController");
 const caseController = require("../controllers/caseController");
 const express = require("express");
 const router = express.Router();
@@ -63,6 +64,7 @@ router.put(
 router.post(
   "/client",
   passport.authenticate("adminLoggedIn", { session: false }),
+  paymentsController.createCustomer,
   adminController.addClient
 );
 
