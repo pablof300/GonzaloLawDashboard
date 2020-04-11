@@ -36,16 +36,12 @@ const MyAccount = () => {
   const [verifyCode, setVerifyCode] = useState(false);
   const [verifyError, setVerifyError] = useState(false);
   const [code, setCode] = useState(null);
-  const [logoUrl, setLogoUrl] = useState(null);
-  const [hasCompany, setHasCompany] = useState(false);
+  
 
   const loadUserData = async () => {
     const user = (await getCurrentUser()).data;
     if (user) {
       setUserData(user);
-      if (user.company) {
-        setHasCompany(true);
-      }
       setIsUserLoaded(true);
     }
   };
@@ -137,9 +133,6 @@ const MyAccount = () => {
     setCurrPassword(e.target.value);
   };
 
-  const getLogoUrl = (e) => {
-    e.preventDefault();
-  };
 
   const newPass = (e) => {
     e.preventDefault();
@@ -373,60 +366,6 @@ const MyAccount = () => {
                   </Form.Group>
                 </Form>
               </Grid.Row>
-            </Grid.Column>
-          </Grid.Row>
-
-          <Grid.Row className={!hasCompany ? "hidden" : ""}>
-            <h3>Company Information</h3>
-          </Grid.Row>
-          <Grid.Row className={!hasCompany ? "hidden" : ""}>
-            <Grid.Column floated="left" stretched={true}>
-              <Grid.Row stretched={true} textAlign="left">
-                <Form widths="equal">
-                  <Form.Input
-                    className="wrap"
-                    label="Logo URL"
-                    type="text"
-                    placeholder="Logo URL"
-                    labelPosition="left"
-                    value={logoUrl}
-                    onChange={getLogoUrl}
-                  />
-                  <Form.Input
-                    className="wrap"
-                    label="Company"
-                    type="text"
-                    placeholder="Company"
-                    labelPosition="left"
-                    readOnly
-                    value={!(userData && userData.company) ? "" : userData.company.companyName}
-                  />
-
-                  <Form.Input
-                    className="wrap"
-                    label="Website"
-                    type="text"
-                    placeholder="Website"
-                    labelPosition="left"
-                    readOnly
-                    value={!(userData && userData.company) ? "" : userData.company.website}
-                  ></Form.Input>
-                </Form>
-              </Grid.Row>
-            </Grid.Column>
-
-            <Grid.Column floated="right" width={5}>
-              <p>Company Logo</p>
-              <Image
-                src={
-                  !(userData && userData.company)
-                    ? defaultImage
-                    : userData.company.companyLogoUrl
-                }
-                size="huge"
-                rounded
-                fluid
-              />
             </Grid.Column>
           </Grid.Row>
 
