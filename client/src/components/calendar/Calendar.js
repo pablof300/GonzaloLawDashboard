@@ -3,7 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import AddEvent from "./AddEvent";
-import { Card, Button, Popup, Modal, Header, Icon } from "semantic-ui-react";
+import { Card, Button, Modal, Form } from "semantic-ui-react";
 import interactionPlugin from '@fullcalendar/interaction';
 import {getAdminById} from '../../api/AdminApi'
 import {getUserById} from '../../api/UserApi'  
@@ -21,8 +21,8 @@ const Calendar = props => {
   const [startDate, setStartDate] = useState("n/a");
   const [endDate, setEndDate] = useState("n/a");
   const [title, setTitle] = useState("n/a");
-  const [eventAdmin, setEventAdmin] = useState("n/a");
-  const [eventClient, setEventClient] = useState("n/a");
+  const [eventAdmin, setEventAdmin] = useState("");
+  const [eventClient, setEventClient] = useState("");
 
   useEffect(() => {
     setEvents(props.events);
@@ -57,30 +57,53 @@ const Calendar = props => {
   }
   //get the admin and user information so message can say [lawyer] has a meeting at [time] doing [x] until [y] with [client]
   const eventsModal = async (info) => {
-    console.log(info);
     
     setEventData(info);
     setShowEventModal(true);
-    console.log(info.event._instance.range.start);
-    setStartDate(info.event._instance.range.start.toString());
-    setEndDate(info.event._instance.range.end.toString());
-    setTitle(info.event._def.title.toString());
-    console.log(info.event._instance.range.start.toISOString());
+    let date1 = new Date(info.event._instance.range.start);
+    let startMin = date1.getUTCMinutes();
+
+    if (startMin < 10) {
+      startMin = '0' + startMin;
+    }
+
+    startMin = ':' + startMin + " (EDT)";
+    let start = JSON.stringify(info.event._instance.range.start);
+    start = start.replace(/\"/g, "");
+    start = start.substr(0,10);
+    start =  start + date1.getUTCHours() + startMin;
+    setStartDate(start);
+
+    let date2 = new Date(info.event._instance.range.end);
+    let endMin = date2.getUTCMinutes();
+    if (endMin < 10) {
+      endMin = '0' + endMin;
+    }
+
+    endMin = ':' + endMin + " (EDT)";
+    let end = JSON.stringify(info.event._instance.range.end);
+    end = end.replace(/\"/g, "");
+    end = end.substr(0,10);
+    end = end + date2.getUTCHours() + endMin;
+    setEndDate(end);
+    let title = JSON.stringify(info.event._def.title);
+    title = info.event._def.title.replace(/\"/g, "");
+    setTitle(title);
     
     for (var i = 0; i < events.length; i++) {
-      let poop = events[i].startDate;
-      console.log(poop);
       if (events[i].startDate === info.event._instance.range.start.toISOString()) {
-          console.log("went inside if statement");
           const temp = await getAdminById(events[i].admins[0]);
-          setEventAdmin(temp.data.username.toString());
+          let adminName = JSON.stringify(temp.data.firstName + " " + temp.data.secondName);
+          adminName = adminName.replace(/\"/g, "");
+          setEventAdmin(adminName);
           const user = await getUserById(events[i].users[0]);
-          setEventClient(user.data);
-          
+          let userName = JSON.stringify(user.data.firstName + " " + user.data.secondName);
+          userName = userName.replace(/\"/g, "");
+          setEventClient(userName);         
           break;
       }
     }
-    console.log("made it here");
+    
   }
 
   const closeEventModal = () => {
@@ -117,13 +140,43 @@ const Calendar = props => {
       closeIcon
       centered
       >
+      <Modal.Header>{title} </Modal.Header>  
         <Modal.Content>
-        <p>{JSON.stringify(eventAdmin)} </p> 
-          <p>On: {JSON.stringify(startDate)} </p> 
-          <p>Scheduled: {JSON.stringify(title)} </p>
-          <p>Until: {JSON.stringify(endDate)}</p>
-          <p>[Client] </p> 
+          <Form>
+          <Form.Input label="Staff"
+                      placeholder="Lawyer"
+                      labelPosition="left"
+                      readOnly
+                      value={!eventAdmin ? "" : eventAdmin}
+          />
+          <Form.Input label="On"
+                      placeholder="n/a"
+                      labelPosition="left"
+                      readOnly
+                      value={!startDate ? "" : startDate.substr(0, 10) + " at " + startDate.substr(10, 17)}
+          />
+          <Form.Input label="Until"
+                      placeholder="n/a"
+                      labelPosition="left"
+                      readOnly
+                      value={!endDate ? "" : endDate.substr(0, 10) + " at " + endDate.substr(10, 17)}
+          />
+          <Form.Input label="Client"
+                      placeholder="n/a"
+                      labelPosition="left"
+                      readOnly
+                      value={!eventClient ? "" : eventClient}
+          />
+          
+          </Form>
         </Modal.Content>
+        <Modal.Actions>
+          <Button grey
+          onClick={closeEventModal}
+          >
+            Ok
+          </Button>
+        </Modal.Actions>
       </Modal>
     </Card>
   );

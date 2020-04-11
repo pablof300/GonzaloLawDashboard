@@ -21,7 +21,7 @@ const getCurrentUser = async () => {
 };
 
 const getUserById = async id => {
-  let axiosResponse = await API.get(`/user/${id}`, {
+  let axiosResponse = await API.get(`/user/name/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {

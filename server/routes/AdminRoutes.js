@@ -22,7 +22,7 @@ router.get(
 );
 
 router.get(
-  "/:id",
+  "/name/:id",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getById
 );

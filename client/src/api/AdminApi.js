@@ -182,7 +182,7 @@ const addCase = async (
 };
 
 const getAdminById = async (id) => {
-  let axiosResponse = await API.get(`/admin/${id}`, {
+  let axiosResponse = await API.get(`/admin/name/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {

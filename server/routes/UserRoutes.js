@@ -36,7 +36,7 @@ router.get(
   userController.get
 );
 router.get(
-  "/:id",
+  "/name/:id",
   passport.authenticate("loggedIn", { session: false }),
   userController.getById
 );
