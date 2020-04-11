@@ -93,18 +93,23 @@ const updatePassword = async (params) => {
 
 const getAllUserFiles = async () => {
   const user = (await getCurrentUser()).data;
-  let allFiles = [];
-  if (user && user.files) {
-    const filesID = user.files;
-    for (let i = 0; i < filesID.length; i++) {
-      const data = (await getUserFileById(filesID[i])).data;
-      if (data) {
-        allFiles.unshift(data);
+  const id = user._id;
+  let axiosResponse = await API.get(`/files/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      if (error && error.response) {
+        return { error: error.response };
       }
-    }
-  }
+      return {
+        error: "Unable to retrieve all user's files!",
+      };
+    });
 
-  return allFiles;
+  return axiosResponse;
 };
 
 const checkIfCodeExistOrHasNotExpired = async  (code, id) => {

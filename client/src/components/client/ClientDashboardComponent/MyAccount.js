@@ -8,9 +8,6 @@ import {
   Button,
   Modal,
   Label,
-  Dimmer,
-  Loader,
-  Segment,
 } from "semantic-ui-react";
 import "../FileComponent/FileComponent.css";
 import {

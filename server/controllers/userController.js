@@ -60,7 +60,6 @@ exports.sendMessage = async (req, res) => {
     console.log(error)
     return false;
   })
-  console.log(results)
   return results;
 };
 
