@@ -21,6 +21,13 @@ router.get(
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.get
 );
+
+router.get(
+  "/name/:id",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.getById
+);
+
 router.get(
   "/events",
   passport.authenticate("adminLoggedIn", { session: false }),

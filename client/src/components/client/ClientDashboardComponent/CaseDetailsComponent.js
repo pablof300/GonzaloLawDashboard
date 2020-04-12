@@ -15,12 +15,10 @@ const CaseDetailsComponent = props => {
       const user = (await getCurrentUser()).data;
       setUserData(user.cases);
       setIsUserLoaded(true);
-      console.log(user)
     };
     if (!isUserLoaded) {
       loadUserData();
     }
-    console.log(userData)
     let panes = []
    
     if (isUserLoaded) {

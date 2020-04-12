@@ -36,6 +36,11 @@ router.get(
   userController.get
 );
 router.get(
+  "/name/:id",
+  passport.authenticate("loggedIn", { session: false }),
+  userController.getById
+);
+router.get(
   "/events",
   passport.authenticate("loggedIn", { session: false }),
   userController.getEvents
