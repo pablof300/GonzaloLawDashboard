@@ -43,7 +43,7 @@ const usersData: User[] = [
         },
         contact: {
             cellPhone: 345786345,
-            email: "peter@gmail.com",
+            email: "pablof300@gmail.com",
             homePhone: 345223561,
             workPhone: 345223561
         },
@@ -51,9 +51,9 @@ const usersData: User[] = [
         _id: new Types.ObjectId("5e37ac71d0ba8b3dd080516a")
     },
     {
-        username: "edward",
-        password: "Jesus100",
-        firstName: "Edward",
+        username: "robert",
+        password: "robert",
+        firstName: "Robert",
         secondName: "Mensah",
         cases: [new Types.ObjectId('16cb91bdc3464f14678934ca')],
         middleName: "Dubi",

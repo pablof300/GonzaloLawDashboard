@@ -1,10 +1,18 @@
 const adminController = require("../controllers/adminController");
+const paymentsController = require("../controllers/paymentsController");
+const caseController = require("../controllers/caseController");
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
 router.get(
   "/getAll",
+  adminController.getAll
+);
+
+router.get(
+  "/allAdmins",
+  passport.authenticate("loggedIn", { session: false }),
   adminController.getAll
 );
 
@@ -56,7 +64,14 @@ router.put(
 router.post(
   "/client",
   passport.authenticate("adminLoggedIn", { session: false }),
+  paymentsController.createCustomer,
   adminController.addClient
+);
+
+router.get(
+  "/case/:id",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  caseController.get
 );
 
 module.exports = router;

@@ -11,7 +11,10 @@ import {
   TransitionablePortal
 } from "semantic-ui-react";
 import axios from "axios";
-import { getCurrentUser, checkIfUserUploadingFileExist } from "../../../api/UserApi";
+import {
+  getCurrentUser,
+  checkIfUserUploadingFileExist
+} from "../../../api/UserApi";
 import Cookies from "js-cookie";
 
 const FileUploadComponent = props => {
@@ -33,8 +36,10 @@ const FileUploadComponent = props => {
 
   const getUserData = async () => {
     const user = (await getCurrentUser()).data;
-    setUserID(user._id);
-    setGotUserID(true);
+    if (user) {
+      setUserID(user._id);
+      setGotUserID(true);
+    }
   };
 
   if (!gotUserID) {
@@ -59,7 +64,7 @@ const FileUploadComponent = props => {
   };
 
   const upload = async () => {
-    if (file) {
+    if (file && userID) {
       const i = 0;
       let fileParts = file[i].name.split(".");
       let size = file[i].size;
@@ -67,9 +72,9 @@ const FileUploadComponent = props => {
       const fileType = fileParts[1];
       const fileSize = getFileSize(size);
 
-      let res = await checkIfUserUploadingFileExist(fileName, fileType);
+      let fileExist = await checkIfUserUploadingFileExist(fileName, fileType);
 
-      if(!res){
+      if (!fileExist) {
         setShowUploadProgress(true);
         setPortalProp({
           color: "red",
@@ -82,7 +87,7 @@ const FileUploadComponent = props => {
             fileName: fileName,
             fileType: fileType,
             userID: userID,
-            folder: "caseFiles",
+            folder: "caseFiles"
           })
           .then(response => {
             let returnData = response.data.data.returnData;
@@ -95,33 +100,37 @@ const FileUploadComponent = props => {
               onUploadProgress: progressEvent => {
                 setPercent(
                   parseInt(
-                    Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    Math.round(
+                      (progressEvent.loaded * 100) / progressEvent.total
+                    )
                   )
                 );
               }
             };
-  
+
             axios
               .put(signedRequest, file[i], options)
               .then(result => {
                 console.log("We got response from s3");
-                
+
                 const fileToStore = {
                   name: fileName,
                   type: fileType,
                   size: fileSize,
                   url: url
                 };
-                axios.post("/files", fileToStore, {
-                  headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
-                }).then(res => {
-                  setPortalProp({
-                    color: "green",
-                    buttonText: "Done!",
-                    text: "Uploaded Successfully"
+                axios
+                  .post("/files", fileToStore, {
+                    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+                  })
+                  .then(res => {
+                    setPortalProp({
+                      color: "green",
+                      buttonText: "Done!",
+                      text: "Uploaded Successfully"
+                    });
+                    props.setIsFilesPopulated(false);
                   });
-                  props.setIsFilesPopulated(false);
-                });
               })
               .catch(error => {
                 alert("ERROR: " + JSON.stringify(error));
@@ -130,12 +139,11 @@ const FileUploadComponent = props => {
           .catch(error => {
             alert(JSON.stringify(error));
           });
-      }else{
+      } else {
         alert("ERROR: This file already exist.");
       }
-
-     
-     
+    } else {
+      alert("ERROR: Either the file is corrupted or no user is logged in.");
     }
   };
 
