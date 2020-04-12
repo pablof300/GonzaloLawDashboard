@@ -17,6 +17,8 @@ exports.getOAuthURL = async (req, res) => {
     scope: [OAuthClient.scopes.Accounting],
     state: "intuit-test"
   });
+  console.log(authUri);
+  res.contentType("application/json");
   res.send(authUri);
 };
 
@@ -207,6 +209,7 @@ exports.callback = async (req, res) => {
 
 const getAuthStatus = async () => {
   if (!oauthClient) {
+    console.log("heh");
     return false;
   }
   if (oauthClient.isAccessTokenValid()) {

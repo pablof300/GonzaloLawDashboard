@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Image, Item, Segment, Card } from "semantic-ui-react";
 import ClientCaseCard from "./ClientCases/ClientCaseCard.js";
+import InvoiceCard from "./ClientInvoices/InvoiceCard"
 import "../Admin.css";
 
 const ClientCard = props => {
@@ -24,6 +25,7 @@ const ClientCard = props => {
           </Item>
         </Item.Group>
         <ClientCaseCard clientData={props.clientData} />
+        <InvoiceCard clientData={props.clientData} />
       </Segment>
 
   );
