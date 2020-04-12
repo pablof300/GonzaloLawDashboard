@@ -20,17 +20,15 @@ exports.get = async id => {
       .then(data => {
         return data;
       });
-  if (!user) {
-    console.log("Could not find an user for the given id!");
-  }
+  if (!user) return false
+
   return user;
 };
 
 exports.getById = async id => {
   const user = await User.findById(id)
-  if (!user) {
-    console.log("Could not find an user for the given id!");
-  }
+  if (!user) throw new NotFoundError();
+
   return user;
 };
 

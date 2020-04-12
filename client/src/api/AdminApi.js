@@ -20,7 +20,7 @@ const getAllClients = async () => {
 };
 
 const getCaseById = async (id) => {
-  let axiosResponse = await API.get(`/case/${id}`, {
+  let axiosResponse = await API.get(`/case/admin/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {
@@ -46,7 +46,7 @@ const getEvents = async () => {
     })
     .catch(error => {
       if (error.response) {
-        return { error: error.response.data.error };
+        return { error: error.response };
       }
       return {
         error: "Unable to retrieve events!"
