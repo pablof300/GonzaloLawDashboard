@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Modal, Form, Button, Icon, Card, Input } from "semantic-ui-react";
 import EditStepCard from "./EditStepCard.js";
 import { addCase } from "../../../../../src/api/AdminApi";
-import { set } from "mongoose";
 
 const EditCaseForm = (props) => {
   //case
@@ -19,17 +18,27 @@ const EditCaseForm = (props) => {
       type,
       startDate,
       caseCompleted,
-      stepDict,
+      getStepArray(),
       props.clientData._id,
       null
     );
     if (addCaseResponse.data) {
       alert("Successfully added new case!");
+      props.addClientCallback(addCaseResponse.data);
       setOpen(false);
     } else {
       alert("Failed to add case, please try again!");
-      console.log("Unable to add case.");
+      console.log("Unable to add case");
     }
+  };
+
+  const getStepArray = () => {
+    let stepArray = [];
+    for (let i = 1; i <= stepCount; i++) {
+      const curStep = stepDict[i.toString()];
+      stepArray.push(curStep);
+    }
+    return stepArray;
   };
 
   //addStep

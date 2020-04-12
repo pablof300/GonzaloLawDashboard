@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Card, Input, Button } from "semantic-ui-react";
 
 const EditStepCard = (props) => {
@@ -6,14 +6,7 @@ const EditStepCard = (props) => {
   const [stepDate, setStepDate] = useState(props.date);
   const [stepDescription, setStepDescription] = useState(props.stepDescription);
 
-  const updateStep = () => {
-    console.log({
-      step: stepTitle,
-      date: stepDate,
-      completed: props.completed,
-      stepDescription: stepDescription,
-      stepNumber: props.stepNumber,
-    });
+  useEffect(() => {
     props.updateStep({
       step: stepTitle,
       date: stepDate,
@@ -21,7 +14,7 @@ const EditStepCard = (props) => {
       stepDescription: stepDescription,
       stepNumber: props.stepNumber,
     });
-  };
+  });
 
   const clearStep = () => {
     setStepTitle("");
@@ -39,7 +32,6 @@ const EditStepCard = (props) => {
           value={stepTitle}
           onChange={(event) => {
             setStepTitle(event.target.value);
-            updateStep();
           }}
         />
         <Form.Field
@@ -48,7 +40,6 @@ const EditStepCard = (props) => {
           value={stepDate}
           onChange={(event) => {
             setStepDate(event.target.value);
-            updateStep();
           }}
         />
         <Form.TextArea
@@ -56,7 +47,6 @@ const EditStepCard = (props) => {
           value={props.description}
           onChange={(event) => {
             setStepDescription(event.target.value);
-            updateStep();
           }}
         />
       </Card.Content>
