@@ -5,13 +5,23 @@ const passport = require("passport");
 
 router.get(
   "/getAll",
-  passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getAll
 );
+
 router.get(
   "/",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.get
+);
+router.get(
+  "/events",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.getEvents
+);
+router.post(
+    "/events",
+    passport.authenticate("adminLoggedIn", { session: false }),
+    adminController.addEvent
 );
 router.put(
   "/",
@@ -29,7 +39,7 @@ router.get(
   "/clients",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getAllClients
-)
+);
 
 router.get(
   "/:clientId",
@@ -43,8 +53,8 @@ router.put(
   adminController.removeClient
 );
 
-router.put(
-  "/add/:clientId",
+router.post(
+  "/client",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.addClient
 );

@@ -13,10 +13,10 @@ import {
 } from "semantic-ui-react";
 import "./FileComponent.css";
 import FileUploadComponent from "./FileUploadComponent";
-import { getFiles, deleteFiles } from "../../../api/FilesApi";
-
-// TODO:
-// - Refactor confirmDeletion to be by fileId not testFileNamesData
+import {
+  getAllUserFiles,
+  deleteUserFileById
+} from "../../../../src/api/UserApi";
 
 const FileComponent = () => {
   const [listOfFiles, setListOfFiles] = useState([]);
@@ -28,19 +28,17 @@ const FileComponent = () => {
     fileID: null,
     fileName: null
   });
-
   const [isFilesPopulated, setIsFilesPopulated] = useState(false);
 
-  let itemsPerPage = 5;
-  let totalPages;
-  let divisible;
-  let remainder;
-  let startIndex;
-  let endIndex;
-  let allFileListInPagination = [];
+  let itemsPerPage = 5,
+    totalPages,
+    startIndex,
+    endIndex,
+    allFileListInPagination = [];
 
   const loadFiles = async () => {
-    setListOfFiles((await getFiles()).data);
+    const data = await getAllUserFiles();
+    setListOfFiles(data);
     setIsFilesPopulated(true);
   };
 
@@ -48,10 +46,10 @@ const FileComponent = () => {
     loadFiles();
   }
 
-  const filterFilesByText = async (e, { value }) => {
+  const filterFilesByText = (e, { value }) => {
     setIsLoading(true);
 
-    const results = await listOfFiles.filter(file => {
+    const results = listOfFiles.filter(file => {
       return (
         value.length > 0 &&
         file.name.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
@@ -79,12 +77,7 @@ const FileComponent = () => {
     } else {
       totalPages = parseInt(listOfFiles.length / itemsPerPage) + 1;
     }
-
-    divisible = parseInt(listOfFiles.length / itemsPerPage);
-    remainder = listOfFiles.length % itemsPerPage;
-
     startIndex = (currentPage - 1) * itemsPerPage;
-    endIndex = divisible * itemsPerPage;
     endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
 
     for (let i = startIndex; i < endIndex; i++) {
@@ -99,10 +92,13 @@ const FileComponent = () => {
   };
 
   const deleteFile = async () => {
-    const id = confirmDeletion["fileID"];
-    const fileName = confirmDeletion["fileName"];
+    const params = {
+      id: confirmDeletion["fileID"],
+      fileName: confirmDeletion["fileName"],
+      folder: "caseFiles"
+    }
 
-    const fileIsDeleted = await deleteFiles(fileName, id);
+    const fileIsDeleted = await deleteUserFileById(params);
     if (fileIsDeleted) {
       setIsFilesPopulated(false);
       setConfirmDeletion({
@@ -207,7 +203,7 @@ const FileComponent = () => {
           <Table
             attached="bottom"
             size="small"
-            unstackable="true"
+            unstackable={true}
             singleLine
             fixed
           >
@@ -230,6 +226,8 @@ const FileComponent = () => {
                     <div>
                       <Popup
                         content="Add supporting files"
+                        position="top right"
+                        positionFixed
                         trigger={
                           <Button
                             floated="right"

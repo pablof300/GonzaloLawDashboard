@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../assets/HorizontalLogo.png";
+import FooterComponent from "../../components/util/FooterComponent/FooterComponent";
 import MessageComponent from "../../components/util/MessageComponent/MessageComponent";
 import { authenticateAdmin } from "../../api/AuthApi";
 import { Redirect } from "react-router-dom";
@@ -39,12 +40,14 @@ function AdminLogin() {
   }
 
   return (
+    <div>
+
     <Grid stackable className="container">
       <Grid.Column width={4} />
       <Grid.Column width={8}>
         {error && (
           <MessageComponent type="failure" title="Uh no!" content={error} />
-        )}
+          )}
         <Segment padded="very" stacked>
           <Header
             centered
@@ -52,7 +55,7 @@ function AdminLogin() {
             as="div"
             icon
             style={{ backgroundColor: "white" }}
-          >
+            >
             <Image src={logo} fluid style={{ width: "50%" }} />
           </Header>
           <Divider hidden />
@@ -62,13 +65,13 @@ function AdminLogin() {
                 label="Username"
                 control={Input}
                 onChange={event => setUsername(event.target.value)}
-              />
+                />
               <Form.Input
                 label="Password"
                 control={Input}
                 type="password"
                 onChange={event => setPassword(event.target.value)}
-              />
+                />
               <Button color="orange" onClick={login}>
                 Login
               </Button>
@@ -77,6 +80,8 @@ function AdminLogin() {
         </Segment>
       </Grid.Column>
     </Grid>
+    <FooterComponent />
+                </div> 
   );
 }
 

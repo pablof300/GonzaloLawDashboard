@@ -1,61 +1,73 @@
 import React, { useState } from "react";
-import { Step } from "semantic-ui-react";
+import { Step, Popup } from "semantic-ui-react";
+import { getCurrentUser } from "../../../../src/api/UserApi";
 
-/*
-This component takes in an array of case steps that will be retrieved from the database and passed down as props.
-It maps each of those case steps to a step component that will be rendered to the user.
-*/
+const ProgBar = props => {
+  if (props.cases !== undefined && props.cases.length !== 0) {
+    const displayedCase = props.cases[0];
 
-const progBar = props => {
-  /*
-  const progBarItems = props.progBarItems.map(item => {
-    if (item.completed) {
-      return (
-        <Step completed>
-          <Step.Content>
-            <Step.Title>{item.title}</Step.Title>
-          </Step.Content>
-        </Step>
-      );
-    } else if (item.active) {
-      return (
-        <Step active>
-          <Step.Content>
-            <Step.Title>{item.title}</Step.Title>
-          </Step.Content>
-        </Step>
-      );
-    } else {
-      return (
-        <Step disabled>
-          <Step.Content>
-            <Step.Title>{item.title}</Step.Title>
-          </Step.Content>
-        </Step>
-      );
-    }
-  });
-  */
+    let activeStepSeen = false;
+    const steps = displayedCase.steps.map(function(curStep) {
+      if (curStep.completed === false && activeStepSeen === false) {
+        activeStepSeen = true;
+        return (
+            <Popup
+                trigger={
+                  <Step active={true}>
+                    <Step.Content>
+                      <Step.Title>{curStep.step}</Step.Title>
+                    </Step.Content>
+                  </Step>
+                }
+                position="top center"
+                positionFixed
+            >
+              <Popup.Header>{curStep.stepDescription}</Popup.Header>
+            </Popup>
+        );
+      } else if (curStep.completed === false && activeStepSeen === true) {
+        return (
+            <Popup
+                trigger={
+                  <Step disabled={true}>
+                    <Step.Content>
+                      <Step.Title>{curStep.step}</Step.Title>
+                    </Step.Content>
+                  </Step>
+                }
+                position="top center"
+                positionFixed
+            >
+              <Popup.Header>{curStep.stepDescription}</Popup.Header>
+            </Popup>
+        );
+      } else {
+        return (
+            <Popup
+                trigger={
+                  <Step completed={true}>
+                    <Step.Content>
+                      <Step.Title>{curStep.step}</Step.Title>
+                    </Step.Content>
+                  </Step>
+                }
+                position="top center"
+                positionFixed
+            >
+              <Popup.Header>{curStep.stepDescription}</Popup.Header>
+            </Popup>
+        );
+      }
+    });
 
-  return (
-    <Step.Group style={{ overflow: "auto" }} size="small" ordered>
-      <Step completed>
-        <Step.Content>
-          <Step.Title>First step</Step.Title>
-        </Step.Content>
-      </Step>
-      <Step active>
-        <Step.Content>
-          <Step.Title>Second step</Step.Title>
-        </Step.Content>
-      </Step>
-      <Step disabled>
-        <Step.Content>
-          <Step.Title>Third step</Step.Title>
-        </Step.Content>
-      </Step>
-    </Step.Group>
-  );
+    return (
+        <Step.Group size="small" ordered>
+          {steps}
+        </Step.Group>
+    );
+  } else {
+    return <p>No cases for current client.</p>;
+  }
 };
 
-export default progBar;
+export default ProgBar;
