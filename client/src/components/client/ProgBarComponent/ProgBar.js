@@ -4,7 +4,7 @@ import { getCurrentUser } from "../../../../src/api/UserApi";
 
 const ProgBar = props => {
   if (props.cases !== undefined && props.cases.length !== 0) {
-    const displayedCase = props.cases[0];
+    const displayedCase = props.cases;
 
     let activeStepSeen = false;
     const steps = displayedCase.steps.map(function(curStep) {
