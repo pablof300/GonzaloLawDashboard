@@ -150,13 +150,11 @@ const ClientList = () => {
             modal
             closeOnDocumentClick
           >
-            <Container className="FormContainer">
               <ClientCard
                 clientData={client}
                 clientName={client.firstName + " " + client.secondName}
                 clientContact={client.contact}
               />
-            </Container>
           </Popup>
         </List.Content>
         <Image

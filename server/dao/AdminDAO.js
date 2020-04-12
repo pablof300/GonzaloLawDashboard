@@ -1,7 +1,6 @@
 const Admin = require("../models/Admin.js").Model;
 const User = require("../models/User.js").Model;
 const { NotFoundError } = require("../util/exceptions");
-const mongoose = require("mongoose");
 
 exports.create = async adminParams => {
   if (await Admin.exists({ username: adminParams.username })) {
@@ -20,6 +19,12 @@ exports.getAll = async () => {
 };
 
 exports.get = async id => {
+  const admin = await Admin.findById(id);
+  if (!admin) return false;
+  return admin;
+};
+
+exports.getById = async id => {
   const admin = await Admin.findById(id);
   if (!admin) {
     console.log("Could not find an admin for the given id!");

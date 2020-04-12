@@ -13,6 +13,12 @@ exports.get = async (req, res) => {
   });
 };
 
+exports.getById = async (req, res) => {
+  catchErrors(res, async () => {
+    return userDAO.getById(req.params.id);
+  });
+};
+
 exports.update = async (req, res) =>
   catchErrors(res, async () => {
     return userDAO.update(req.userId, req.body);

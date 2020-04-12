@@ -20,6 +20,25 @@ const getCurrentUser = async () => {
   return axiosResponse;
 };
 
+const getUserById = async id => {
+  let axiosResponse = await API.get(`/user/name/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error !== null && error.response) {
+        return { error: error.response };
+      }
+      return {
+        error: "Unable to retrieve user!"
+      };
+    });
+
+  return axiosResponse;
+};
+
 const getAllUserFiles = async () => {
   const user = (await getCurrentUser()).data;
   let allFiles = [];
@@ -234,5 +253,6 @@ export {
   getAllUserFiles,
   deleteUserFileById,
   getAllLawyersWorkingOnUserCase,
-  checkIfUserUploadingFileExist
+  checkIfUserUploadingFileExist,
+  getUserById
 };

@@ -77,3 +77,6 @@
   float: right;
   bottom: 5px;
  }
+.header {
+  background-color: transparent !important;
+}
