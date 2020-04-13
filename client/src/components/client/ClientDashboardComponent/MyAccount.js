@@ -87,14 +87,7 @@ const MyAccount = (props) => {
               };
               const changed = await updatePassword(params);
               if (changed) {
-                setChangePass(false);
-                setCurrPasswordError(false);
-                setConfirmNewPasswordError(false);
-                setClearErrors(false);
-                setVerifyCode(false);
-                setConfirmNewPassword(null);
-                setCurrPassword(null);
-                setNewPassword(null);
+                handlePassCancel()
                 alert("Password changed successfully");
               }
             } else {
@@ -213,7 +206,7 @@ const MyAccount = (props) => {
   const handleDialogCancel = () => {
     setOpenCodeDialog(false);
     setVerifyError(true);
-    setCode(null);
+    setCode("");
   };
 
   const getCode = (e) => {
@@ -534,7 +527,7 @@ const MyAccount = (props) => {
                       color="red"
                       pointing
                     >
-                      Password do not match
+                      Password does not match your previous
                     </Label>
                   </Form.Field>
                 </Form.Group>
