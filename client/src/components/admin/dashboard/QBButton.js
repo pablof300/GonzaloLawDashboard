@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {Grid, Container, Header, Icon, Card, Button} from "semantic-ui-react";
-import { getURL } from "../../../../src/api/QBApi";
+import { getURL, checkURLStatus } from "../../../../src/api/QBApi";
 
 const QBStatus = props => {
+  const [status, setStatus] = useState("Offline");
 
   const startOAuth = async () => {
-    console.log("oauth hahaha");
     let oAuthResponse = await getURL();
-    console.log("hahaha oauth");
+    var win = window.open(oAuthResponse.data, '_blank');   win.focus();
+
+    let urlStatus = await checkURLStatus();
+    if(urlStatus)
+    {
+      setStatus("Online");
+    }
   };
 
   return (
@@ -16,7 +22,7 @@ const QBStatus = props => {
       <Card.Content> Connect to Quickbooks </Card.Content>
     </Card.Content>
     <Card.Content extra>
-      <a> Status: Offline </a>
+      <a> Status: {status} </a>
       <Button
         compact
         floated="right"

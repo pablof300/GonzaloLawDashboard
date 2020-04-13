@@ -17,9 +17,9 @@ exports.getOAuthURL = async (req, res) => {
     scope: [OAuthClient.scopes.Accounting],
     state: "intuit-test"
   });
+
   console.log(authUri);
-  res.contentType("application/json");
-  res.send(authUri);
+  res.send({ ok: true, data: authUri });
 };
 
 exports.createInvoice = async (req, res) => {
@@ -187,9 +187,12 @@ exports.getInvoicePdf = async (req, res) => {
 
 exports.isPaymentOnline = async (req, res) => {
   if (!authToken) {
-    res.send(false);
+    console.log("AUTH TOKEN NOT VALID");
+    res.send({ ok: true, data: false });
   } else {
-    return getAuthStatus();
+    console.log("AUTH TOKEN VALID");
+    console.log(getAuthStatus());
+    res.send({ ok: true, data: true });
   }
 };
 
@@ -209,11 +212,12 @@ exports.callback = async (req, res) => {
 
 const getAuthStatus = async () => {
   if (!oauthClient) {
-    console.log("heh");
-    return false;
+    console.log("TOKEN NOT VALID");
+    return (false);
   }
   if (oauthClient.isAccessTokenValid()) {
-    return true;
+    console.log("TOKEN VALID");
+    return (true);
   }
   return await oauthClient
     .refresh()
