@@ -39,7 +39,7 @@ const FileComponent = () => {
   const loadFiles = async () => {
     const data = (await getAllUserFiles()).data;
     if(data){
-      setListOfFiles(data);
+      setListOfFiles(data.reverse());
       setIsFilesPopulated(true);
     }
     

@@ -21,9 +21,21 @@ exports.get = async (req, res) => {
   });
 };
 
+exports.getUserByEmail = async (req, res) => {
+  catchErrors(res, async () => {
+    return userDAO.getUserByEmail(req.params.email);
+  });
+};
+
 exports.update = async (req, res) =>
   catchErrors(res, async () => {
     return userDAO.update(req.userId, req.body);
+  });
+
+  exports.updateUserPassword = async (req, res) =>
+  catchErrors(res, async () => {
+    const user = await userDAO.updateUserPassword(req.params.id, req.body)
+    return user._id;
   });
 
 exports.delete = async (req, res) =>

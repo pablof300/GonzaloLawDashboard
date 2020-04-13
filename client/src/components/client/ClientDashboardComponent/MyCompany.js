@@ -1,57 +1,101 @@
-import React, { useState } from "react";
-import { Button, Grid, Image, Form, Card } from "semantic-ui-react";
-import { getCurrentUser } from "../../../../src/api/UserApi";
+import React, { useState, useEffect } from "react";
+import { Button, Grid, Image, Form, Icon } from "semantic-ui-react";
+import { getCurrentUser, updateUserData } from "../../../../src/api/UserApi";
 
 const defaultImage = "https://react.semantic-ui.com/images/wireframe/image.png";
-function MyCompany() {
+function MyCompany(props) {
   const [logoUrl, setLogoUrl] = useState(null);
-  const [hasCompany, setHasCompany] = useState(false);
   const [userData, setUserData] = useState([]);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    if (isUserLoaded) {
+      abortController.abort();
+    }
+  }, []);
+
+  const RefreshPage = () => {
+    window.location.reload(false)
+  }
 
   const loadUserData = async () => {
     const user = (await getCurrentUser()).data;
     if (user) {
       setUserData(user);
-      if (user.company) {
-        setHasCompany(true);
+      if(user.company && user.company.companyLogoUrl){
+        setLogoUrl(user.company.companyLogoUrl)
       }
+      
       setIsUserLoaded(true);
+      props.setIsLoading(false);
     }
   };
   if (!isUserLoaded) {
+    props.setIsLoading(true);
     loadUserData();
+  }
+
+  const saveLogoUrl = async () => {
+    const data = {
+      company:{
+        companyLogoUrl: logoUrl,
+        companyName: userData.company.companyName,
+        website: userData.company.website
+      }
+    }
+
+    const res = await updateUserData(data)
+    if(res){
+      alert("Your company logo has been updated successfully");
+      RefreshPage()
+    }
+
   }
 
   const getLogoUrl = (e) => {
     e.preventDefault();
+    setLogoUrl(e.target.value)
   };
 
   return (
     <div>
-      <Card unstackable fluid centered>
-        <Grid
-          unstackable
-          padded="vertically"
-          divided="vertically"
-          style={{ margin: 30 }}
-        >
-          <Grid.Row className={!hasCompany ? "hidden" : ""}>
-            <h3>Company Information</h3>
-          </Grid.Row>
-          <Grid.Row className={!hasCompany ? "hidden" : ""}>
-            <Grid.Column floated="left" stretched={true}>
+      <Grid
+        unstackable
+        padded="vertically"
+        divided="vertically"
+        style={{ margin: 30 }}
+      >
+        <Grid.Row>
+          <h3>Company Information</h3>
+        </Grid.Row>
+
+        <Grid.Row textAlign="left">
+          <Grid.Column floated="left" stretched={true}>
+            <div>
               <Grid.Row stretched={true} textAlign="left">
                 <Form widths="equal">
-                  <Form.Input
-                    className="wrap"
-                    label="Logo URL"
-                    type="text"
-                    placeholder="Logo URL"
-                    labelPosition="left"
-                    value={logoUrl}
-                    onChange={getLogoUrl}
-                  />
+                  <Form.Group inline>
+                    <Form.Input
+                      className="wrap"
+                      label="Logo URL"
+                      type="text"
+                      placeholder="Logo URL"
+                      labelPosition="left"
+                      value={logoUrl}
+                      onChange={getLogoUrl}
+                    />
+                    <div>
+                      <Button onClick={saveLogoUrl}>
+                        <Button.Content>
+                          <Icon name="save" />
+                        </Button.Content>
+                      </Button>
+                    </div>
+                  </Form.Group>
+
                   <Form.Input
                     className="wrap"
                     label="Company"
@@ -81,24 +125,24 @@ function MyCompany() {
                   ></Form.Input>
                 </Form>
               </Grid.Row>
-            </Grid.Column>
+            </div>
+          </Grid.Column>
 
-            <Grid.Column floated="right" width={5}>
-              <p>Company Logo</p>
-              <Image
-                src={
-                  !(userData && userData.company)
-                    ? defaultImage
-                    : userData.company.companyLogoUrl
-                }
-                size="huge"
-                rounded
-                fluid
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Card>
+          <Grid.Column floated="right" width={5}>
+            <p>Company Logo</p>
+            <Image
+              src={
+                !(userData && userData.company)
+                  ? defaultImage
+                  : userData.company.companyLogoUrl
+              }
+              size="huge"
+              rounded
+              fluid
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </div>
   );
 }

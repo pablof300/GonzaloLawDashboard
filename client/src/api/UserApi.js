@@ -21,63 +21,76 @@ const getCurrentUser = async () => {
 };
 
 const sendMessageToTeam = async (params) => {
-  API.post(`/user/message`, params , {
+  API.post(`/user/message`, params, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
-  }).then(res => {
-    return res;
-  }).catch(err=> {
-    return err
   })
-    return true;
-}
-
-
-
-
-const sendEmail = async (params) => {
-  const user = (await getCurrentUser()).data;
-  let result = null;
-  if (user) {
-    const userID = user._id;
-    result = await API.post(`/codes/${userID}`,params, {
-      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+    .then((res) => {
+      return res;
     })
-      .then((res) => {
-        if (res.data && res.data.data) {
-          const data = res.data.data;
-          const code = data.code;
-          const message = `<h3>Hi ${user.firstName},</h3> <p>Use the code below to help reset your password.</p> <p><h2><b>${code}</b></h2></p>`
-          const from  = "GonzaloLaw <no-eply@mail.gonzalolaw.com>";
-          params.from = from
-          params.html = message;
-          const sEmail = async () => {
-            const emailSend = await API.post("codes/mail",params, {
-              headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },}).then(res => {
-                if(res){
-                  alert("A verification Code was sent to your email");
-                }
-              return true;
-          }).catch(err => {
-            console.log(err)
-            return false;
+    .catch((err) => {
+      return err;
+    });
+  return true;
+};
+
+const sendEmail = async (params, id, name) => {
+  let result = null;
+  result = await API.post(`/codes/${id}`, params, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((res) => {
+      if (res.data && res.data.data) {
+        const data = res.data.data;
+        const code = data.code;
+        const message = `<h3>Hi ${name},</h3> <p>Use the code below to help reset your password.</p> <p><h2><b>${code}</b></h2></p>`;
+        const from = "GonzaloLaw <no-eply@mail.gonzalolaw.com>";
+        params.from = from;
+        params.html = message;
+        const sEmail = async () => {
+          const emailSend = await API.post("codes/mail", params, {
+            headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
           })
+            .then((res) => {
+              if (res) {
+                alert("A verification Code was sent to your email");
+              }
+              return true;
+            })
+            .catch((err) => {
+              console.log(err);
+              return false;
+            });
 
           return emailSend;
-          }
-          return sEmail();
-          
-        }
-      })
-      .catch((error) => {
-        if (error && error.response) {
-          console.log(error.response);
-          return false;
-        }
-      });
-     
-  }
+        };
+        return sEmail();
+      }
+    })
+    .catch((error) => {
+      if (error && error.response) {
+        console.log(error.response);
+        return false;
+      }
+    });
   return result;
 };
+
+ const updatePasswordAtLogin = async (params, id) =>{
+  let axiosResponse = await API.put(`/user/${id}`,params)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      if (error !== null && error.response) {
+        return { error: error.response };
+      }
+      return {
+        error: "Unable to retrieve user!",
+      };
+    });
+
+  return axiosResponse;
+}
 
 const updatePassword = async (params) => {
   const success = await updateUserData(params).then((res) => {
@@ -112,19 +125,19 @@ const getAllUserFiles = async () => {
   return axiosResponse;
 };
 
-const checkIfCodeExistOrHasNotExpired = async  (code, id) => {
+const checkIfCodeExistOrHasNotExpired = async (code, id) => {
   let axiosResponse = await API.get(`/codes/${code}/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
     .then((response) => {
-     // console.log(response)
-     if(response && response.data && response.data.data){
-      ///console.log(response)
-        return true
-     }
+      // console.log(response)
+      if (response && response.data && response.data.data) {
+        ///console.log(response)
+        return true;
+      }
       return false;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error !== null && error.response) {
         // console.log( error.response)
         return false;
@@ -135,20 +148,6 @@ const checkIfCodeExistOrHasNotExpired = async  (code, id) => {
     });
 
   return axiosResponse;
-}
-
-const checkIfUserUploadingFileExist = async (fileName, fileType) => {
-  const user = (await getCurrentUser()).data;
-  if (user && user.files) {
-    const filesID = user.files;
-    for (let i = 0; i < filesID.length; i++) {
-      const data = (await getUserFileById(filesID[i])).data;
-      if (data.name === fileName && data.type === fileType) {
-        return true;
-      }
-    }
-  }
-  return false;
 };
 
 const getAllLawyersWorkingOnUserCase = async () => {
@@ -203,6 +202,7 @@ const uploadUserProfilePicture = (params) => {
             if (res) {
               alert("Profile Picture updated successfully");
               console.log("Profile Picture updated successfully");
+              RefreshPage();
             }
           });
         })
@@ -215,21 +215,59 @@ const uploadUserProfilePicture = (params) => {
     });
 };
 
-const getUserFileById = async (id) => {
-  let axiosResponse = await API.get(`/files/${id}`, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
-  })
+const RefreshPage = () => {
+  window.location.reload(false);
+};
+
+const getUserByEmail = async (email) => {
+  let axiosResponse = await API.get(`/user/${email}`)
     .then((response) => {
       return response.data;
     })
     .catch((error) => {
-      if (error.response) {
-        return { error: error.response.data.error };
+      if (error && error.response) {
+        return { error: error.response };
       }
       return {
-        error: "Unable to retrieve file!",
+        error: "User does not exist!",
       };
     });
+
+  return axiosResponse;
+};
+
+const checkIfUserUploadingFileExist = async (fileName, fileType) => {
+  const user = (await getCurrentUser()).data;
+  let axiosResponse = null;
+  if (user) {
+    axiosResponse = await API.get(`/files/${user._id}`, {
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+    })
+      .then((response) => {
+        const file = response.data.data;
+        let i = 0;
+        for (; i < file.length; i++) {
+          if (
+            file[i].name === fileName &&
+            file[i].type.toLowerCase() === fileType.toLowerCase()
+          ) {
+            return true;
+          }
+        }
+        if (i === file.length) {
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          return { error: error.response.data.error };
+        }
+        return {
+          error: "Unable to retrieve file!",
+        };
+      });
+    return axiosResponse;
+  }
   return axiosResponse;
 };
 
@@ -320,6 +358,8 @@ export {
   getAllUserFiles,
   deleteUserFileById,
   updatePassword,
+  getUserByEmail,
+  updatePasswordAtLogin,
   getAllLawyersWorkingOnUserCase,
   checkIfUserUploadingFileExist,
   checkIfCodeExistOrHasNotExpired,

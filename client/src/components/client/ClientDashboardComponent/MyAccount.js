@@ -20,7 +20,7 @@ import {
 
 const defaultImage = "https://react.semantic-ui.com/images/wireframe/image.png";
 
-const MyAccount = () => {
+const MyAccount = (props) => {
   const [userData, setUserData] = useState([]);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
   const [changePass, setChangePass] = useState(false);
@@ -36,16 +36,17 @@ const MyAccount = () => {
   const [verifyCode, setVerifyCode] = useState(false);
   const [verifyError, setVerifyError] = useState(false);
   const [code, setCode] = useState(null);
-  
 
   const loadUserData = async () => {
     const user = (await getCurrentUser()).data;
     if (user) {
       setUserData(user);
       setIsUserLoaded(true);
+      props.setIsLoading(false);
     }
   };
   if (!isUserLoaded) {
+    props.setIsLoading(true);
     loadUserData();
   }
 
@@ -66,7 +67,7 @@ const MyAccount = () => {
         subject: "Reset Password",
         html: "",
       };
-      await sendEmail(mailOptions);
+      await sendEmail(mailOptions, userData._id, userData.firstName);
     }
   };
 
@@ -133,7 +134,6 @@ const MyAccount = () => {
     setCurrPassword(e.target.value);
   };
 
-
   const newPass = (e) => {
     e.preventDefault();
     if (!clearErrors) {
@@ -159,12 +159,11 @@ const MyAccount = () => {
   const checkCode = async () => {
     if (userData && code) {
       const res = await checkIfCodeExistOrHasNotExpired(code, userData._id);
-      console.log(res);
       if (res) {
         setVerifyCode(true);
         setOpenCodeDialog(false);
         setVerifyError(false);
-        setCode(null)
+        setCode(null);
         setCurrPassword(userData.password);
       } else {
         setVerifyCode(false);
@@ -185,7 +184,7 @@ const MyAccount = () => {
     setNewPassword(null);
   };
 
-  const getFile = (e) => {
+  const getFile = async (e) => {
     e.preventDefault();
     const file = e.target.files;
     if (file && userData) {
@@ -212,169 +211,171 @@ const MyAccount = () => {
   };
 
   const handleDialogCancel = () => {
-    setOpenCodeDialog(false)
+    setOpenCodeDialog(false);
     setVerifyError(true);
-    setCode(null)
-  }
+    setCode(null);
+  };
 
   const getCode = (e) => {
     e.preventDefault();
-    setVerifyError(false)
+    setVerifyError(false);
     setCode(e.target.value);
   };
 
   return (
     <div>
-      <Card unstackable fluid centered>
-        <Grid
-          unstackable
-          padded="vertically"
-          divided="vertically"
-          style={{ margin: 30 }}
-        >
-          <Grid.Row>
-            <h3>Personal Information</h3>
-          </Grid.Row>
+      <Grid
+        unstackable
+        textAlign="left"
+        padded="vertically"
+        divided="vertically"
+        style={{ margin: 30 }}
+      >
+        <Grid.Row>
+          <h3>Personal Information</h3>
+        </Grid.Row>
 
-          <Grid.Row>
-            <Grid.Column width={4}>
-              <Image
-                src={
-                  !(userData && userData.imageUrl)
-                    ? defaultImage
-                    : userData.imageUrl
-                }
-                size="huge"
-                rounded
-                fluid
-              />
-              <Popup
-                content="Click to Change Profile Picture"
-                position="top center"
-                trigger={
-                  <div style={{ marginTop: 20 }}>
-                    <label for="file" class="ui icon button">
-                      Upload
-                    </label>
-                    <input
-                      onChange={getFile}
-                      type="file"
-                      id="file"
-                      style={{ display: "none" }}
-                    />
-                  </div>
-                }
-              />
-            </Grid.Column>
+        <Grid.Row>
+          <Grid.Column width={4}>
+            <Image
+              src={
+                !(userData && userData.imageUrl)
+                  ? defaultImage
+                  : userData.imageUrl
+              }
+              size="huge"
+              rounded
+              fluid
+            />
+            <Popup
+              content="Click to Change Profile Picture"
+              position="top left"
+              trigger={
+                <div style={{ marginTop: 20 }}>
+                  <label for="file" class="ui icon button">
+                    Upload
+                  </label>
+                  <input
+                    onChange={getFile}
+                    type="file"
+                    id="file"
+                    style={{ display: "none" }}
+                  />
+                </div>
+              }
+            />
+          </Grid.Column>
 
-            <Grid.Column stretched={true}>
-              <Grid.Row stretched={true} textAlign="left">
-                <Form widths="equal">
-                  <Form.Group className="wrap" unstackable>
-                    <Form.Input
-                      label="First name"
-                      placeholder="First name"
-                      labelPosition="left"
-                      readOnly
-                      value={!userData ? "" : userData.firstName}
-                    />
-                    <Form.Input
-                      label="Last name"
-                      placeholder="Last name"
-                      labelPosition="left"
-                      readOnly
-                      value={!userData ? "" : userData.secondName}
-                    />
-                  </Form.Group>
+          <Grid.Column stretched={true}>
+            <Grid.Row stretched={true} textAlign="left">
+              <Form widths="equal">
+                <Form.Group className="wrap" unstackable>
+                  <Form.Input
+                    label="First name"
+                    placeholder="First name"
+                    labelPosition="left"
+                    readOnly
+                    value={!userData ? "" : userData.firstName}
+                  />
+                  <Form.Input
+                    label="Last name"
+                    placeholder="Last name"
+                    labelPosition="left"
+                    readOnly
+                    value={!userData ? "" : userData.secondName}
+                  />
+                </Form.Group>
 
-                  <Form.Group className="wrap" unstackable>
-                    <Form.Input
-                      className={
-                        !(userData && userData.middleName) ? "hidden" : ""
-                      }
-                      label="Middle name"
-                      labelPosition="left"
-                      placeholder="Middle name"
-                      readOnly
-                      value={!userData ? "" : userData.middleName}
-                    />
-                    <Form.Input
-                      className={
-                        !(userData && userData.otherName) ? "hidden" : ""
-                      }
-                      label="Other name"
-                      placeholder="Other name"
-                      labelPosition="left"
-                      readOnly
-                      value={!userData ? "" : userData.otherName}
-                    />
-                  </Form.Group>
-
+                <Form.Group className="wrap" unstackable>
                   <Form.Input
                     className={
-                      !(userData && userData.birthDate) ? "hidden" : "wrap"
+                      !(userData && userData.middleName) ? "hidden" : ""
                     }
-                    label="Birth Date"
+                    label="Middle name"
                     labelPosition="left"
-                    placeholder="mm/dd/yy"
+                    placeholder="Middle name"
                     readOnly
-                    value={!userData ? "" : userData.birthDate}
+                    value={!userData ? "" : userData.middleName}
                   />
                   <Form.Input
-                    className="wrap"
-                    label="Username"
-                    labelPosition="left"
-                    placeholder="Username"
-                    readOnly
-                    value={!userData ? "" : userData.username}
-                  />
-
-                  <Form.Input
-                    className="wrap"
-                    label="Phone Number"
-                    labelPosition="left"
-                    placeholder="Phone Number"
-                    readOnly
-                    value={
-                      !(userData && userData.contact)
-                        ? null
-                        : userData.contact.cellPhone
+                    className={
+                      !(userData && userData.otherName) ? "hidden" : ""
                     }
+                    label="Other name"
+                    placeholder="Other name"
+                    labelPosition="left"
+                    readOnly
+                    value={!userData ? "" : userData.otherName}
                   />
+                </Form.Group>
 
-                  <Form.Group className="wrap" unstackable>
-                    <Form.Input
-                      className={
-                        !(userData && userData.workPhone) ? "hidden" : ""
-                      }
-                      label="Work Phone"
-                      labelPosition="left"
-                      placeholder="Work Phone"
-                      readOnly
-                      value={!userData ? "" : userData.workPhone}
-                    />
-                    <Form.Input
-                      className={
-                        !(userData && userData.homePhone) ? "hidden" : ""
-                      }
-                      label="Home Phone"
-                      placeholder="Home Phone"
-                      labelPosition="left"
-                      readOnly
-                      value={!userData ? "" : userData.homePhone}
-                    />
-                  </Form.Group>
-                </Form>
-              </Grid.Row>
-            </Grid.Column>
-          </Grid.Row>
+                <Form.Input
+                  className={
+                    !(userData && userData.birthDate) ? "hidden" : "wrap"
+                  }
+                  label="Birth Date"
+                  labelPosition="left"
+                  placeholder="mm/dd/yy"
+                  readOnly
+                  value={!userData ? "" : userData.birthDate}
+                />
+                <Form.Input
+                  className="wrap"
+                  label="Username"
+                  labelPosition="left"
+                  placeholder="Username"
+                  readOnly
+                  value={!userData ? "" : userData.username}
+                />
 
-          <Grid.Row>
-            <h3>Address</h3>
-          </Grid.Row>
+                <Form.Input
+                  className="wrap"
+                  label="Phone Number"
+                  labelPosition="left"
+                  placeholder="Phone Number"
+                  readOnly
+                  value={
+                    !(userData && userData.contact)
+                      ? null
+                      : userData.contact.cellPhone
+                  }
+                />
 
+                <Form.Group className="wrap" unstackable>
+                  <Form.Input
+                    className={
+                      !(userData && userData.workPhone) ? "hidden" : ""
+                    }
+                    label="Work Phone"
+                    labelPosition="left"
+                    placeholder="Work Phone"
+                    readOnly
+                    value={!userData ? "" : userData.workPhone}
+                  />
+                  <Form.Input
+                    className={
+                      !(userData && userData.homePhone) ? "hidden" : ""
+                    }
+                    label="Home Phone"
+                    placeholder="Home Phone"
+                    labelPosition="left"
+                    readOnly
+                    value={!userData ? "" : userData.homePhone}
+                  />
+                </Form.Group>
+              </Form>
+            </Grid.Row>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <h3>Address</h3>
+        </Grid.Row>
+
+       
           <Grid.Row stretched={true} textAlign="left">
-            <Form widths="equal">
+          <Grid.Column textAlign="left">
+          <Form widths="equal">
               <Form.Group className="wrap" unstackable>
                 <Form.Input
                   label="Street"
@@ -420,13 +421,18 @@ const MyAccount = () => {
                 />
               </Form.Group>
             </Form>
+          </Grid.Column>
+            
           </Grid.Row>
+     
 
-          <Grid.Row>
-            <h3>Email</h3>
-          </Grid.Row>
+        <Grid.Row>
+          <h3>Email</h3>
+        </Grid.Row>
+        
           <Grid.Row stretched={true} textAlign="left">
-            <Form widths="equal">
+          <Grid.Column textAlign="left">
+          <Form widths="equal">
               <Form.Input
                 className="wrap"
                 label="Email"
@@ -438,174 +444,173 @@ const MyAccount = () => {
                 }
               />
             </Form>
+          </Grid.Column>
+           
           </Grid.Row>
+       
 
-          <Grid.Row>
-            <h3>Account Password</h3>
-          </Grid.Row>
-          <Grid.Row stretched={true} textAlign="left">
-            <Popup
-              content="Change your current password"
-              position="top center"
-              trigger={
+        <Grid.Row>
+          <h3>Account Password</h3>
+        </Grid.Row>
+
+        <Grid.Row stretched={true} textAlign="left">
+          <Popup
+            content="Change your current password"
+            position="top center"
+            trigger={
+              <Button
+                onClick={() => setChangePass(true)}
+                content="Change Password"
+                primary
+              />
+            }
+          />
+        </Grid.Row>
+
+        <div>
+          <Modal open={changePass} size="large">
+            <Modal.Header>Change Password</Modal.Header>
+            <Modal.Content>
+              <Form widths="equal">
+                <Form.Group className="wrap" unstackable>
+                  <Form.Field>
+                    <Form.Input
+                      disabled={verifyCode}
+                      label="Current Password"
+                      placeholder="Current Password"
+                      labelPosition="left"
+                      type="password"
+                      error={currPasswordError}
+                      value={currPassword}
+                      onChange={currPass}
+                    />
+                    <Label
+                      className={!currPasswordError ? "invisible" : ""}
+                      basic
+                      color="red"
+                      pointing
+                    >
+                      Password does not match your current password
+                    </Label>
+                  </Form.Field>
+
+                  <Form.Field>
+                    <Form.Input
+                      label="New Password"
+                      placeholder="New Password"
+                      type="password"
+                      error={newPasswordError}
+                      labelPosition="left"
+                      ondrop="return false;"
+                      onpaste="return false;"
+                      onChange={newPass}
+                      value={newPassword}
+                    />
+                    <Label
+                      className={!newPasswordError ? "invisible" : ""}
+                      basic
+                      color="red"
+                      pointing
+                    >
+                      {newPasswordErrorMessage}
+                    </Label>
+                  </Form.Field>
+
+                  <Form.Field>
+                    <Form.Input
+                      label="Confirm New Password"
+                      type="password"
+                      ondrop="return false;"
+                      onpaste="return false;"
+                      placeholder="Confirm New Password"
+                      labelPosition="left"
+                      error={confirmNewPasswordError}
+                      onChange={newConfirmPass}
+                      value={confirmNewPassword}
+                    />
+                    <Label
+                      className={!confirmNewPasswordError ? "invisible" : ""}
+                      basic
+                      color="red"
+                      pointing
+                    >
+                      Password do not match
+                    </Label>
+                  </Form.Field>
+                </Form.Group>
                 <Button
-                  onClick={() => setChangePass(true)}
-                  content="Change Password"
+                  onClick={savePassword}
+                  content="Save Password"
                   primary
                 />
-              }
-            />
-          </Grid.Row>
+                <Button onClick={handlePassCancel} content="Cancel" primary />
 
-          <div>
-            <Modal open={changePass} size="large">
-              <Modal.Header>Change Password</Modal.Header>
-              <Modal.Content>
-                <Form widths="equal">
-                  <Form.Group className="wrap" unstackable>
-                    <Form.Field>
-                      <Form.Input
-                        disabled={verifyCode}
-                        label="Current Password"
-                        placeholder="Current Password"
-                        labelPosition="left"
-                        type="password"
-                        error={currPasswordError}
-                        value={currPassword}
-                        onChange={currPass}
-                      />
-                      <Label
-                        className={!currPasswordError ? "invisible" : ""}
-                        basic
-                        color="red"
-                        pointing
-                      >
-                        Password does not match your current password
-                      </Label>
-                    </Form.Field>
-
-                    <Form.Field>
-                      <Form.Input
-                        label="New Password"
-                        placeholder="New Password"
-                        type="password"
-                        error={newPasswordError}
-                        labelPosition="left"
-                        ondrop="return false;"
-                        onpaste="return false;"
-                        onChange={newPass}
-                        value={newPassword}
-                      />
-                      <Label
-                        className={!newPasswordError ? "invisible" : ""}
-                        basic
-                        color="red"
-                        pointing
-                      >
-                        {newPasswordErrorMessage}
-                      </Label>
-                    </Form.Field>
-
-                    <Form.Field>
-                      <Form.Input
-                        label="Confirm New Password"
-                        type="password"
-                        ondrop="return false;"
-                        onpaste="return false;"
-                        placeholder="Confirm New Password"
-                        labelPosition="left"
-                        error={confirmNewPasswordError}
-                        onChange={newConfirmPass}
-                        value={confirmNewPassword}
-                      />
-                      <Label
-                        className={!confirmNewPasswordError ? "invisible" : ""}
-                        basic
-                        color="red"
-                        pointing
-                      >
-                        Password do not match
-                      </Label>
-                    </Form.Field>
-                  </Form.Group>
-                  <Button
-                    onClick={savePassword}
-                    content="Save Password"
-                    primary
-                  />
-                  <Button onClick={handlePassCancel} content="Cancel" primary />
-
-                  <Popup
-                    content="An email will be sent to you to reset your Password"
-                    position="top center"
-                    trigger={
-                      <Button
-                        floated="right"
-                        style={{ marginLeft: 30 }}
-                        onClick={resetPass}
-                        content="Forgot Password?"
-                        primary
-                      />
-                    }
-                  />
-                </Form>
-                <Modal.Actions>
-                  <div>
-                    <Modal open={openCodeDialog} size="small">
-                      <Modal.Header>Verify Code</Modal.Header>
-                      <Modal.Content>
-                        <p>A verification Code has been sent to your email.</p>
-                        <Form widths="equal">
-                          <Form.Field>
-                            <Form.Input
-                              label="Code"
-                              placeholder="Code"
-                              labelPosition="left"
-                              focus={true}
-                              type="text"
-                              value={code}
-                              error={verifyError}
-                              onChange={getCode}
-                            />
-                            <Label
-                              className={!verifyError ? "invisible" : ""}
-                              basic
-                              color="red"
-                              pointing
-                            >
-                              Either the code has expired or does not exist
-                            </Label>
-                          </Form.Field>
-                        </Form>
-                      </Modal.Content>
-                      <Modal.Actions>
-                        <Form widths="equal">
-                          <Button
-                            onClick={checkCode}
-                            content="Confirm"
-                            primary
+                <Popup
+                  content="An email will be sent to you to reset your Password"
+                  position="top center"
+                  trigger={
+                    <Button
+                      floated="right"
+                      style={{ marginLeft: 30 }}
+                      onClick={resetPass}
+                      content="Forgot Password?"
+                      primary
+                    />
+                  }
+                />
+              </Form>
+              <Modal.Actions>
+                <div>
+                  <Modal open={openCodeDialog} size="small">
+                    <Modal.Header>Verify Code</Modal.Header>
+                    <Modal.Content>
+                      <p>A verification Code has been sent to your email.</p>
+                      <Form widths="equal">
+                        <Form.Field>
+                          <Form.Input
+                            label="Code"
+                            placeholder="Code"
+                            labelPosition="left"
+                            focus={true}
+                            type="text"
+                            value={code}
+                            error={verifyError}
+                            onChange={getCode}
                           />
-                          <Button
-                            onClick={resetPass}
-                            content="Resend Code"
-                            primary
-                          />
-                        </Form>
+                          <Label
+                            className={!verifyError ? "invisible" : ""}
+                            basic
+                            color="red"
+                            pointing
+                          >
+                            Either the code has expired or does not exist
+                          </Label>
+                        </Form.Field>
+                      </Form>
+                    </Modal.Content>
+                    <Modal.Actions>
+                      <Form widths="equal">
+                        <Button onClick={checkCode} content="Confirm" primary />
                         <Button
-                          floated="right"
-                          onClick={handleDialogCancel}
-                          content="Cancel"
+                          onClick={resetPass}
+                          content="Resend Code"
                           primary
                         />
-                      </Modal.Actions>
-                    </Modal>
-                  </div>
-                </Modal.Actions>
-              </Modal.Content>
-            </Modal>
-          </div>
-        </Grid>
-      </Card>
+                      </Form>
+                      <Button
+                        floated="right"
+                        onClick={handleDialogCancel}
+                        content="Cancel"
+                        primary
+                      />
+                    </Modal.Actions>
+                  </Modal>
+                </div>
+              </Modal.Actions>
+            </Modal.Content>
+          </Modal>
+        </div>
+      </Grid>
     </div>
   );
 };

@@ -21,7 +21,7 @@ import { getAllLawyersWorkingOnUserCase, getCurrentUser, sendMessageToTeam } fro
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
 
-const MyTeam = () => {
+const MyTeam = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [listOfLawyers, setListOfLawyers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +32,6 @@ const MyTeam = () => {
   const [disableDone, setDisableDone] = useState(true);
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
-  const [sent, setSent] = useState(true);
 
   let itemsPerPage = 3,
     totalPages,
@@ -45,10 +44,12 @@ const MyTeam = () => {
     if (userLawyers) {
       setListOfLawyers(userLawyers);
       setUserLawyers(true);
+      props.setIsLoading(false);
     }
   };
 
   if (!userLawyers) {
+    props.setIsLoading(true);
     loadTeam();
   }
 
@@ -109,17 +110,21 @@ const MyTeam = () => {
        }
        const res = await sendMessageToTeam(mailOptions)
        if(res){
-        handleMessageCancel();
         alert("Message has been sent successfully")
+        handleMessageCancel();
        }
       
       
       }
     }else{
-      alert("User logged out or session has expired")
+      alert("User logged out or user session has expired")
     }
     
   };
+
+  const RefreshPage = () => {
+    window.location.reload(false)
+  }
 
   const handleMessageCancel = () => {
     setOpenEmailBox(false);
@@ -128,8 +133,8 @@ const MyTeam = () => {
     setSubject("")
     setEmailThisTeam([])
     setDisableDone(true)
-    setSent(false)
     setUserLawyers(false)
+    RefreshPage()
   };
 
   const addLawyer = (lawyer) => {
@@ -252,7 +257,6 @@ const MyTeam = () => {
 
   return (
     <Table.HeaderCell>
-      <Card unstackable={true} fluid centered>
         <div className="center">
           <h1>My Team</h1>
         </div>
@@ -357,7 +361,7 @@ const MyTeam = () => {
             </Form>
           </Modal.Content>
         </Modal>
-      </Card>
+     
     </Table.HeaderCell>
   );
 };
