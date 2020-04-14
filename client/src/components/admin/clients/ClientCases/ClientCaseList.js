@@ -1,17 +1,23 @@
 import React, { useState } from "react";
-import { Accordion, Icon } from "semantic-ui-react";
+import { Accordion, Icon, Button } from "semantic-ui-react";
 import ProgCard from "../../../client/ProgBarComponent/ProgCard.js";
 import { getCaseById } from "../../../../../src/api/AdminApi";
+import EditCaseForm from "./EditCaseForm";
 
 const ClientCaseList = (props) => {
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [userCaseData, setUserCaseData] = useState(null);
+  const [userCaseData, setUserCaseData] = useState([]);
   const [cases, setCases] = useState(false);
 
   const loadCases = async () => {
     if (props.clientData) {
-      const client_Cases = (await getCaseById(props.clientData.cases[0])).data;
-      setUserCaseData(client_Cases);
+      let clientCases = [];
+      const numOfCases = props.clientData.cases.length;
+      for (let i = 0; i < numOfCases; i++) {
+        const curCase = (await getCaseById(props.clientData.cases[i])).data;
+        clientCases.push(curCase);
+      }
+      setUserCaseData(clientCases);
       setCases(true);
     }
   };
@@ -28,30 +34,41 @@ const ClientCaseList = (props) => {
     }
   };
 
+  const getUICaseList = () => {
+    let UICaseList = [];
+    for (let i = 0; i < userCaseData.length; i++) {
+      const curCase = userCaseData[i];
+      UICaseList.push(
+        <Accordion>
+          <Accordion.Title
+            active={activeIndex === i}
+            onClick={() => {
+              toggleActive(i);
+            }}
+          >
+            <Icon name="dropdown" />
+            {curCase.startDate + ": " + curCase.type}
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === i}>
+            <ProgCard case_={userCaseData[i]} />
+            <EditCaseForm
+              caseIndex={i}
+              open={true}
+              clientData={props.clientData}
+              triggerButtonText={"Edit Case"}
+            />
+          </Accordion.Content>
+        </Accordion>
+      );
+    }
+    return UICaseList;
+  };
+
   if (!userCaseData) {
     return <p>Awaiting case data...</p>;
   }
-  //restructure to return list of accordion components that is matched to each case
-  //use mapping function or something similar
-  return (
-    <Accordion>
-      {
-        //=========================
-      }
-      <Accordion.Title
-        active={activeIndex === 0}
-        onClick={() => {
-          toggleActive(0);
-        }}
-      >
-        <Icon name="dropdown" />
-        {userCaseData.type}
-      </Accordion.Title>
-      <Accordion.Content active={activeIndex === 0}>
-        <ProgCard case_={userCaseData} />
-      </Accordion.Content>
-    </Accordion>
-  );
+
+  return <div>{getUICaseList()}</div>;
 };
 
 export default ClientCaseList;

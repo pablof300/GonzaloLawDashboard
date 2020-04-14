@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Form, Card, Input, Button } from "semantic-ui-react";
+import { Form, Card, Input, Button, Radio } from "semantic-ui-react";
 
 const EditStepCard = (props) => {
   const [stepTitle, setStepTitle] = useState(props.step);
   const [stepDate, setStepDate] = useState(props.date);
   const [stepDescription, setStepDescription] = useState(props.stepDescription);
+  const [completed, setCompleted] = useState(props.completed);
 
   useEffect(() => {
     props.updateStep({
       step: stepTitle,
       date: stepDate,
-      completed: props.completed,
+      completed: completed,
       stepDescription: stepDescription,
       stepNumber: props.stepNumber,
     });
@@ -44,9 +45,17 @@ const EditStepCard = (props) => {
         />
         <Form.TextArea
           label="Description"
-          value={props.description}
+          value={stepDescription}
           onChange={(event) => {
             setStepDescription(event.target.value);
+          }}
+        />
+        <Radio
+          toggle
+          label="Completed"
+          defaultChecked={completed}
+          onClick={() => {
+            setCompleted(!completed);
           }}
         />
       </Card.Content>

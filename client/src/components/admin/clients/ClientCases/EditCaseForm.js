@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Form, Button, Icon, Card, Input } from "semantic-ui-react";
 import EditStepCard from "./EditStepCard.js";
-import { addCase } from "../../../../../src/api/AdminApi";
+import { addCase, getCaseById, updateCase } from "../../../../api/AdminApi";
 
 const EditCaseForm = (props) => {
   //case
+  const [caseID, setCaseID] = useState(""); //only used when editing pre-existing case
   const [type, setType] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [caseCompleted, setCaseCompleted] = useState(false);
@@ -12,23 +13,61 @@ const EditCaseForm = (props) => {
   //steps
   const [stepDict, setStepDict] = useState([]);
   const [stepCount, setStepCount] = useState(0);
+  //used to determine if form data should be populated or not
+  const [firstRender, setFirstRender] = useState(true);
 
-  const createNewCase = async () => {
-    let addCaseResponse = await addCase(
-      type,
-      startDate,
-      caseCompleted,
-      getStepArray(),
-      props.clientData._id,
-      null
-    );
-    if (addCaseResponse.data) {
-      alert("Successfully added new case!");
-      props.addClientCallback(addCaseResponse.data);
-      setOpen(false);
+  useEffect(async () => {
+    if (firstRender && props.caseIndex !== undefined) {
+      const ID = props.clientData.cases[props.caseIndex];
+      const caseToUpdate = (await getCaseById(ID)).data;
+      const caseSteps = caseToUpdate.steps;
+      let newStepDict = [];
+      for (let i = 0; i < caseSteps.length; i++) {
+        newStepDict[(i + 1).toString()] = caseSteps[i];
+      }
+      setStepDict(newStepDict);
+      setStepCount(caseSteps.length);
+      setCaseID(ID);
+      setType(caseToUpdate.type);
+      setStartDate(caseToUpdate.startDate);
+      setCaseCompleted(caseToUpdate.completed);
+    }
+  }, [firstRender]);
+
+  const createOrUpdateCase = async () => {
+    if (props.caseIndex !== undefined) {
+      //update case with matching caseID
+      let updateCaseResponse = await updateCase(
+        type,
+        startDate,
+        caseCompleted,
+        getStepArray(),
+        caseID,
+        null
+      );
+      if (updateCaseResponse.data) {
+        alert("Successfully updated case!");
+        setOpen(false);
+      } else {
+        alert("Failed to update case, please try again!");
+        console.log("Unable to update case");
+      }
     } else {
-      alert("Failed to add case, please try again!");
-      console.log("Unable to add case");
+      let addCaseResponse = await addCase(
+        type,
+        startDate,
+        caseCompleted,
+        getStepArray(),
+        props.clientData._id,
+        null
+      );
+      if (addCaseResponse.data) {
+        alert("Successfully added new case!");
+        setOpen(false);
+      } else {
+        alert("Failed to add case, please try again!");
+        console.log("Unable to add case");
+      }
     }
   };
 
@@ -41,7 +80,6 @@ const EditCaseForm = (props) => {
     return stepArray;
   };
 
-  //addStep
   const addStep = () => {
     let newStep = {
       step: "",
@@ -56,14 +94,12 @@ const EditCaseForm = (props) => {
     setStepCount(stepCount + 1);
   };
 
-  //updateStep
   const updateStep = (updatedStep) => {
     let newStepDict = stepDict;
     newStepDict[updatedStep.stepNumber] = updatedStep;
     setStepDict(newStepDict);
   };
 
-  //removeStep
   const removeStep = (stepNumber) => {
     let newStepDict = stepDict;
     console.log(newStepDict[stepNumber.toString()]);
@@ -80,6 +116,7 @@ const EditCaseForm = (props) => {
 
   const clearSteps = () => {
     setStepDict([]);
+    setStepCount(0);
   };
 
   const getStepCards = () => {
@@ -103,9 +140,22 @@ const EditCaseForm = (props) => {
 
   return (
     <Modal
-      trigger={props.triggerButton}
+      open={open}
+      trigger={
+        <Button
+          size="small"
+          floated="right"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          <Icon name="plus" size="small" />
+          {props.triggerButtonText}
+        </Button>
+      }
       onClose={() => {
         clearSteps();
+        setOpen(false);
       }}
     >
       <Modal.Header>Input Case Information</Modal.Header>
@@ -114,13 +164,13 @@ const EditCaseForm = (props) => {
           <Form.Field
             control={Input}
             label="Case Title"
-            placeholder="Case Title"
+            value={type}
             onChange={(event) => setType(event.target.value)}
           />
           <Form.Field
             control={Input}
             label="Start Date"
-            placeholder="mm/dd/year"
+            value={startDate}
             onChange={(event) => setStartDate(event.target.value)}
           />
           <Form.Field>
@@ -133,8 +183,8 @@ const EditCaseForm = (props) => {
             <Card.Group>{getStepCards()}</Card.Group>
           </Form.Field>
           <Form.Field>
-            <Button size="small" onClick={() => createNewCase()}>
-              Add Case
+            <Button size="small" onClick={() => createOrUpdateCase()}>
+              {props.triggerButtonText}
             </Button>
           </Form.Field>
         </Form>
