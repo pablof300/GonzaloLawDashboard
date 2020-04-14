@@ -18,7 +18,6 @@ const ProgCard = props => {
     }
 
     const cases = userData.cases;
-
     return (
       <Card fluid>
         <Card.Content>
@@ -31,7 +30,7 @@ const ProgCard = props => {
           <div class="ui grid">
             <div class="centered row">
               <Card.Description>
-                <ProgBar cases={cases} />
+                <ProgBar cases={props.userCase} />
               </Card.Description>
             </div>
           </div>

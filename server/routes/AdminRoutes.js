@@ -1,4 +1,5 @@
 const adminController = require("../controllers/adminController");
+const paymentsController = require("../controllers/paymentsController");
 const caseController = require("../controllers/caseController");
 const express = require("express");
 const router = express.Router();
@@ -20,6 +21,13 @@ router.get(
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.get
 );
+
+router.get(
+  "/name/:id",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.getById
+);
+
 router.get(
   "/events",
   passport.authenticate("adminLoggedIn", { session: false }),
@@ -63,6 +71,7 @@ router.put(
 router.post(
   "/client",
   passport.authenticate("adminLoggedIn", { session: false }),
+  paymentsController.createCustomer,
   adminController.addClient
 );
 

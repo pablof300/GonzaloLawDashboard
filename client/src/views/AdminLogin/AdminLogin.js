@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/HorizontalLogo.png";
 import FooterComponent from "../../components/util/FooterComponent/FooterComponent";
 import MessageComponent from "../../components/util/MessageComponent/MessageComponent";
-import { authenticateAdmin } from "../../api/AuthApi";
+import { authenticateAdmin, verifyAdmin } from "../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import "./AdminLogin.css";
+import Cookies from "js-cookie";
 import {
   Grid,
   Segment,
@@ -21,6 +22,14 @@ function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successfulLogin, setSuccessfulLogin] = useState(false);
+
+  useEffect(() => {
+    const jwt = Cookies.get("jwt");
+    if (jwt) {
+      verifyAdmin().then(verified => { if (verified) { setSuccessfulLogin(true) } })
+    }
+  }, []);
+
 
   const login = async event => {
     if (!username || !password) {
@@ -41,47 +50,46 @@ function AdminLogin() {
 
   return (
     <div>
-
-    <Grid stackable className="container">
-      <Grid.Column width={4} />
-      <Grid.Column width={8}>
-        {error && (
-          <MessageComponent type="failure" title="Uh no!" content={error} />
+      <Grid stackable className="container">
+        <Grid.Column width={4} />
+        <Grid.Column width={8}>
+          {error && (
+            <MessageComponent type="failure" title="Uh no!" content={error} />
           )}
-        <Segment padded="very" stacked>
-          <Header
-            centered
-            textAlign="center"
-            as="div"
-            icon
-            style={{ backgroundColor: "white" }}
+          <Segment padded="very" stacked>
+            <Header
+              centered
+              textAlign="center"
+              as="div"
+              icon
+              style={{ backgroundColor: "white" }}
             >
-            <Image src={logo} fluid style={{ width: "50%" }} />
-          </Header>
-          <Divider hidden />
-          <Segment raised color="orange">
-            <Form>
-              <Form.Field
-                label="Username"
-                control={Input}
-                onChange={event => setUsername(event.target.value)}
+              <Image src={logo} fluid style={{ width: "50%" }} />
+            </Header>
+            <Divider hidden />
+            <Segment raised color="orange">
+              <Form>
+                <Form.Field
+                  label="Username"
+                  control={Input}
+                  onChange={event => setUsername(event.target.value)}
                 />
-              <Form.Input
-                label="Password"
-                control={Input}
-                type="password"
-                onChange={event => setPassword(event.target.value)}
+                <Form.Input
+                  label="Password"
+                  control={Input}
+                  type="password"
+                  onChange={event => setPassword(event.target.value)}
                 />
-              <Button color="orange" onClick={login}>
-                Login
-              </Button>
-            </Form>
+                <Button color="orange" onClick={login}>
+                  Login
+                </Button>
+              </Form>
+            </Segment>
           </Segment>
-        </Segment>
-      </Grid.Column>
-    </Grid>
-    <FooterComponent />
-                </div> 
+        </Grid.Column>
+      </Grid>
+      <FooterComponent />
+    </div>
   );
 }
 

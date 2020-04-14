@@ -53,7 +53,7 @@ passport.use(
     },
     async (req, jwtPayload, done) => {
       req.userId = jwtPayload.id;
-      if (userDAO.get(jwtPayload.id)) {
+      if (await userDAO.get(jwtPayload.id)) {
         return done(null, true);
       } else {
         return done("Invalid token?");

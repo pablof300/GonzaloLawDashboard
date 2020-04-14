@@ -36,7 +36,7 @@ const usersData: User[] = [
         password: "123456",
         firstName: "Pablo",
         secondName: "Estrada",
-        cases: [new Types.ObjectId('16cb91bdc3464f14678934ca')],
+        cases: [new Types.ObjectId('16cb91bdc3464f14678934ca'), new Types.ObjectId('16cb91bdc3464f14678934cb'), new Types.ObjectId('16cb91bdc3464f14678934df')],
         middleName: "White",
         otherName: "BoneCracker",
         imageUrl: "https://react.semantic-ui.com/images/wireframe/square-image.png",
@@ -48,7 +48,7 @@ const usersData: User[] = [
         },
         contact: {
             cellPhone: 345786345,
-            email: "peter@gmail.com",
+            email: "pablof300@gmail.com",
             homePhone: 345223561,
             workPhone: 345223561
         },

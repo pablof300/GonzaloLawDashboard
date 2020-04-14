@@ -10,7 +10,8 @@ const caseRoutes = require("../routes/CaseRoutes.js");
 const authRoutes = require("../routes/AuthRoutes.js");
 const fileRoutes = require("../routes/FileRoutes");
 const fileAwsRoute = require("../routes/FileAwsRoutes");
-const CodeRoute = require("../routes/CodeRoute");
+const codeRoute = require("../routes/CodeRoute");
+const paymentsRoute = require("../routes/PaymentRoutes");
 const configUtil = require("./configUtil.js");
 const cors = require("cors");
 
@@ -25,6 +26,9 @@ module.exports.init = () => {
 
   app.use(morgan("dev"));
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }));
   app.use(cors());
 
   app.use("/user", userRoutes);
@@ -33,7 +37,8 @@ module.exports.init = () => {
   app.use("/auth", authRoutes);
   app.use("/files", fileRoutes);
   app.use("/fileAws", fileAwsRoute);
-  app.use("/codes", CodeRoute);
+  app.use("/codes", codeRoute);
+  app.use("/payments", paymentsRoute);
 
   if (process.env.NODE_ENV === "production") {
     // Serve any static files

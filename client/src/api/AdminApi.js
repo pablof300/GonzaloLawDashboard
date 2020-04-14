@@ -20,7 +20,7 @@ const getAllClients = async () => {
 };
 
 const getCaseById = async (id) => {
-  let axiosResponse = await API.get(`/case/${id}`, {
+  let axiosResponse = await API.get(`/case/admin/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {
@@ -46,7 +46,7 @@ const getEvents = async () => {
     })
     .catch(error => {
       if (error.response) {
-        return { error: error.response.data.error };
+        return { error: error.response };
       }
       return {
         error: "Unable to retrieve events!"
@@ -181,6 +181,23 @@ const addCase = async (
   return axiosResponse;
 };
 
+const getAdminById = async (id) => {
+  let axiosResponse = await API.get(`/admin/name/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve case!"
+      };
+    });
+  return axiosResponse;
+};
 
 const getCurrentAdmin = async () => {
   let axiosResponse = await API.get("/admin/", {
@@ -201,4 +218,4 @@ const getCurrentAdmin = async () => {
   return axiosResponse;
 };
 
-export { getEvents, getAllClients, addEvent, addClient, getCaseById, addCase };
+export { getEvents, getAllClients, addEvent, addClient, getCaseById, addCase, getAdminById };

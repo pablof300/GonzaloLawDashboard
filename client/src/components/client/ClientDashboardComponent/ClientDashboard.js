@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from "react";
 import "./ClientDashboard.css";
+import "./UserDetails.css";
 import NavBar from "../../util/NavBarComponent/NavBar";
 import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
 import PaymentCard from "../PaymentComponent/PaymentCard";
-import { verifyUser } from "../../../api/AuthApi";
+import {verifyAdmin, verifyUser} from "../../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
+import CaseDetailsComponent from "./CaseDetailsComponent";
 import Calendar from "../../calendar/Calendar";
 import { getEvents } from "../../../api/UserApi";
 
+
 const ClientDashboard = () => {
+  const [loading, setLoading] = useState(true);
   const [isVerified, setIsVerified] = useState(true);
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    setEventData();
+    verifyUser().then(verified => {
+      if (isVerified) {
+        setEventData(verified);
+      }
+      setIsVerified(verified);
+      setLoading(false);
+    })
   }, []);
 
   const setEventData = async () => {
@@ -35,9 +45,9 @@ const ClientDashboard = () => {
     }
   };
 
-  verifyUser().then(verified => {
-    setIsVerified(verified);
-  });
+  if (loading) {
+    return <></>
+  }
 
   if (!isVerified) {
     return <Redirect to="/login" />;
@@ -55,9 +65,9 @@ const ClientDashboard = () => {
             </Header>
           </Grid.Row>
           <Grid.Row>
-            <ProgBarComponent isClient={true} />
+            <CaseDetailsComponent />
           </Grid.Row>
-          <Grid.Row>
+          <Grid.Row className="LeftTab">
             <UserDetailsComponent />
           </Grid.Row>
           <Grid.Row>

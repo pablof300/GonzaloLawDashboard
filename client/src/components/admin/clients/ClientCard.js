@@ -1,27 +1,33 @@
 import React, { useState } from "react";
-import { Image, Item } from "semantic-ui-react";
+import { Image, Item, Segment, Card } from "semantic-ui-react";
 import ClientCaseCard from "./ClientCases/ClientCaseCard.js";
+import InvoiceCard from "./ClientInvoices/InvoiceCard"
 import "../Admin.css";
 
 const ClientCard = props => {
-  return (
-    <Item.Group>
-      <Item>
-        <Item.Image size="tiny" src={props.clientData.imageUrl} />
 
-        <Item.Content>
-          <Item.Header className="ClientCard">{props.clientName}</Item.Header>
-          <Item.Meta>Contact Information</Item.Meta>
-          <Item.Description>
-            {"Email: " + props.clientData.contact.email}
-          </Item.Description>
-          <Item.Description>
-            {"Phone: " + props.clientData.contact.cellPhone}
-          </Item.Description>
-          <ClientCaseCard clientData={props.clientData} />
-        </Item.Content>
-      </Item>
-    </Item.Group>
+  console.log(props.clientData)
+
+  return (
+      <Segment>
+        <Item.Group>
+          <Item>
+            <Item.Image size='small' src={props.clientData.imageUrl} />
+            <Item.Content>
+              <Item.Header>{props.clientData.firstName + ' ' + props.clientData.secondName}</Item.Header>
+              <Item.Description>
+                <p>{props.clientData.address.street + ", " + props.clientData.address.city + ", " + props.clientData.address.state}</p>
+                <p>{props.clientData.birthDate}</p>
+                <p>{props.clientData.contact.email}</p>
+                <p>{props.clientData.contact.cellPhone}</p>
+              </Item.Description>
+            </Item.Content>
+          </Item>
+        </Item.Group>
+        <ClientCaseCard clientData={props.clientData} />
+        <InvoiceCard clientData={props.clientData} clientName={props.clientName} />
+      </Segment>
+
   );
 };
 

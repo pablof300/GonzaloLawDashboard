@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/HorizontalLogo.png";
 import MessageComponent from "../../components/util/MessageComponent/MessageComponent";
-import { authenticateUser } from "../../api/AuthApi";
+import { authenticateUser, verifyUser } from "../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import "./Login.css";
 import {
@@ -14,6 +14,7 @@ import {
   Input,
   Image
 } from "semantic-ui-react";
+import Cookies from "js-cookie";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -22,6 +23,19 @@ function Login() {
   const [successfulLogin, setSuccessfulLogin] = useState(false);
   const [forgotPassword,  setForgotPassword] = useState(false)
 
+
+  useEffect(() => {
+    const jwt = Cookies.get("jwt");
+    if (jwt) {
+      verifyUser().then(verified => {
+        console.log("VERIFIED");
+        console.log(verified);
+        if (verified) {
+          setSuccessfulLogin(true);
+        }
+      });
+    }
+  }, []);
 
   const login = async event => {
     if (!username || !password) {

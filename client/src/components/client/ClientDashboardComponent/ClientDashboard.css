@@ -4,10 +4,10 @@
 }
 
 .container {
-    padding-top: 3vh !important;
+    margin-top: 0 !important;
+    padding-top: 1.5vh !important;
 }
 
 .main_container{
     height: 100%;
 }
-

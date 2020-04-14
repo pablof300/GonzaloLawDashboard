@@ -3,17 +3,17 @@ import Cookies from "js-cookie";
 
 const getCurrentUser = async () => {
   let axiosResponse = await API.get("/user/", {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
-    .then((response) => {
+    .then(response => {
       return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       if (error !== null && error.response) {
         return { error: error.response };
       }
       return {
-        error: "Unable to retrieve user!",
+        error: "Unable to retrieve user!"
       };
     });
 
@@ -102,6 +102,25 @@ const updatePassword = async (params) => {
   });
 
   return success;
+};
+
+const getUserById = async id => {
+  let axiosResponse = await API.get(`/user/name/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error !== null && error.response) {
+        return { error: error.response };
+      }
+      return {
+        error: "Unable to retrieve user!"
+      };
+    });
+
+  return axiosResponse;
 };
 
 const getAllUserFiles = async () => {
@@ -362,6 +381,7 @@ export {
   updatePasswordAtLogin,
   getAllLawyersWorkingOnUserCase,
   checkIfUserUploadingFileExist,
+  getUserById,
   checkIfCodeExistOrHasNotExpired,
-  sendMessageToTeam,
+  sendMessageToTeam
 };

@@ -22,6 +22,12 @@ exports.get = async (req, res) => {
   });
 };
 
+exports.getById = async (req, res) => {
+  catchErrors(res, async () => {
+    return adminDAO.getById(req.params.id); 
+  });
+};
+
 exports.update = async (req, res) => {
   catchErrors(res, async () => {
     return adminDAO.update(req.adminId, req.body);
