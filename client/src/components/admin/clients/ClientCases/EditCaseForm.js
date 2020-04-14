@@ -9,11 +9,9 @@ const EditCaseForm = (props) => {
   const [type, setType] = useState(null);
   const [startDate, setStartDate] = useState(null);
   const [caseCompleted, setCaseCompleted] = useState(false);
-  const [open, setOpen] = useState(false);
   //steps
   const [stepDict, setStepDict] = useState([]);
   const [stepCount, setStepCount] = useState(0);
-  //used to determine if form data should be populated or not
   const [firstRender, setFirstRender] = useState(true);
 
   useEffect(async () => {
@@ -47,7 +45,6 @@ const EditCaseForm = (props) => {
       );
       if (updateCaseResponse.data) {
         alert("Successfully updated case!");
-        setOpen(false);
       } else {
         alert("Failed to update case, please try again!");
         console.log("Unable to update case");
@@ -63,12 +60,12 @@ const EditCaseForm = (props) => {
       );
       if (addCaseResponse.data) {
         alert("Successfully added new case!");
-        setOpen(false);
       } else {
         alert("Failed to add case, please try again!");
         console.log("Unable to add case");
       }
     }
+    window.location.reload(true);
   };
 
   const getStepArray = () => {
@@ -140,22 +137,14 @@ const EditCaseForm = (props) => {
 
   return (
     <Modal
-      open={open}
       trigger={
-        <Button
-          size="small"
-          floated="right"
-          onClick={() => {
-            setOpen(true);
-          }}
-        >
+        <Button size="small" floated="right">
           <Icon name="plus" size="small" />
           {props.triggerButtonText}
         </Button>
       }
       onClose={() => {
         clearSteps();
-        setOpen(false);
       }}
     >
       <Modal.Header>Input Case Information</Modal.Header>

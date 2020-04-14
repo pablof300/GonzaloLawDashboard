@@ -50,13 +50,12 @@ const ClientCaseList = (props) => {
             {curCase.startDate + ": " + curCase.type}
           </Accordion.Title>
           <Accordion.Content active={activeIndex === i}>
-            <ProgCard case_={userCaseData[i]} />
             <EditCaseForm
               caseIndex={i}
-              open={true}
               clientData={props.clientData}
               triggerButtonText={"Edit Case"}
             />
+            <ProgCard case_={userCaseData[i]} />
           </Accordion.Content>
         </Accordion>
       );

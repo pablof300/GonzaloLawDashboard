@@ -60,7 +60,7 @@ const ProgBar = (props) => {
     });
 
     return (
-      <Step.Group size="small" ordered>
+      <Step.Group ordered size="small">
         {steps}
       </Step.Group>
     );
