@@ -14,7 +14,7 @@ interface User {
         state: String;
         zip: Number;
     };
-    company: {
+    company?: {
         companyLogoUrl: String;
         companyName: String;
         website: String;
