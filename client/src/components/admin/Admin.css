@@ -29,6 +29,10 @@
   padding-left: 0%;
 }
 
+.ui.container {
+  margin-top: 0!important;
+}
+
 .ContainerPaddingCorrection1 {
   padding-top: 8vh!important;
 }

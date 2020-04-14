@@ -1,6 +1,14 @@
 const catchErrors = require("../util/catchErrors");
 const userDAO = require("../dao/UserDAO");
+const configUtil = require("../config/configUtil");
 const eventDAO = require("../dao/EventDAO");
+
+const mailGun = require("mailgun-js");
+
+const mg = mailGun({
+  apiKey: configUtil.getAPIKey(),
+  domain: configUtil.getDomain(),
+});
 
 exports.getAll = async (req, res) =>
   catchErrors(res, async () => {
@@ -13,6 +21,12 @@ exports.get = async (req, res) => {
   });
 };
 
+exports.getUserByEmail = async (req, res) => {
+  catchErrors(res, async () => {
+    return userDAO.getUserByEmail(req.params.email);
+  });
+};
+
 exports.getById = async (req, res) => {
   catchErrors(res, async () => {
     return userDAO.getById(req.params.id);
@@ -22,6 +36,12 @@ exports.getById = async (req, res) => {
 exports.update = async (req, res) =>
   catchErrors(res, async () => {
     return userDAO.update(req.userId, req.body);
+  });
+
+  exports.updateUserPassword = async (req, res) =>
+  catchErrors(res, async () => {
+    const user = await userDAO.updateUserPassword(req.params.id, req.body)
+    return user._id;
   });
 
 exports.delete = async (req, res) =>
@@ -48,6 +68,18 @@ exports.createCase = async (req, res) =>
   catchErrors(res, async () => {
     return userDAO.createCase(req.params.id, req.body);
   });
+
+exports.sendMessage = async (req, res) => {
+  let mailOptions = req.body;
+  const results = await mg.messages().send(mailOptions).then(data => {
+    console.log(data)
+   return true;
+  }).catch(error => {
+    console.log(error)
+    return false;
+  })
+  return results;
+};
 
 exports.updateCase = async (req, res) =>
   catchErrors(res, async () => {

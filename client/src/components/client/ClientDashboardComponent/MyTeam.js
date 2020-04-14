@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Table,
@@ -8,19 +8,30 @@ import {
   Menu,
   Popup,
   Button,
-  Image
+  Image,
+  Modal,
+  Form,
+  Checkbox,
+  Dropdown,
+  TextArea,
 } from "semantic-ui-react";
 import "../FileComponent/FileComponent.css";
-import { getAllLawyersWorkingOnUserCase } from "../../../../src/api/UserApi";
+import { getAllLawyersWorkingOnUserCase, getCurrentUser, sendMessageToTeam } from "../../../../src/api/UserApi";
 
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
 
-const MyTeam = () => {
+const MyTeam = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [listOfLawyers, setListOfLawyers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [userLawyers, setUserLawyers] = useState(false);
+  const [openEmailBox, setOpenEmailBox] = useState(false);
+  const [emailThisTeam, setEmailThisTeam] = useState([]);
+  const [contactTeam, setContactTeam] = useState(false);
+  const [disableDone, setDisableDone] = useState(true);
+  const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState("");
 
   let itemsPerPage = 3,
     totalPages,
@@ -29,18 +40,20 @@ const MyTeam = () => {
     allTeamListInPagination = [];
 
   const loadTeam = async () => {
-    const userLawyers = await getAllLawyersWorkingOnUserCase();
+    const userLawyers = (await getAllLawyersWorkingOnUserCase()).data;
     if (userLawyers) {
       setListOfLawyers(userLawyers);
       setUserLawyers(true);
+      props.setIsLoading(false);
     }
   };
 
   if (!userLawyers) {
+    props.setIsLoading(true);
     loadTeam();
   }
 
-  const fullName = lawyer => {
+  const fullName = (lawyer) => {
     if (lawyer) {
       if (lawyer.middleName) {
         return (
@@ -54,7 +67,7 @@ const MyTeam = () => {
 
   const filterTeamByText = (e, { value }) => {
     setIsLoading(true);
-    const results = listOfLawyers.filter(lawyer => {
+    const results = listOfLawyers.filter((lawyer) => {
       const name = fullName(lawyer);
       return (
         value.length > 0 &&
@@ -70,6 +83,117 @@ const MyTeam = () => {
       setListOfLawyers(results);
     } else {
       setUserLawyers(false);
+    }
+  };
+
+  const sendMessage = async () => {
+    const user = (await getCurrentUser()).data
+    if(user){
+      if(message && subject){
+        let to = "";
+       const from = user.secondName + " <" + user.contact.email + "> ";
+       let c = 0;
+       emailThisTeam.map(lawyer => {
+         if(c === 0){
+           to = lawyer.email
+         }else{
+          to = to.concat(', ').concat(lawyer.email)
+         }
+         c++;
+         
+       })
+       const mailOptions = {
+         from: from, 
+         to: to,
+         subject: subject,
+         text: message
+       }
+       const res = await sendMessageToTeam(mailOptions)
+       if(res){
+        alert("Message has been sent successfully")
+        handleMessageCancel();
+       }
+      
+      
+      }
+    }else{
+      alert("User logged out or user session has expired")
+    }
+    
+  };
+
+  const RefreshPage = () => {
+    window.location.reload(false)
+  }
+
+  const handleMessageCancel = () => {
+    setOpenEmailBox(false);
+    setContactTeam(false)
+    setMessage("")
+    setSubject("")
+    setEmailThisTeam([])
+    setDisableDone(true)
+    setUserLawyers(false)
+    RefreshPage()
+  };
+
+  const addLawyer = (lawyer) => {
+    if (lawyer) {
+      const name = fullName(lawyer);
+      const mLawyer = {
+        key: lawyer._id,
+        value: name,
+        text: name,
+        email: !(lawyer.contact && lawyer.contact.email)
+          ? "angelgab2222@gmail.com"
+          : lawyer.contact.email,
+        image: {
+          avatar: true,
+          scr: lawyer.imageUrl,
+        },
+      };
+      emailThisTeam.push(mLawyer);
+    }
+  };
+
+  const removeLawyer = (lawyer) => {
+    let tempTeam = [];
+    emailThisTeam.forEach((element) => {
+      if (element.key !== lawyer._id) {
+        tempTeam.push(element);
+      }
+    });
+    setEmailThisTeam(tempTeam);
+  };
+
+  const getLawyer = (data, lawyer) => {
+    if (data.checked) {
+      addLawyer(lawyer);
+    } else {
+      removeLawyer(lawyer);
+    }
+    if (emailThisTeam.length > 0) {
+      setDisableDone(false);
+    } else {
+      setDisableDone(true);
+    }
+  };
+
+  useEffect(() => {
+    if (emailThisTeam.length > 0) {
+      setDisableDone(false);
+    } else {
+      setDisableDone(true);
+    }
+  }, [emailThisTeam.length]);
+
+  const userContactTeam = () => {
+    setContactTeam(true);
+  };
+
+  const doneSelecting = () => {
+    if (emailThisTeam.length > 0) {
+      setOpenEmailBox(true);
     }
   };
 
@@ -96,7 +220,7 @@ const MyTeam = () => {
     setCurrentPage(activePage);
   };
 
-  const myLawyersList = allTeamListInPagination.map(lawyer => {
+  const myLawyersList = allTeamListInPagination.map((lawyer) => {
     return (
       <Table.Body>
         <Table.Row
@@ -117,6 +241,15 @@ const MyTeam = () => {
           </Table.Cell>
 
           <Table.Cell singleLine>{!lawyer ? "" : fullName(lawyer)}</Table.Cell>
+
+          <Table.Cell singleLine>
+            {lawyer && (
+              <Checkbox
+                className={!contactTeam ? "invisible" : ""}
+                onChange={(e, data) => getLawyer(data, lawyer)}
+              />
+            )}
+          </Table.Cell>
         </Table.Row>
       </Table.Body>
     );
@@ -124,7 +257,6 @@ const MyTeam = () => {
 
   return (
     <Table.HeaderCell>
-      <Card unstackable={true} fluid centered>
         <div className="center">
           <h1>My Team</h1>
         </div>
@@ -170,23 +302,66 @@ const MyTeam = () => {
                     content="Contact the team handling your case"
                     trigger={
                       <Button
+                        className={listOfLawyers.length > 0 ? "" : "invisible"}
                         floated="left"
                         icon
                         inverted
                         labelPosition="left"
                         color="green"
                         size="small"
+                        onClick={userContactTeam}
                       >
                         <Icon name="chat" /> Contact My Team
                       </Button>
                     }
                   />
+
+                  <Button
+                    className={!contactTeam ? "invisible" : ""}
+                    floated="left"
+                    icon
+                    disabled={disableDone}
+                    inverted
+                    labelPosition="left"
+                    color="purple"
+                    size="small"
+                    onClick={doneSelecting}
+                  >
+                    <Icon name="check" /> Done
+                  </Button>
                 </div>
               </Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
         </Table>
-      </Card>
+        <Modal open={openEmailBox} size="small">
+          <Modal.Header>Send a message to your Team</Modal.Header>
+          <Modal.Content>
+            
+            <Form widths="equal">
+            <Dropdown selection={false} style={{marginBottom:10}} placeholder="To" selection options={emailThisTeam} />
+              <Form.Input
+                className="wrap"
+                label="Subject"
+                type='text'
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Subject"
+                labelPosition="left"
+                value={subject}
+              />
+              <TextArea
+                className="wrap"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                style={{minHeight:200, marginBottom:20}}
+                placeholder="Type message here..."
+              />
+              <Button onClick={sendMessage} content="Send Message" primary />
+              <Button onClick={handleMessageCancel} content="Cancel" primary />
+            </Form>
+          </Modal.Content>
+        </Modal>
+     
     </Table.HeaderCell>
   );
 };

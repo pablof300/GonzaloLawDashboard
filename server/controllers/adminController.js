@@ -8,6 +8,14 @@ exports.getAll = async (req, res) => {
   });
 };
 
+exports.getUserLawyers = async (req, res) => {
+  catchErrors(res, async () => {
+    const userID = req.params.id;
+    const law = await adminDAO.getUserLawyers(userID);
+    return law;
+  });
+}
+
 exports.get = async (req, res) => {
   catchErrors(res, async () => {
     return adminDAO.get(req.adminId); //gets the admin from the jwt token

@@ -27,7 +27,7 @@ const EditCaseForm = props => {
     );
     console.log(addClientResponse);
     if (addClientResponse.data) {
-      alert("Successfully added new client!");
+      alert("Successfully added new case!");
       setOpen(false);
     } else {
       alert("Failed to add case, please try again!");
@@ -68,10 +68,10 @@ const EditCaseForm = props => {
       temp.push(element);
     });
     temp.push(<EditStepCard stepNum={temp.length + 1} toRemove={toRemove}
-      setStepDate={setStepDate} setStepTitle={setStepTitle}
-      setStepDescription={setStepDescription}
-      addToStepArray={addToStepArray}
-    />);
+        setStepDate = {setStepDate} setStepTitle = {setStepTitle}
+        setStepDescription = {setStepDescription}
+        addToStepArray = {addToStepArray}
+      />);
     setStepList(temp);
   };
 

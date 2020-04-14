@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Image, Item, Segment, Card, Popup, Container, Modal } from "semantic-ui-react";
 import ClientCaseCard from "./ClientCases/ClientCaseCard.js";
+import InvoiceCard from "./ClientInvoices/InvoiceCard"
 import "../Admin.css";
 import { deleteClient } from "../../../api/AdminApi"
 
@@ -42,6 +43,7 @@ const ClientCard = props => {
         </Item>
       </Item.Group>
       <ClientCaseCard clientData={props.clientData} />
+      <InvoiceCard clientData={props.clientData} clientName={props.clientName} />
       <Modal
         className="ui small modal"
         trigger={<button class="negative ui button" onClick={e => removeClient(e)} >Remove</button>}

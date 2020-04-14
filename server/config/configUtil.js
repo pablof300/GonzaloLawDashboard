@@ -49,3 +49,12 @@ exports.getIntuitCompany = () => {
 exports.getIntuitItemId = () => {
   return process.env.INTUIT_ITEM_ID || require("./config").QB.intuitItemId;
 };
+
+exports.getDomain = () => {
+  return process.env.MAILGUN_DOMAIN || require("./config").mailGun.domain;
+};
+
+exports.getAPIKey = () => {
+  return process.env.MAILGUN_KEY || require("./config").mailGun.apiKey;
+};
+

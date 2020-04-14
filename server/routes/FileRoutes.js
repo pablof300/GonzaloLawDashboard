@@ -3,11 +3,19 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
+
+router.get(
+  "/:userID",
+  passport.authenticate("loggedIn", { session: false }),
+  fileController.getAllFilesByUser
+);
+
 router.get(
   "/",
   passport.authenticate("loggedIn", { session: false }),
   fileController.getAll
 );
+
 router.get(
   "/:id",
   passport.authenticate("loggedIn", { session: false }),

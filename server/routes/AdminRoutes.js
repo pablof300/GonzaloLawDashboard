@@ -11,9 +11,9 @@ router.get(
 );
 
 router.get(
-  "/allAdmins",
+  "/userLawyers/:id",
   passport.authenticate("loggedIn", { session: false }),
-  adminController.getAll
+  adminController.getUserLawyers
 );
 
 router.get(

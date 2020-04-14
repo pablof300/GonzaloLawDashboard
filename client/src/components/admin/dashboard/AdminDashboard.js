@@ -4,6 +4,7 @@ import AdminNav from "../navbar/AdminNav";
 import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import ClientList from "../clients/AdminClientList";
 import Calendar from "../../calendar/Calendar";
+import QBButton from "./QBButton"
 import { getEvents } from "../../../api/AdminApi";
 
 import "../Admin.css";
@@ -67,6 +68,7 @@ const AdminDashboard = () => {
             </Grid.Column>
             <Grid.Column width={4}>
               <ClientList />
+              <QBButton />
             </Grid.Column>
           </Grid.Row>
         </Grid>
