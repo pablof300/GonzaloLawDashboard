@@ -17,7 +17,9 @@ exports.getOAuthURL = async (req, res) => {
     scope: [OAuthClient.scopes.Accounting],
     state: "intuit-test"
   });
-  res.send(authUri);
+
+  console.log(authUri);
+  res.send({ ok: true, data: authUri });
 };
 
 exports.createInvoice = async (req, res) => {
@@ -121,6 +123,7 @@ exports.createCustomer = async (req, res, next) => {
     });
 };
 
+// getInvoices should get all of a customers invoices by using their first and last names as query.
 exports.getInvoices = async (req, res) => {
   if (!getAuthStatus()) {
     res.send(false);
@@ -150,7 +153,7 @@ exports.getInvoices = async (req, res) => {
         })
         .then(function(response) {
           let invoices = response.json.QueryResponse.Invoice;
-          res.send(invoices);
+          res.send({ok: true, data: invoices});
         })
         .catch(function(e) {
           res.send(e);
@@ -185,9 +188,12 @@ exports.getInvoicePdf = async (req, res) => {
 
 exports.isPaymentOnline = async (req, res) => {
   if (!authToken) {
-    res.send(false);
+    console.log("AUTH TOKEN NOT VALID");
+    res.send({ ok: true, data: false });
   } else {
-    return getAuthStatus();
+    console.log("AUTH TOKEN VALID");
+    console.log(getAuthStatus());
+    res.send({ ok: true, data: true });
   }
 };
 
@@ -207,10 +213,12 @@ exports.callback = async (req, res) => {
 
 const getAuthStatus = async () => {
   if (!oauthClient) {
-    return false;
+    console.log("TOKEN NOT VALID");
+    return (false);
   }
   if (oauthClient.isAccessTokenValid()) {
-    return true;
+    console.log("TOKEN VALID");
+    return (true);
   }
   return await oauthClient
     .refresh()
