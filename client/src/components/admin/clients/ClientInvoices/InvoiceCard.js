@@ -5,11 +5,6 @@ import InvoiceList from "./InvoiceList.js";
 import { getAllInvoices } from "../../../../../src/api/QBApi";
 
 const InvoiceCard = (props) => {
-  // const getOurInvoices = async () => {
-  //   console.log(props.clientName);
-  //   let invoiceResponse = await getAllInvoices(props.clientName);
-  // }
-
   return (
     <Card fluid>
       <Card.Content>
@@ -21,11 +16,7 @@ const InvoiceCard = (props) => {
           </Button>
           <EditInvoiceForm
             clientData = {props.clientData}
-            triggerButton={
-              <Button size="small" floated="right">
-                <Icon name="plus" size="small" />
-                Add Invoice
-              </Button>}
+            clientName = {props.clientName}
           />
         </Card.Header>
       </Card.Content>

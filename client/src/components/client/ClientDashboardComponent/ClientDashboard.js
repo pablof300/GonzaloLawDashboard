@@ -6,7 +6,7 @@ import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
-import PaymentCard from "../PaymentComponent/PaymentCard";
+import InvoiceCard from "../../admin/clients/ClientInvoices/InvoiceCard";
 import {verifyAdmin, verifyUser} from "../../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
@@ -15,7 +15,7 @@ import Calendar from "../../calendar/Calendar";
 import { getEvents } from "../../../api/UserApi";
 
 
-const ClientDashboard = () => {
+const ClientDashboard = (props) => {
   const [loading, setLoading] = useState(true);
   const [isVerified, setIsVerified] = useState(true);
   const [events, setEvents] = useState([]);
@@ -75,7 +75,7 @@ const ClientDashboard = () => {
               <Calendar adminView={false} events={events} />
             </Grid.Column>
             <Grid.Column width={8}>
-              <PaymentCard />
+              <InvoiceCard clientData={props.clientData} clientName={props.clientName}/>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
