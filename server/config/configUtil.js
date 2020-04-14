@@ -47,6 +47,6 @@ exports.getDomain = () => {
 };
 
 exports.getAPIKey = () => {
-  return return process.env.MAILGUN_KEY || require("./config").mailGun.apiKey;
+  return process.env.MAILGUN_KEY || require("./config").mailGun.apiKey;
 };
 
