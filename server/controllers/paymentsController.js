@@ -42,7 +42,7 @@ exports.createInvoice = async (req, res) => {
         "Content-Type": "application/json"
       }
     })
-    .then(function(response) {
+    .then(function (response) {
       let id = parseInt(response.json.QueryResponse.Customer[0].Id);
       const body = {
         Line: [
@@ -78,7 +78,7 @@ exports.createInvoice = async (req, res) => {
       console.log(e);
       res.send(false);
     })
-    .catch(function(e) {
+    .catch(function (e) {
       console.log("Unable to fetch user id with given name");
       res.send(false);
     });
@@ -109,12 +109,12 @@ exports.createCustomer = async (req, res, next) => {
       },
       body: JSON.stringify(body)
     })
-    .then(function(response) {
+    .then(function (response) {
       console.log(response);
       console.log("Successfully able to create quickbooks client");
       next();
     })
-    .catch(function(e) {
+    .catch(function (e) {
       console.log("Unable to create quickbooks client");
       console.log(e);
       next();
@@ -135,7 +135,7 @@ exports.getInvoices = async (req, res) => {
         "Content-Type": "application/json"
       }
     })
-    .then(function(response) {
+    .then(function (response) {
       let id = parseInt(response.json.QueryResponse.Customer[0].Id);
       console.log(
         getQueryURL(`select * from Invoice Where CustomerRef='${id}'`)
@@ -148,15 +148,15 @@ exports.getInvoices = async (req, res) => {
             "Content-Type": "application/json"
           }
         })
-        .then(function(response) {
+        .then(function (response) {
           let invoices = response.json.QueryResponse.Invoice;
           res.send(invoices);
         })
-        .catch(function(e) {
+        .catch(function (e) {
           res.send(e);
         });
     })
-    .catch(function(e) {
+    .catch(function (e) {
       res.send(e);
     });
 };
@@ -194,12 +194,12 @@ exports.isPaymentOnline = async (req, res) => {
 exports.callback = async (req, res) => {
   oauthClient
     .createToken(req.url)
-    .then(function(authResponse) {
+    .then(function (authResponse) {
       authToken = JSON.stringify(authResponse.getJson(), null, 2);
       console.log("Successfully obtained auth token");
       console.log(authToken);
     })
-    .catch(function(e) {
+    .catch(function (e) {
       console.error(e);
     });
   res.send("");
@@ -214,14 +214,14 @@ const getAuthStatus = async () => {
   }
   return await oauthClient
     .refresh()
-    .then(function(authResponse) {
+    .then(function (authResponse) {
       console.log(
         "Updated access token: " + JSON.stringify(authResponse.getJson())
       );
       oauth2_token_json = JSON.stringify(authResponse.getJson(), null, 2);
       return true;
     })
-    .catch(function(e) {
+    .catch(function (e) {
       console.error(e);
       return false;
     });

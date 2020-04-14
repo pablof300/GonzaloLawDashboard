@@ -49,7 +49,7 @@ const EditCaseForm = props => {
     temp.push(newStep);
     setCaseSteps(temp);
     console.log(newStep);
-  } 
+  }
 
   const removeStep = index => {
     let temp = [];
@@ -68,10 +68,10 @@ const EditCaseForm = props => {
       temp.push(element);
     });
     temp.push(<EditStepCard stepNum={temp.length + 1} toRemove={toRemove}
-        setStepDate = {setStepDate} setStepTitle = {setStepTitle} 
-        setStepDescription = {setStepDescription}
-        addToStepArray = {addToStepArray}
-      />);
+      setStepDate={setStepDate} setStepTitle={setStepTitle}
+      setStepDescription={setStepDescription}
+      addToStepArray={addToStepArray}
+    />);
     setStepList(temp);
   };
 
@@ -90,14 +90,14 @@ const EditCaseForm = props => {
       <Modal.Content>
         <Form>
           <Form.Field
-            control ={Input}
-            label = "Case Title"
+            control={Input}
+            label="Case Title"
             placeholder="Case Title"
             onChange={event => setType(event.target.value)}
           />
           <Form.Field
-            control ={Input}
-            label = "Start Date"
+            control={Input}
+            label="Start Date"
             placeholder="mm/dd/year"
             onChange={event => setStartDate(event.target.value)}
           />
@@ -123,13 +123,13 @@ const EditCaseForm = props => {
             <Card.Group>{stepList}</Card.Group>
           </Form.Field>
           <Form.Field>
-          <Button
+            <Button
               size="small"
               onClick={() => createNewCase()}
             >
               Add Case
             </Button>
-            </Form.Field>
+          </Form.Field>
         </Form>
       </Modal.Content>
     </Modal>

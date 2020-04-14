@@ -64,7 +64,7 @@ exports.removeClient = async (id, client) => {
     id,
     { $pullAll: { clients: [client] } },
     { new: true },
-    function(err, data) {}
+    function (err, data) { }
   );
   if (!admin) throw new NotFoundError();
 
@@ -79,11 +79,25 @@ exports.addClient = async (id, clientData) => {
     id,
     { $addToSet: { clients: [user] } },
     { new: true },
-    function(err, data) {}
+    function (err, data) { }
   );
 
   return user;
 };
+
+exports.addExistingClient = async (id, clientId) => {
+  const user = await User.findById(clientId);
+  if (!user) throw new NotFoundError();
+
+  const admin = await Admin.findByIdAndUpdate(
+    id,
+    { $addToSet: { clients: [user] } },
+    { new: true },
+    function (err, data) { }
+  );
+
+  return user;
+}
 
 // TODO:
 // Update with better logic
@@ -116,3 +130,16 @@ exports.getAllClients = async id => {
 
   return users;
 };
+
+exports.getAllOtherClients = async id => {
+  const admin = await Admin.findById(id);
+  if (!admin) throw new NotFoundError();
+
+  const users = await User.find({
+    _id: {
+      $nin: admin.clients
+    }
+  });
+
+  return users;
+}

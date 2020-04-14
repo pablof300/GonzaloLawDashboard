@@ -49,34 +49,27 @@
 
 /* Below is some CSS for some specific stuff, I can organize the file better if need be though - Tyler*/
 
-.RemoveFormContainer {
-  border-radius: 1rem;
-  height: 0px;
-  padding-top: 2px!important;
-  padding: 2px;
-}
-
-.large.negative.left.floated.ui.button{
+.large.negative.left.floated.ui.button.Delete_Yes{
   position: relative;
-  top: 30px;
-  left: 250px;
+  left: 200px;
+  bottom: 10px;
   padding-left: 30px;
   padding-right: 30px; 
 }
 
-.ui.large.right.floated.button{
+.ui.large.right.floated.button.Delete_No{
   position: relative;
-  top: 30px;
-  right: 250px;
+  right: 200px;
+  bottom: 10px;
   padding-left: 30px;
   padding-right: 30px;
 }
 
- .negative.ui.button{
-  position: absolute;
-  float: right;
-  bottom: 5px;
- }
+.ui.small.center.aligned.header.Delete_Header{
+  position: relative;
+  left: 175px;
+}
+
 .header {
   background-color: transparent !important;
 }

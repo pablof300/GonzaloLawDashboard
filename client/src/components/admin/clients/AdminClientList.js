@@ -1,99 +1,3 @@
-/*import React, { useState } from "react";
-import { Button, Card, Icon, Image, List, Container } from "semantic-ui-react";
-import AddClientForm from "./AddClientForm";
-import ClientCard from "./ClientCard";
-import Popup from "reactjs-popup";
-import "../Admin.css";
-import { getClients } from "../../../api/AdminApi";
-
-const ClientList = () => {
-  const [clients, setClients] = useState([]);
-  const [isClientsPopulated, setIsClientsPopulated] = useState(false);
-
-  function AddClient(e) {
-    console.log("add client happening.");
-  }
-
-  const showClientList = myClientList.map(client => {
-    return (
-      <List.Item>
-        <List.Content floated="right">
-          <Popup
-            trigger={<Button onClick={e => ViewClient(e)}>View</Button>}
-            position="right center"
-            modal
-            closeOnDocumentClick
-          >
-            <Container className="FormContainer">
-              <ClientCard
-                clientData={client}
-                clientName={client.firstName + " " + client.secondName}
-                clientContact={client.contact}
-              />
-            </Container>
-          </Popup>
-        </List.Content>
-        <Image
-          avatar
-          src={!(client && client.imageUrl) ? defaultProfile : client.imageUrl}
-        />
-        <List.Content>
-          {!(client && client.firstName && client.secondName)
-            ? "nuttin loaded"
-            : client.firstName + " " + client.secondName}
-        </List.Content>
-      </List.Item>
-    );
-  });
-
-  function ViewClient(e) {
-    console.log("view client happening.");
-  }
-
-  const loadClients = async () => {
-    setClients((await getClients()));
-    setIsClientsPopulated(true);
-  };
-  if (!isClientsPopulated) {
-    loadClients();
-  }
-
-  return (
-    <Card className="Card">
-      <List divided verticalAlign="middle">
-        <List.Item className="List-Header">
-          <List.Content floated="right">
-            <AddClientForm addClientCallback={addClientCallback} />
-          </List.Content>
-          <List.Content id="content">Client List</List.Content>
-        </List.Item>
-        {clients.map(client =>
-          <List.Item key={client._id}>
-            <List.Content floated="right">
-              <Popup
-                trigger={<Button onClick={e => ViewClient(e)}>View</Button>}
-                position="right center"
-                modal
-                closeOnDocumentClick
-              >
-                <Container className="FormContainer">
-                  <ClientCard currentClient={client} setIsClientsPopulated={setIsClientsPopulated} />
-                </Container>
-              </Popup>
-            </List.Content>
-            <Image
-              avatar
-              src={client.avatar}
-            />
-            <List.Content>{client.realName}</List.Content>
-          </List.Item>)
-        }
-      </List>
-    </Card>
-  );
-};
-
-export default ClientList;*/
 import React, { useState } from "react";
 import {
   Button,
@@ -110,12 +14,15 @@ import Popup from "reactjs-popup";
 import "../Admin.css";
 import { getAllClients } from "../../../../src/api/AdminApi";
 
+
+
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
 
 const ClientList = () => {
   const [listOfClients, setClientList] = useState([]);
   const [clients, setClients] = useState(false);
+  const [isClientsPopulated, setIsClientsPopulated] = useState(false);
 
   const loadUsers = async () => {
     const lawyerClients = await getAllClients();
@@ -150,11 +57,16 @@ const ClientList = () => {
             modal
             closeOnDocumentClick
           >
-              <ClientCard
-                clientData={client}
-                clientName={client.firstName + " " + client.secondName}
-                clientContact={client.contact}
-              />
+            <ClientCard
+              clientData={client}
+              clientName={client.firstName + " " + client.secondName}
+              clientContact={client.contact}
+              setIsClientsPopulated={setClients}
+              setIsClientsPopulatedPagination={setIsClientsPopulated}
+            />
+            {/* This is kind of poorly named, but setClients, is setClientsPopulated in the client card, while 
+              setIsClientsPopulated is setIsClientsPopulatedPagination in the client card. Fix some naming conventions
+              for readability in the future.*/}
           </Popup>
         </List.Content>
         <Image
@@ -179,7 +91,7 @@ const ClientList = () => {
       <List divided verticalAlign="middle">
         <List.Item className="List-Header">
           <List.Content floated="right">
-            <AddClientForm addClientCallback={addClientCallback} />
+            <AddClientForm addClientCallback={addClientCallback} setClients={setClients} setIsClientsPopulated={setIsClientsPopulated} isClientsPopulated={isClientsPopulated} />
           </List.Content>
           <List.Content id="content">Client List</List.Content>
         </List.Item>

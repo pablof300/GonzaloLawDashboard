@@ -10,7 +10,7 @@ const ClientCaseCard = (props) => {
         <Card.Header>
           Cases
           <EditCaseForm
-            clientData = {props.clientData}
+            clientData={props.clientData}
             triggerButton={
               <Button size="small" floated="right">
                 <Icon name="plus" size="small" />
@@ -19,8 +19,8 @@ const ClientCaseCard = (props) => {
             }
           />
         </Card.Header>
-        <ClientCaseList 
-        clientData = {props.clientData}
+        <ClientCaseList
+          clientData={props.clientData}
         />
       </Card.Content>
     </Card>

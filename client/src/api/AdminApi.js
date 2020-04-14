@@ -19,6 +19,24 @@ const getAllClients = async () => {
   return axiosResponse;
 };
 
+const getAllOtherClients = async () => {
+  let axiosResponse = await API.get("/admin/otherClients", {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve clients!"
+      };
+    });
+  return axiosResponse;
+};
+
 const getCaseById = async (id) => {
   let axiosResponse = await API.get(`/case/admin/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
@@ -80,6 +98,24 @@ const addEvent = async (title, type, startDate, duration, notes, clientId) => {
       }
       return {
         error: "Unable to retrieve events!"
+      };
+    });
+  return axiosResponse;
+};
+
+const addExistingClient = async (id) => {
+  let axiosResponse = await API.post(`/admin/add/${id}`, id, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve client!"
       };
     });
   return axiosResponse;
@@ -218,4 +254,19 @@ const getCurrentAdmin = async () => {
   return axiosResponse;
 };
 
-export { getEvents, getAllClients, addEvent, addClient, getCaseById, addCase, getAdminById };
+const deleteClient = async (clientId) => {
+  let axiosResponse = await API.put("/admin/remove/" + clientId, clientId, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      return {
+        error: "Unable to delete client!"
+      };
+    });
+  return axiosResponse;
+};
+
+export { getEvents, getAllClients, getAllOtherClients, addEvent, addExistingClient, addClient, getCaseById, addCase, getAdminById, deleteClient };

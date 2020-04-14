@@ -16,7 +16,7 @@ exports.get = async (req, res) => {
 
 exports.getById = async (req, res) => {
   catchErrors(res, async () => {
-    return adminDAO.getById(req.params.id); 
+    return adminDAO.getById(req.params.id);
   });
 };
 
@@ -51,9 +51,19 @@ exports.addClient = async (req, res) =>
     return adminDAO.addClient(req.adminId, req.body);
   });
 
+exports.addExistingClient = async (req, res) =>
+  catchErrors(res, async () => {
+    return adminDAO.addExistingClient(req.adminId, req.params.clientId);
+  });
+
 exports.getAllClients = async (req, res) =>
   catchErrors(res, async () => {
     return adminDAO.getAllClients(req.adminId);
+  });
+
+exports.getAllOtherClients = async (req, res) =>
+  catchErrors(res, async () => {
+    return adminDAO.getAllOtherClients(req.adminId)
   });
 
 exports.getEvents = async (req, res) =>
@@ -62,12 +72,12 @@ exports.getEvents = async (req, res) =>
   });
 
 exports.addEvent = async (req, res) =>
-    catchErrors(res, async () => {
-        let startDate = new Date(req.query.startDate);
-        let endDateTime = new Date(req.query.startDate).getTime();
-        endDateTime += (req.query.duration * 60 * 1000);
+  catchErrors(res, async () => {
+    let startDate = new Date(req.query.startDate);
+    let endDateTime = new Date(req.query.startDate).getTime();
+    endDateTime += (req.query.duration * 60 * 1000);
 
-        let event = { title: req.query.title, type: req.query.type, startDate: startDate, endDate: new Date(endDateTime), notes: req.query.notes, admins: [req.adminId], users: [req.query.clientId]}
-        console.log(event)
-        return eventDAO.addEvent(event)
-    });
+    let event = { title: req.query.title, type: req.query.type, startDate: startDate, endDate: new Date(endDateTime), notes: req.query.notes, admins: [req.adminId], users: [req.query.clientId] }
+    console.log(event)
+    return eventDAO.addEvent(event)
+  });

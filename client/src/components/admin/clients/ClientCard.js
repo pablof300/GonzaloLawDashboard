@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Image, Item, Segment, Card } from "semantic-ui-react";
+import { Image, Item, Segment, Card, Popup, Container, Modal } from "semantic-ui-react";
 import ClientCaseCard from "./ClientCases/ClientCaseCard.js";
 import "../Admin.css";
+import { deleteClient } from "../../../api/AdminApi"
 
 const ClientCard = props => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +17,10 @@ const ClientCard = props => {
     deleteClient(clientId);
     setIsOpen(false);
     props.setIsClientsPopulated(false);
+    props.setIsClientsPopulatedPagination(false);
+  }
+  function removeClient(e) {
+    console.log("remove client happening.");
   }
 
   console.log(props.clientData)
@@ -37,24 +42,25 @@ const ClientCard = props => {
         </Item>
       </Item.Group>
       <ClientCaseCard clientData={props.clientData} />
-      <Popup
-        trigger={<button class="negative ui button" onClick={e => removeClient(e)}>Delete</button>}
+      <Modal
+        className="ui small modal"
+        trigger={<button class="negative ui button" onClick={e => removeClient(e)} >Remove</button>}
         position="bottom left"
-        modal
         closeOnDocumentClick
         open={isOpen}
         onOpen={handleOpen}
         onClose={handleClose}
-
       >
-        <Container className="FormContainer">
-          <h3 className="ui center aligned header">
-            Are you sure you want to delete {props.clientName} as a client?
-            </h3>
-          <button class="large negative left floated ui button" onClick={() => { handleCloseAndDelete(props.clientData._id) }}>Yes</button>
-          <button class="ui large right floated button" onClick={() => { handleClose() }}>No</button>
-        </Container>
-      </Popup>
+        <Modal.Header>
+          <div className="ui small center aligned header Delete_Header">
+            Are you sure you want to remove {props.clientName} as a client?
+          </div>
+        </Modal.Header>
+        <Modal.Content className="ui center aligned">
+          <button class="large negative left floated ui button Delete_Yes" onClick={() => { handleCloseAndDelete(props.clientData._id) }}>Yes</button>
+          <button class="ui large right floated button Delete_No" onClick={() => { handleClose() }}>No</button>
+        </Modal.Content>
+      </Modal>
     </Segment>
   );
 };
