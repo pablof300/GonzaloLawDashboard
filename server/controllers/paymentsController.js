@@ -123,6 +123,7 @@ exports.createCustomer = async (req, res, next) => {
     });
 };
 
+// getInvoices should get all of a customers invoices by using their first and last names as query.
 exports.getInvoices = async (req, res) => {
   if (!getAuthStatus()) {
     res.send(false);

@@ -12,12 +12,30 @@ const checkURLStatus = async () => {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to get OAuthURL"
+        error: "Unable to get OAuthURL status."
       };
     });
-    
+
   return axiosResponse;
 }
+
+const getAllInvoices = async (customerName) => {
+  let axiosResponse = await API.get(`/payments/invoices/?customerName=${customerName}`)
+    .then(response => {
+      console.log(response);
+      return response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to get your invoices."
+      };
+    });
+
+  return axiosResponse;
+};
 
 const getURL = async () => {
   let axiosResponse = await API.get("/payments/oauth")
@@ -37,4 +55,4 @@ const getURL = async () => {
   return axiosResponse;
 };
 
-export { getURL, checkURLStatus };
+export { checkURLStatus, getURL, getAllInvoices };

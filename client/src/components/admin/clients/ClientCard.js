@@ -25,7 +25,7 @@ const ClientCard = props => {
           </Item>
         </Item.Group>
         <ClientCaseCard clientData={props.clientData} />
-        <InvoiceCard clientData={props.clientData} />
+        <InvoiceCard clientData={props.clientData} clientName={props.clientName} />
       </Segment>
 
   );
