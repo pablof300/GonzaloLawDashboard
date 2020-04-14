@@ -207,6 +207,7 @@ const AddClientForm = (props) => {
       alert("Failed to add client, please try again!");
       console.log("Unable to add client");
     }
+    props.setClients(false);
   };
 
   const createNewClientComponent = <Modal.Content>
