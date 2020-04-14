@@ -2,7 +2,7 @@ const Admin = require("../models/Admin.js").Model;
 const User = require("../models/User.js").Model;
 const { NotFoundError } = require("../util/exceptions");
 
-exports.create = async adminParams => {
+exports.create = async (adminParams) => {
   if (await Admin.exists({ username: adminParams.username })) {
     throw Error("username already taken");
   }
@@ -14,7 +14,7 @@ exports.getAll = async () => {
   return await Admin.find({}).exec();
 };
 
-exports.get = async id => {
+exports.get = async (id) => {
   const admin = await Admin.findById(id);
   if (!admin) return false;
   return admin;
@@ -28,7 +28,17 @@ exports.getById = async id => {
   return admin;
 };
 
-exports.getByUsername = async username => {
+exports.getUserLawyers = async (id) => {
+  const userLawyers = await Admin.find(
+    { clients: { $in: [id] } },
+    "firstName secondName middleName contact imageUrl");
+    if(userLawyers){
+      return userLawyers
+    }
+    return null;
+};
+
+exports.getByUsername = async (username) => {
   const admin = await Admin.findOne({ username: username });
   if (!admin) throw new NotFoundError();
 
@@ -38,13 +48,13 @@ exports.getByUsername = async username => {
 exports.update = async (id, updatedData) => {
   await Admin.findOneAndUpdate({ _id: id }, updatedData, {
     upsert: true,
-    useFindAndModify: false
+    useFindAndModify: false,
   });
 
   return exports.get(id);
 };
 
-exports.delete = async id => {
+exports.delete = async (id) => {
   const admin = await Admin.findByIdAndDelete(id);
   if (!admin) throw new NotFoundError();
 
@@ -60,7 +70,7 @@ exports.removeClient = async (id, client) => {
     id,
     { $pullAll: { clients: [client] } },
     { new: true },
-    function(err, data) {}
+    function (err, data) {}
   );
   if (!admin) throw new NotFoundError();
 
@@ -75,7 +85,7 @@ exports.addClient = async (id, clientData) => {
     id,
     { $addToSet: { clients: [user] } },
     { new: true },
-    function(err, data) {}
+    function (err, data) {}
   );
 
   return user;
@@ -100,14 +110,14 @@ exports.getClient = async (id, client) => {
   throw new NotFoundError();
 };
 
-exports.getAllClients = async id => {
+exports.getAllClients = async (id) => {
   const admin = await Admin.findById(id);
   if (!admin) throw new NotFoundError();
 
   const users = await User.find({
     _id: {
-      $in: admin.clients
-    }
+      $in: admin.clients,
+    },
   });
 
   return users;

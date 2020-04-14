@@ -6,6 +6,10 @@ const Schema = new mongoose.Schema({
   firstName: { type: String, required: true },
   secondName: { type: String, required: true },
   middleName: { type: String },
+  contact:{
+    email: {type: String},
+    phone: {type: Number}
+  },
   imageUrl: {type: String},
   clients: [
     {

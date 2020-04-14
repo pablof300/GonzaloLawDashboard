@@ -10,6 +10,7 @@ const caseRoutes = require("../routes/CaseRoutes.js");
 const authRoutes = require("../routes/AuthRoutes.js");
 const fileRoutes = require("../routes/FileRoutes");
 const fileAwsRoute = require("../routes/FileAwsRoutes");
+const codeRoute = require("../routes/CodeRoute");
 const paymentsRoute = require("../routes/PaymentRoutes");
 const configUtil = require("./configUtil.js");
 const cors = require("cors");
@@ -36,6 +37,7 @@ module.exports.init = () => {
   app.use("/auth", authRoutes);
   app.use("/files", fileRoutes);
   app.use("/fileAws", fileAwsRoute);
+  app.use("/codes", codeRoute);
   app.use("/payments", paymentsRoute);
 
   if (process.env.NODE_ENV === "production") {

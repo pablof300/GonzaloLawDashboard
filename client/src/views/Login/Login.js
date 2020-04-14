@@ -21,6 +21,8 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successfulLogin, setSuccessfulLogin] = useState(false);
+  const [forgotPassword,  setForgotPassword] = useState(false)
+
 
   useEffect(() => {
     const jwt = Cookies.get("jwt");
@@ -50,6 +52,10 @@ function Login() {
 
   if (successfulLogin) {
     return <Redirect to="/dashboard" />;
+  }
+
+  if(forgotPassword) {
+    return <Redirect to="/passwordreset" />;
   }
 
   return (
@@ -85,6 +91,9 @@ function Login() {
               />
               <Button color="orange" onClick={login}>
                 Login
+              </Button>
+              <Button color="purple" onClick={() => setForgotPassword(true)}>
+                Forgot Password?
               </Button>
             </Form>
           </Segment>
