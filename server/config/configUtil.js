@@ -43,10 +43,10 @@ exports.getIntuitItemId = () => {
 };
 
 exports.getDomain = () => {
-  return require("./config").mailGun.domain;
+  return process.env.MAILGUN_DOMAIN || require("./config").mailGun.domain;
 };
 
 exports.getAPIKey = () => {
-  return require("./config").mailGun.apiKey;
+  return return process.env.MAILGUN_KEY || require("./config").mailGun.apiKey;
 };
 
