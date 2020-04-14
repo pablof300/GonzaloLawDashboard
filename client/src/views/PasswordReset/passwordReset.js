@@ -158,6 +158,13 @@ function PasswordReset() {
 
   };
 
+  const getEmail = (e) => {
+    e.preventDefault()
+    setEmail(e.target.value)
+    setError(false)
+
+  }
+
   return (
     <Grid stackable className="container">
       <Grid.Column width={4} />
@@ -189,7 +196,7 @@ function PasswordReset() {
                   type="email"
                   error={error}
                   labelPosition="left"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={getEmail}
                   value={email}
                 />
                 <Label

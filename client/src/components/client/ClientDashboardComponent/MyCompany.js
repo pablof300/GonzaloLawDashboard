@@ -7,6 +7,7 @@ function MyCompany(props) {
   const [logoUrl, setLogoUrl] = useState(null);
   const [userData, setUserData] = useState([]);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const [hasCompany, setHasCompany] = useState(false)
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -25,6 +26,9 @@ function MyCompany(props) {
     const user = (await getCurrentUser()).data;
     if (user) {
       setUserData(user);
+      if(user.company){
+        setHasCompany(true)
+      }
       if(user.company && user.company.companyLogoUrl){
         setLogoUrl(user.company.companyLogoUrl)
       }
@@ -39,20 +43,21 @@ function MyCompany(props) {
   }
 
   const saveLogoUrl = async () => {
-    const data = {
-      company:{
-        companyLogoUrl: logoUrl,
-        companyName: userData.company.companyName,
-        website: userData.company.website
+    if(hasCompany){
+      const data = {
+        company:{
+          companyLogoUrl: logoUrl,
+          companyName: userData.company.companyName,
+          website: userData.company.website
+        }
+      }
+  
+      const res = await updateUserData(data)
+      if(res){
+        alert("Your company logo has been updated successfully");
+        RefreshPage()
       }
     }
-
-    const res = await updateUserData(data)
-    if(res){
-      alert("Your company logo has been updated successfully");
-      RefreshPage()
-    }
-
   }
 
   const getLogoUrl = (e) => {
@@ -88,7 +93,7 @@ function MyCompany(props) {
                       onChange={getLogoUrl}
                     />
                     <div>
-                      <Button onClick={saveLogoUrl}>
+                      <Button disabled={!hasCompany} onClick={saveLogoUrl}>
                         <Button.Content>
                           <Icon name="save" />
                         </Button.Content>
