@@ -45,6 +45,10 @@ module.exports.init = () => {
     app.use(express.static(path.join(__dirname, "../../client/build")));
 
     // Handle React routing, return all requests to React app
+    app.get('/api/saved', (req, res) => {
+      res.send("CATT")
+    });
+
     app.get("*", function(req, res) {
       res.sendFile(path.join(__dirname, "../../client/build", "index.html"));
     });
