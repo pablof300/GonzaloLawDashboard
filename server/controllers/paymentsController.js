@@ -153,7 +153,7 @@ exports.getInvoices = async (req, res) => {
         })
         .then(function(response) {
           let invoices = response.json.QueryResponse.Invoice;
-          res.send(invoices);
+          res.send({ok: true, data: invoices});
         })
         .catch(function(e) {
           res.send(e);
