@@ -53,9 +53,13 @@ const ClientCaseList = (props) => {
             <EditCaseForm
               caseIndex={i}
               clientData={props.clientData}
+              triggerButtonColor={"yellow"}
               triggerButtonText={"Edit Case"}
             />
-            <ProgCard case_={userCaseData[i]} />
+            <ProgCard
+              case_={userCaseData[i]}
+              style={{ marginTop: "1000px !important" }}
+            />
           </Accordion.Content>
         </Accordion>
       );

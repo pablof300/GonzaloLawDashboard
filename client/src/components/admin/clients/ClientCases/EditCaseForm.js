@@ -138,12 +138,13 @@ const EditCaseForm = (props) => {
   return (
     <Modal
       trigger={
-        <Button size="small" floated="right">
+        <Button size="small" floated="right" color={props.triggerButtonColor}>
           <Icon name="plus" size="small" />
           {props.triggerButtonText}
         </Button>
       }
       onClose={() => {
+        window.location.reload(true);
         clearSteps();
       }}
     >
@@ -172,7 +173,11 @@ const EditCaseForm = (props) => {
             <Card.Group>{getStepCards()}</Card.Group>
           </Form.Field>
           <Form.Field>
-            <Button size="small" onClick={() => createOrUpdateCase()}>
+            <Button
+              size="small"
+              color={props.triggerButtonColor}
+              onClick={() => createOrUpdateCase()}
+            >
               {props.triggerButtonText}
             </Button>
           </Form.Field>

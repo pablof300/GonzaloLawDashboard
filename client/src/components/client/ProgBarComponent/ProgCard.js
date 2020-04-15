@@ -7,7 +7,7 @@ const ProgCard = (props) => {
 
   return (
     <Card fluid>
-      <Card.Content>
+      <Card.Content style={{ overflow: "auto" }}>
         <Card.Header
           style={{ backgroundColor: "transparent" }}
           textAlign={"center"}
