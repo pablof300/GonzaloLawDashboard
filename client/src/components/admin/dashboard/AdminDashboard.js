@@ -19,7 +19,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     verifyAdmin().then(verified => {
-      if (isVerified) {
+      if (verified) {
         setEventData(verified);
       }
       setIsVerified(verified);
@@ -32,6 +32,7 @@ const AdminDashboard = () => {
       return;
     }
     let eventResponse = await getEvents();
+    console.log("Event response")
     console.log(eventResponse);
     if (eventResponse.data) {
       console.log("Successfully fetched event data");
@@ -56,6 +57,7 @@ const AdminDashboard = () => {
     return <Redirect to="/adminlogin" />;
   }
 
+  console.log("Events");
   console.log(events);
   return (
     <div>

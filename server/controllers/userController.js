@@ -51,6 +51,7 @@ exports.delete = async (req, res) =>
 
 exports.getEvents = async (req, res) =>
   catchErrors(res, async () => {
+      console.log("Attempting getting id for " + req.userId)
     return eventDAO.getEventsByUser(req.userId);
   });
 

@@ -76,7 +76,7 @@ const sendEmail = async (params, id, name) => {
 };
 
  const updatePasswordAtLogin = async (params, id) =>{
-  let axiosResponse = await API.put(`/user/${id}`,params)
+  let axiosResponse = await API.put(`/user/password/${id}`,params)
     .then((response) => {
       return response.data;
     })
@@ -239,7 +239,7 @@ const RefreshPage = () => {
 };
 
 const getUserByEmail = async (email) => {
-  let axiosResponse = await API.get(`/user/${email}`)
+  let axiosResponse = await API.get(`/user/email/${email}`)
     .then((response) => {
       return response.data;
     })

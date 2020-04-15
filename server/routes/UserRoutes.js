@@ -34,8 +34,6 @@ router.get(
   userController.get
 );
 
-router.get("/:email", userController.getUserByEmail);
-
 router.get(
   "/name/:id",
   passport.authenticate("loggedIn", { session: false }),
@@ -52,7 +50,9 @@ router.put(
   userController.update
 );
 
-router.put("/:id", userController.updateUserPassword);
+router.get("/email/:email", userController.getUserByEmail);
+
+router.put("/password/:id", userController.updateUserPassword);
 
 router.delete(
   "/",

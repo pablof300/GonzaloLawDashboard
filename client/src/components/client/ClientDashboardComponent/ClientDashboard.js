@@ -22,7 +22,7 @@ const ClientDashboard = () => {
 
   useEffect(() => {
     verifyUser().then(verified => {
-      if (isVerified) {
+      if (verified) {
         setEventData(verified);
       }
       setIsVerified(verified);
@@ -34,6 +34,7 @@ const ClientDashboard = () => {
     if (events.length > 0) {
       return;
     }
+    console.log("EVENT DATA");
     let eventResponse = await getEvents();
     console.log(eventResponse);
     if (eventResponse.data) {
