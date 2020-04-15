@@ -90,14 +90,14 @@ const EditCaseForm = props => {
       <Modal.Content>
         <Form>
           <Form.Field
-            control ={Input}
-            label = "Case Title"
+            control={Input}
+            label="Case Title"
             placeholder="Case Title"
             onChange={event => setType(event.target.value)}
           />
           <Form.Field
-            control ={Input}
-            label = "Start Date"
+            control={Input}
+            label="Start Date"
             placeholder="mm/dd/year"
             onChange={event => setStartDate(event.target.value)}
           />
@@ -123,13 +123,13 @@ const EditCaseForm = props => {
             <Card.Group>{stepList}</Card.Group>
           </Form.Field>
           <Form.Field>
-          <Button
+            <Button
               size="small"
               onClick={() => createNewCase()}
             >
               Add Case
             </Button>
-            </Form.Field>
+          </Form.Field>
         </Form>
       </Modal.Content>
     </Modal>
