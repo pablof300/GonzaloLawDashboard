@@ -181,8 +181,26 @@ const addCase = async (
   return axiosResponse;
 };
 
-const getAdminById = async (id) => {
-  let axiosResponse = await API.get(`/admin/name/${id}`, {
+const getAdminByIdAdmin = async (id) => {
+  let axiosResponse = await API.get(`/admin/getAdminCalendarAdmin/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve case!"
+      };
+    });
+  return axiosResponse;
+};
+
+const getAdminByIdUser = async (id) => {
+  let axiosResponse = await API.get(`/admin/getAdminCalendarUser/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {
@@ -218,4 +236,4 @@ const getCurrentAdmin = async () => {
   return axiosResponse;
 };
 
-export { getEvents, getAllClients, addEvent, addClient, getCaseById, addCase, getAdminById };
+export { getEvents, getAllClients, addEvent, addClient, getCaseById, addCase, getAdminByIdAdmin, getAdminByIdUser };

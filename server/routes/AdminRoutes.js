@@ -23,7 +23,7 @@ router.get(
 );
 
 router.get(
-  "/name/:id",
+  "/getAdminCalendarAdmin/:id",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getById
 );
@@ -80,5 +80,10 @@ router.get(
   passport.authenticate("adminLoggedIn", { session: false }),
   caseController.get
 );
-
+//route for admin information to be loaded into user calendar
+router.get(
+  "/getAdminCalendarUser/:id",
+  passport.authenticate("loggedIn", { session: false }),
+  adminController.getById
+);
 module.exports = router;

@@ -33,9 +33,8 @@ router.get(
   passport.authenticate("loggedIn", { session: false }),
   userController.get
 );
-
 router.get(
-  "/name/:id",
+  "/getUserCalendarUser/:id",
   passport.authenticate("loggedIn", { session: false }),
   userController.getById
 );
@@ -96,6 +95,12 @@ router.delete(
   "/:id/:caseid",
   passport.authenticate("adminLoggedIn", { session: false }),
   userController.deleteCase
+);
+
+router.get(
+  "/getUserCalendarAdmin/:id",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  userController.getById
 );
 
 module.exports = router;
