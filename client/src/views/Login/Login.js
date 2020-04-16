@@ -89,10 +89,10 @@ function Login() {
                 type="password"
                 onChange={event => setPassword(event.target.value)}
               />
-              <Button color="orange" onClick={login}>
+              <Button color="orange" fluid onClick={login}>
                 Login
               </Button>
-              <Button color="purple" onClick={() => setForgotPassword(true)}>
+              <Button style={{marginTop:10}} color="purple" fluid onClick={() => setForgotPassword(true)}>
                 Forgot Password?
               </Button>
             </Form>
