@@ -281,8 +281,19 @@ const deleteClient = async (clientId) => {
       return {
         error: "Unable to delete client!"
       };
-    });updateCase
+    });
   return axiosResponse;
 };
 
-export { getEvents, getAllClients, getAllOtherClients, addEvent, addExistingClient, addClient, getCaseById, addCase, getAdminById, deleteClient };
+export {
+  updateCase,
+  getEvents,
+  getAllClients,
+  getAllOtherClients,
+  addEvent,
+  addExistingClient,
+  addClient,
+  getCaseById,
+  addCase,
+  getAdminById,
+  deleteClient };

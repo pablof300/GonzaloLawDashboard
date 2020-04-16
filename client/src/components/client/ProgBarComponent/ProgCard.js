@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "semantic-ui-react";
 import ProgBar from "./ProgBar.js";
 import { getCurrentUser } from "../../../../src/api/UserApi";
