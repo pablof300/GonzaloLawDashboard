@@ -37,9 +37,12 @@ const FileComponent = () => {
     allFileListInPagination = [];
 
   const loadFiles = async () => {
-    const data = await getAllUserFiles();
-    setListOfFiles(data);
-    setIsFilesPopulated(true);
+    const data = (await getAllUserFiles()).data;
+    if(data){
+      setListOfFiles(data.reverse());
+      setIsFilesPopulated(true);
+    }
+    
   };
 
   if (!isFilesPopulated) {
@@ -60,7 +63,7 @@ const FileComponent = () => {
       setIsLoading(!results ? true : false);
     }, 300);
 
-    if (results.length > 0) {
+    if (results && results.length > 0) {
       setListOfFiles(results);
     } else {
       setIsFilesPopulated(false);
@@ -72,17 +75,20 @@ const FileComponent = () => {
   };
 
   const performFilesPagination = () => {
-    if (listOfFiles.length % itemsPerPage === 0) {
-      totalPages = listOfFiles.length / itemsPerPage;
-    } else {
-      totalPages = parseInt(listOfFiles.length / itemsPerPage) + 1;
+    if(listOfFiles){
+      if (listOfFiles.length % itemsPerPage === 0) {
+        totalPages = listOfFiles.length / itemsPerPage;
+      } else {
+        totalPages = parseInt(listOfFiles.length / itemsPerPage) + 1;
+      }
+      startIndex = (currentPage - 1) * itemsPerPage;
+      endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
+  
+      for (let i = startIndex; i < endIndex; i++) {
+        allFileListInPagination.push(listOfFiles[i]);
+      }
     }
-    startIndex = (currentPage - 1) * itemsPerPage;
-    endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
-
-    for (let i = startIndex; i < endIndex; i++) {
-      allFileListInPagination.push(listOfFiles[i]);
-    }
+    
   };
 
   performFilesPagination();

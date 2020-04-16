@@ -1,4 +1,5 @@
 const adminController = require("../controllers/adminController");
+const paymentsController = require("../controllers/paymentsController");
 const caseController = require("../controllers/caseController");
 const express = require("express");
 const router = express.Router();
@@ -10,9 +11,9 @@ router.get(
 );
 
 router.get(
-  "/allAdmins",
+  "/userLawyers/:id",
   passport.authenticate("loggedIn", { session: false }),
-  adminController.getAll
+  adminController.getUserLawyers
 );
 
 router.get(
@@ -20,15 +21,22 @@ router.get(
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.get
 );
+
+router.get(
+  "/name/:id",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.getById
+);
+
 router.get(
   "/events",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getEvents
 );
 router.post(
-    "/events",
-    passport.authenticate("adminLoggedIn", { session: false }),
-    adminController.addEvent
+  "/events",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.addEvent
 );
 router.put(
   "/",
@@ -49,6 +57,12 @@ router.get(
 );
 
 router.get(
+  "/otherClients",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.getAllOtherClients
+)
+
+router.get(
   "/:clientId",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getClient
@@ -63,7 +77,14 @@ router.put(
 router.post(
   "/client",
   passport.authenticate("adminLoggedIn", { session: false }),
+  paymentsController.createCustomer,
   adminController.addClient
+);
+
+router.post(
+  "/add/:clientId",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.addExistingClient
 );
 
 router.get(

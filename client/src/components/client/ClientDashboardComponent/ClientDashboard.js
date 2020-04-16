@@ -1,41 +1,40 @@
 import React, { useState, useEffect } from "react";
 import "./ClientDashboard.css";
+import "./UserDetails.css";
 import NavBar from "../../util/NavBarComponent/NavBar";
 import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
 import PaymentCard from "../PaymentComponent/PaymentCard";
-import { verifyUser } from "../../../api/AuthApi";
+import {verifyAdmin, verifyUser} from "../../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
+import CaseDetailsComponent from "./CaseDetailsComponent";
 import Calendar from "../../calendar/Calendar";
 import { getEvents } from "../../../api/UserApi";
-import { getCurrentUser } from "../../../api/UserApi";
+
 
 const ClientDashboard = () => {
+  const [loading, setLoading] = useState(true);
   const [isVerified, setIsVerified] = useState(true);
   const [events, setEvents] = useState([]);
-  const [userData, setUserData] = useState([]);
-  const [isUserLoaded, setIsUserLoaded] = useState(false);
-
-  const loadUserData = async () => {
-    const user = (await getCurrentUser()).data;
-    setUserData(user);
-    setIsUserLoaded(true);
-  };
-  if (!isUserLoaded) {
-    loadUserData();
-  }
 
   useEffect(() => {
-    setEventData();
+    verifyUser().then(verified => {
+      if (verified) {
+        setEventData(verified);
+      }
+      setIsVerified(verified);
+      setLoading(false);
+    })
   }, []);
 
   const setEventData = async () => {
     if (events.length > 0) {
       return;
     }
+    console.log("EVENT DATA");
     let eventResponse = await getEvents();
     console.log(eventResponse);
     if (eventResponse.data) {
@@ -47,9 +46,9 @@ const ClientDashboard = () => {
     }
   };
 
-  verifyUser().then((verified) => {
-    setIsVerified(verified);
-  });
+  if (loading) {
+    return <></>
+  }
 
   if (!isVerified) {
     return <Redirect to="/login" />;
@@ -67,11 +66,9 @@ const ClientDashboard = () => {
             </Header>
           </Grid.Row>
           <Grid.Row>
-            {!!userData && !!userData.cases && userData.cases.length > 0 && (
-              <ProgBarComponent case_={userData.cases[0]} />
-            )}
+            <CaseDetailsComponent />
           </Grid.Row>
-          <Grid.Row>
+          <Grid.Row className="LeftTab">
             <UserDetailsComponent />
           </Grid.Row>
           <Grid.Row>

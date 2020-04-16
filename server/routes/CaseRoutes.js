@@ -13,6 +13,11 @@ router.get(
   passport.authenticate("loggedIn", { session: false }),
   caseController.get
 );
+router.get(
+    "/admin/:id",
+    passport.authenticate("adminLoggedIn", { session: false }),
+    caseController.get
+);
 router.put(
   "/:id",
   passport.authenticate("adminLoggedIn", { session: false }),

@@ -10,13 +10,11 @@ catchErrors = async (res, f) => {
     res.send({ ok: true, data: result });
   } catch (e) {
     if (e instanceof ValidationError) {
-      res
-        .status(e.httpErrorCode)
-        .send({
-          ok: false,
-          error: e.message,
-          validationErrors: e.validationErrors
-        });
+      res.status(e.httpErrorCode).send({
+        ok: false,
+        error: e.message,
+        validationErrors: e.validationErrors,
+      });
     } else if (e instanceof NotFoundError) {
       res.status(e.httpErrorCode).send({ ok: false, error: e.message });
     } else {
@@ -35,6 +33,12 @@ router.get(
   passport.authenticate("loggedIn", { session: false }),
   userController.get
 );
+
+router.get(
+  "/name/:id",
+  passport.authenticate("loggedIn", { session: false }),
+  userController.getById
+);
 router.get(
   "/events",
   passport.authenticate("loggedIn", { session: false }),
@@ -45,6 +49,10 @@ router.put(
   passport.authenticate("loggedIn", { session: false }),
   userController.update
 );
+
+router.get("/email/:email", userController.getUserByEmail);
+
+router.put("/password/:id", userController.updateUserPassword);
 
 router.delete(
   "/",
@@ -70,6 +78,12 @@ router.post(
   "/:id/cases",
   passport.authenticate("adminLoggedIn", { session: false }),
   userController.createCase
+);
+
+router.post(
+  "/message",
+  passport.authenticate("loggedIn", { session: false }),
+  userController.sendMessage
 );
 
 router.put(
