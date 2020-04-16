@@ -39,6 +39,11 @@ router.get(
   userController.getById
 );
 router.get(
+  "/getUserCalendarAdmin/:id",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  userController.getById
+);
+router.get(
   "/events",
   passport.authenticate("loggedIn", { session: false }),
   userController.getEvents
@@ -97,10 +102,6 @@ router.delete(
   userController.deleteCase
 );
 
-router.get(
-  "/getUserCalendarAdmin/:id",
-  passport.authenticate("adminLoggedIn", { session: false }),
-  userController.getById
-);
+
 
 module.exports = router;
