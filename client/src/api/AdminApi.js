@@ -39,17 +39,17 @@ const getAllOtherClients = async () => {
 
 const getCaseById = async (id) => {
   let axiosResponse = await API.get(`/case/admin/${id}`, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
-    .then((response) => {
+    .then(response => {
       return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve case!",
+        error: "Unable to retrieve case!"
       };
     });
   return axiosResponse;
@@ -57,17 +57,17 @@ const getCaseById = async (id) => {
 
 const getEvents = async () => {
   let axiosResponse = await API.get("/admin/events", {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
-    .then((response) => {
+    .then(response => {
       return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       if (error.response) {
         return { error: error.response };
       }
       return {
-        error: "Unable to retrieve events!",
+        error: "Unable to retrieve events!"
       };
     });
   return axiosResponse;
@@ -84,9 +84,9 @@ const addEvent = async (title, type, startDate, duration, notes, clientId) => {
         startDate: startDate,
         duration: duration,
         clientId: clientId,
-        notes: notes,
+        notes: notes
       },
-      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
     }
   )
     .then((response) => {
@@ -110,7 +110,7 @@ const addExistingClient = async (id) => {
     .then((response) => {
       return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       if (error.response) {
         return { error: error.response.data.error };
       }
@@ -149,18 +149,18 @@ const addClient = async (
       street: street,
       city: city,
       state: state,
-      zip: zip,
+      zip: zip
     },
     contact: {
       homePhone: homePhone,
       workPhone: workPhone,
       cellPhone: cellPhone,
-      email: email,
+      email: email
     },
     birthDate: birthDate,
     imageUrl: "https://react.semantic-ui.com/images/avatar/large/matthew.png",
     files: [],
-    cases: [],
+    cases: []
   };
   console.log("Adding the user");
   console.log(userData);
@@ -170,12 +170,12 @@ const addClient = async (
     .then((response) => {
       return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve events!",
+        error: "Unable to retrieve events!"
       };
     });
   return axiosResponse;
@@ -222,14 +222,50 @@ const updateCase = async (type, startDate, completed, steps, caseID) => {
     .then((response) => {
       return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve events!",
+        error: "Unable to retrieve events!"
       };
     });
+  return axiosResponse;
+};
+
+const getAdminByIdAdmin = async (id) => {
+  let axiosResponse = await API.get(`/admin/getAdminCalendarAdmin/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        if (error.response) {
+          return { error: error.response.data.error };
+        }
+        return {
+          error: "Unable to retrieve case!"
+        };
+      });
+  return axiosResponse;
+};
+
+const getAdminByIdUser = async (id) => {
+  let axiosResponse = await API.get(`/admin/getAdminCalendarUser/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        if (error.response) {
+          return { error: error.response.data.error };
+        }
+        return {
+          error: "Unable to retrieve case!"
+        };
+      });
   return axiosResponse;
 };
 
@@ -237,15 +273,15 @@ const getAdminById = async (id) => {
   let axiosResponse = await API.get(`/admin/name/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then((response) => {
+    .then(response => {
       return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve case!",
+        error: "Unable to retrieve case!"
       };
     });
   return axiosResponse;
@@ -253,17 +289,17 @@ const getAdminById = async (id) => {
 
 const getCurrentAdmin = async () => {
   let axiosResponse = await API.get("/admin/", {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
-    .then((response) => {
+    .then(response => {
       return response.data;
     })
-    .catch((error) => {
+    .catch(error => {
       if (error !== null && error.response) {
         return { error: error.response };
       }
       return {
-        error: "Unable to retrieve user!",
+        error: "Unable to retrieve user!"
       };
     });
 
@@ -296,5 +332,8 @@ export {
   addCase,
   updateCase,
   getAdminById,
+  getAdminByIdAdmin,
+  getAdminByIdUser,
+  getCurrentAdmin,
   deleteClient,
 };

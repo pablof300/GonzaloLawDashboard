@@ -104,8 +104,27 @@ const updatePassword = async (params) => {
   return success;
 };
 
-const getUserById = async id => {
-  let axiosResponse = await API.get(`/user/name/${id}`, {
+const getUserByIdUser = async id => {
+  let axiosResponse = await API.get(`/user/getUserCalendarUser/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error !== null && error.response) {
+        return { error: error.response };
+      }
+      return {
+        error: "Unable to retrieve user!"
+      };
+    });
+
+  return axiosResponse;
+};
+
+const getUserByIdAdmin = async id => {
+  let axiosResponse = await API.get(`/user/getUserCalendarAdmin/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {
@@ -381,7 +400,8 @@ export {
   updatePasswordAtLogin,
   getAllLawyersWorkingOnUserCase,
   checkIfUserUploadingFileExist,
-  getUserById,
+  getUserByIdAdmin,
+  getUserByIdUser,
   checkIfCodeExistOrHasNotExpired,
   sendMessageToTeam
 };
