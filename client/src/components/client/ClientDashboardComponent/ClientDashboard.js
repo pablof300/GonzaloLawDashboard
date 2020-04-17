@@ -63,16 +63,10 @@ const ClientDashboard = (props) => {
       setQbAuth(true);
       console.log("WERE ACTUALLY ONLINE.");
     }
-    else {
-
-      let oAuthResponse = await getURL();
-      var win = window.open(oAuthResponse.data, '_blank');   win.focus();
-    }
   };
 
   if (!qbAuth) {
     setQbAuth(true);
-    startOAuth();
   }
 
   const setEventData = async () => {
