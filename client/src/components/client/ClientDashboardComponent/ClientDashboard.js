@@ -25,6 +25,15 @@ const ClientDashboard = (props) => {
   const [events, setEvents] = useState([]);
   const [userData, setUserData] = useState([]);
 
+  useEffect(async () => {
+    let urlStatus = await checkURLStatus();
+    if(urlStatus)
+    {
+      setQbAuth(true);
+      console.log("WERE ACTUALLY ONLINE.");
+    }
+  }, []);
+
   useEffect(() => {
     verifyUser().then(verified => {
       if (isVerified) {
@@ -47,19 +56,22 @@ const ClientDashboard = (props) => {
   }
 
   const startOAuth = async () => {
-    setQbAuth(true);
-    let oAuthResponse = await getURL();
-    var win = window.open(oAuthResponse.data, '_blank');   win.focus();
-
     let urlStatus = await checkURLStatus();
+
     if(urlStatus)
     {
       setQbAuth(true);
       console.log("WERE ACTUALLY ONLINE.");
     }
+    else {
+
+      let oAuthResponse = await getURL();
+      var win = window.open(oAuthResponse.data, '_blank');   win.focus();
+    }
   };
 
   if (!qbAuth) {
+    setQbAuth(true);
     startOAuth();
   }
 

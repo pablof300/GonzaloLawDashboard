@@ -15,13 +15,13 @@ const QBStatus = props => {
   }, []);
 
   const startOAuth = async () => {
+    setStatus("Online");
     let oAuthResponse = await getURL();
     var win = window.open(oAuthResponse.data, '_blank');   win.focus();
 
     let urlStatus = await checkURLStatus();
     if(urlStatus)
     {
-      setStatus("Online");
       console.log("WERE ACTUALLY ONLINE.");
     }
     else {
