@@ -4,8 +4,8 @@ import Cookies from "js-cookie";
 const checkURLStatus = async () => {
   let axiosResponse = await API.get("/payments/status")
     .then(response => {
-      console.log(response);
-      return response.data;
+      console.log(response.data);
+      return response.data.data;
     })
     .catch(error => {
       if (error.response) {
@@ -57,9 +57,11 @@ const getAllInvoices = async (customerName) => {
 };
 
 const getInvoicePdf = async (invoiceId) => {
-  let axiosResponse = await API.get(`/payments/invoice/pdf?invoiceId=${invoiceId}`)
+  let axiosResponse = await API.get(`/payments/invoice/pdf?invoiceId=${invoiceId}`,
+    {headers: {
+      "Content-Type": "application/octet-stream"},
+      responseType: "arraybuffer"})
     .then(response => {
-      console.log(response);
       return response.data;
     })
     .catch(error => {
@@ -92,4 +94,4 @@ const getURL = async () => {
   return axiosResponse;
 };
 
-export { checkURLStatus, createAnInvoice, getURL, getAllInvoices };
+export { checkURLStatus, createAnInvoice, getURL, getAllInvoices, getInvoicePdf };

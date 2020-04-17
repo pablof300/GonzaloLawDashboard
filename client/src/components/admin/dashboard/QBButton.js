@@ -10,6 +10,7 @@ const QBStatus = props => {
     if(urlStatus)
     {
       setStatus("Online");
+      console.log("WERE ACTUALLY ONLINE.");
     }
   }, []);
 
@@ -21,8 +22,31 @@ const QBStatus = props => {
     if(urlStatus)
     {
       setStatus("Online");
+      console.log("WERE ACTUALLY ONLINE.");
+    }
+    else {
+       window.location.reload(true);
     }
   };
+
+  function renderButton() {
+    if(status === "Offline") {
+      return (
+        <Button
+          compact
+          floated="right"
+          size="tiny"
+          onClick={() => startOAuth()}>
+          Connect
+        </Button>
+      )
+    }
+    else if (status === "Online") {
+      return (
+        <a></a>
+      )
+    }
+  }
 
   return (
   <Card>
@@ -31,15 +55,7 @@ const QBStatus = props => {
     </Card.Content>
     <Card.Content extra>
       <a> Status: {status} </a>
-      {status === "Offline" &&
-        <Button
-          compact
-          floated="right"
-          size="tiny"
-          onClick={() => startOAuth()}>
-          Connect
-        </Button>
-      }
+        {renderButton()}
     </Card.Content>
   </Card>
   );
