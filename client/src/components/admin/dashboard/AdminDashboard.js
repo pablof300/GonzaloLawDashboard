@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Grid, Container, Header, Icon} from "semantic-ui-react";
+import { Grid, Container, Header, Icon } from "semantic-ui-react";
 import AdminNav from "../navbar/AdminNav";
 import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import ClientList from "../clients/AdminClientList";
@@ -19,7 +19,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     verifyAdmin().then(verified => {
-      if (isVerified) {
+      if (verified) {
         setEventData(verified);
       }
       setIsVerified(verified);
@@ -32,6 +32,7 @@ const AdminDashboard = () => {
       return;
     }
     let eventResponse = await getEvents();
+    console.log("Event response")
     console.log(eventResponse);
     if (eventResponse.data) {
       console.log("Successfully fetched event data");
@@ -56,14 +57,11 @@ const AdminDashboard = () => {
     return <Redirect to="/adminlogin" />;
   }
 
+  console.log("Events");
   console.log(events);
   return (
     <div>
       <AdminNav />
-      <Header className={"header"} as="h2" icon textAlign="center">
-        <Icon name="users" circular />
-        <Header.Content>Admin Dashboard</Header.Content>
-      </Header>
       <Container className="ContainerPaddingCorrection1">
         <Grid divided>
           <Grid.Row>
@@ -77,7 +75,7 @@ const AdminDashboard = () => {
           </Grid.Row>
         </Grid>
       </Container>
-      <FooterComponent/>
+      <FooterComponent />
     </div>
   );
 };

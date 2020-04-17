@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 interface User {
     username: string;
     password: string;
-    cases:  Types.ObjectId[];
+    cases: Types.ObjectId[];
     firstName: string;
     secondName: String;
     middleName: String;
@@ -13,6 +13,11 @@ interface User {
         city: String;
         state: String;
         zip: Number;
+    };
+    company?: {
+        companyLogoUrl: String;
+        companyName: String;
+        website: String;
     };
     contact: {
         homePhone: Number;
@@ -47,6 +52,11 @@ const usersData: User[] = [
             homePhone: 345223561,
             workPhone: 345223561
         },
+        company: {
+            companyLogoUrl: "" ,
+            companyName: "BoneCracker Social Inc",
+            website: "bonecrakersocial.com",
+        },
         birthDate: "03/08/1998",
         _id: new Types.ObjectId("5e37ac71d0ba8b3dd080516a")
     },
@@ -64,6 +74,11 @@ const usersData: User[] = [
             city: "Clearwater",
             state: "Florida",
             zip: 33467
+        },
+        company: {
+            companyLogoUrl: "" ,
+            companyName: "Cat PDF Inc",
+            website: "catpdf.com",
         },
         contact: {
             workPhone: 345223561,

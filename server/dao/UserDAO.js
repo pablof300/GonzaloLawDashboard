@@ -2,7 +2,7 @@ const User = require("../models/User.js").Model;
 const CaseDAO = require("./CaseDAO");
 const { NotFoundError } = require("../util/exceptions");
 
-exports.create = async userParams => {
+exports.create = async (userParams) => {
   if (await User.exists({ username: userParams.username })) {
     throw Error("username already taken");
   }
@@ -13,7 +13,7 @@ exports.getAll = async () => {
   return await User.find({}).exec();
 };
 
-exports.get = async id => {
+exports.get = async (id) => {
   const user = await User.findById(id)
       .populate("cases")
       .exec()
@@ -32,10 +32,16 @@ exports.getById = async id => {
   return user;
 };
 
-exports.getByUsername = async username => {
+exports.getByUsername = async (username) => {
   const user = await User.findOne({ username: username });
   if (!user) throw new NotFoundError();
 
+  return user;
+};
+
+exports.getUserByEmail = async (email) => {
+  const user = await User.findOne({ 'contact.email' : email }, "firstName" );
+  if (!user) throw new NotFoundError();
   return user;
 };
 
@@ -60,7 +66,16 @@ exports.deleteFileById = async (id, fileID) => {
 exports.update = async (id, updatedData) => {
   await User.findOneAndUpdate({ _id: id }, updatedData, {
     upsert: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+  });
+
+  return exports.get(id);
+};
+
+exports.updateUserPassword = async (id, updatedData) => {
+  await User.findOneAndUpdate({ _id: id }, updatedData, {
+    upsert: true,
+    useFindAndModify: false,
   });
 
   return exports.get(id);

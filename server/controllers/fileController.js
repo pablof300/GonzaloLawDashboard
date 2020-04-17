@@ -7,6 +7,11 @@ exports.getAll = async (req, res) =>
     return fileDAO.getAll();
   });
 
+exports.getAllFilesByUser = async (req, res) =>
+  catchErrors(res, async () => {
+    return fileDAO.getAllFilesByUser(req.params.userID);
+  });
+
 exports.get = async (req, res) =>
   catchErrors(res, async () => {
     return fileDAO.get(req.params.id);

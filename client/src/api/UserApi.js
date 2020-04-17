@@ -20,8 +20,111 @@ const getCurrentUser = async () => {
   return axiosResponse;
 };
 
-const getUserById = async id => {
-  let axiosResponse = await API.get(`/user/name/${id}`, {
+const sendMessageToTeam = async (params) => {
+  API.post(`/user/message`, params, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
+    });
+  return true;
+};
+
+const sendEmail = async (params, id, name) => {
+  let result = null;
+  result = await API.post(`/codes/${id}`, params, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((res) => {
+      if (res.data && res.data.data) {
+        const data = res.data.data;
+        const code = data.code;
+        const message = `<h3>Hi ${name},</h3> <p>Use the code below to help reset your password.</p> <p><h2><b>${code}</b></h2></p>`;
+        const from = "GonzaloLaw <no-eply@mail.gonzalolaw.com>";
+        params.from = from;
+        params.html = message;
+        const sEmail = async () => {
+          const emailSend = await API.post("codes/mail", params, {
+            headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+          })
+            .then((res) => {
+              if (res) {
+                alert("A verification Code was sent to your email");
+              }
+              return true;
+            })
+            .catch((err) => {
+              console.log(err);
+              return false;
+            });
+
+          return emailSend;
+        };
+        return sEmail();
+      }
+    })
+    .catch((error) => {
+      if (error && error.response) {
+        console.log(error.response);
+        return false;
+      }
+    });
+  return result;
+};
+
+ const updatePasswordAtLogin = async (params, id) =>{
+  let axiosResponse = await API.put(`/user/password/${id}`,params)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      if (error !== null && error.response) {
+        return { error: error.response };
+      }
+      return {
+        error: "Unable to retrieve user!",
+      };
+    });
+
+  return axiosResponse;
+}
+
+const updatePassword = async (params) => {
+  const success = await updateUserData(params).then((res) => {
+    if (res) {
+      console.log("Password changed successfully");
+      return true;
+    }
+    return false;
+  });
+
+  return success;
+};
+
+const getUserByIdUser = async id => {
+  let axiosResponse = await API.get(`/user/getUserCalendarUser/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error !== null && error.response) {
+        return { error: error.response };
+      }
+      return {
+        error: "Unable to retrieve user!"
+      };
+    });
+
+  return axiosResponse;
+};
+
+const getUserByIdAdmin = async id => {
+  let axiosResponse = await API.get(`/user/getUserCalendarAdmin/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
   })
     .then(response => {
@@ -41,32 +144,48 @@ const getUserById = async id => {
 
 const getAllUserFiles = async () => {
   const user = (await getCurrentUser()).data;
-  let allFiles = [];
-  if (user && user.files) {
-    const filesID = user.files;
-    for (let i = 0; i < filesID.length; i++) {
-      const data = (await getUserFileById(filesID[i])).data;
-      if (data) {
-        allFiles.unshift(data);
+  const id = user._id;
+  let axiosResponse = await API.get(`/files/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      if (error && error.response) {
+        return { error: error.response };
       }
-    }
-  }
+      return {
+        error: "Unable to retrieve all user's files!",
+      };
+    });
 
-  return allFiles;
+  return axiosResponse;
 };
 
-const checkIfUserUploadingFileExist = async (fileName, fileType) => {
-  const user = (await getCurrentUser()).data;
-  if (user && user.files) {
-    const filesID = user.files;
-    for (let i = 0; i < filesID.length; i++) {
-      const data = (await getUserFileById(filesID[i])).data;
-      if (data.name === fileName && data.type === fileType) {
+const checkIfCodeExistOrHasNotExpired = async (code, id) => {
+  let axiosResponse = await API.get(`/codes/${code}/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((response) => {
+      // console.log(response)
+      if (response && response.data && response.data.data) {
+        ///console.log(response)
         return true;
       }
-    }
-  }
-  return false;
+      return false;
+    })
+    .catch((error) => {
+      if (error !== null && error.response) {
+        // console.log( error.response)
+        return false;
+      }
+      return {
+        error: "Unable to retrieve user!",
+      };
+    });
+
+  return axiosResponse;
 };
 
 const getAllLawyersWorkingOnUserCase = async () => {
@@ -74,100 +193,123 @@ const getAllLawyersWorkingOnUserCase = async () => {
   let result = null;
   if (user) {
     const userID = user._id;
-    result = await API.get("/admin/allAdmins", {
-      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    result = await API.get(`/admin/userLawyers/${userID}`, {
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
     })
-      .then(res => {
-        const lawyers = res.data.data;
-        if (lawyers) {
-          let userLawyers = [];
-          for (let i = 0; i < lawyers.length; i++) {
-            if (lawyers[i] && lawyers[i].clients) {
-              const lawyer = lawyers[i];
-              const clients = lawyers[i].clients;
-              for (let j = 0; j < clients.length; j++) {
-                if (clients[j] === userID) {
-                  userLawyers.push(lawyer);
-                  break;
-                }
-              }
-            }
-          }
-          return userLawyers;
-        }
+      .then((res) => {
+        return res.data;
       })
-      .catch(error => {
+      .catch((error) => {
         if (error && error.response) {
           return { error: error.response };
         }
         return {
-          error: "Unable to retrieve user lawyers!"
+          error: "Unable to retrieve user lawyers!",
         };
       });
   }
   return result;
 };
 
-const uploadUserProfilePicture = params => {
+const uploadUserProfilePicture = (params) => {
   console.log("Preparing to upload Profile Picture");
   API.post("/fileAws", {
     fileName: params.fileName,
     fileType: params.fileType,
     userID: params.userID,
-    folder: "profilePicture"
+    folder: "profilePicture",
   })
-    .then(response => {
+    .then((response) => {
       let returnData = response.data.data.returnData;
       let signedRequest = returnData.signedRequest;
       const url = returnData.url;
       let options = {
         headers: {
-          "Content-Type": params.fileType
-        }
+          "Content-Type": params.fileType,
+        },
       };
 
       API.put(signedRequest, params.file[0], options)
-        .then(result => {
+        .then((result) => {
           console.log("We got response from s3");
 
           const userData = {
-            imageUrl: url
+            imageUrl: url,
           };
-          updateUserData(userData).then(res => {
+          updateUserData(userData).then((res) => {
             if (res) {
               alert("Profile Picture updated successfully");
               console.log("Profile Picture updated successfully");
+              RefreshPage();
             }
           });
         })
-        .catch(error => {
+        .catch((error) => {
           alert(JSON.stringify(error));
         });
     })
-    .catch(error => {
+    .catch((error) => {
       alert(JSON.stringify(error));
     });
 };
 
-const getUserFileById = async id => {
-  let axiosResponse = await API.get(`/files/${id}`, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
-  })
-    .then(response => {
+const RefreshPage = () => {
+  window.location.reload(false);
+};
+
+const getUserByEmail = async (email) => {
+  let axiosResponse = await API.get(`/user/email/${email}`)
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
-      if (error.response) {
-        return { error: error.response.data.error };
+    .catch((error) => {
+      if (error && error.response) {
+        return { error: error.response };
       }
       return {
-        error: "Unable to retrieve file!"
+        error: "User does not exist!",
       };
     });
+
   return axiosResponse;
 };
 
-const deleteUserFileById = async params => {
+const checkIfUserUploadingFileExist = async (fileName, fileType) => {
+  const user = (await getCurrentUser()).data;
+  let axiosResponse = null;
+  if (user) {
+    axiosResponse = await API.get(`/files/${user._id}`, {
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+    })
+      .then((response) => {
+        const file = response.data.data;
+        let i = 0;
+        for (; i < file.length; i++) {
+          if (
+            file[i].name === fileName &&
+            file[i].type.toLowerCase() === fileType.toLowerCase()
+          ) {
+            return true;
+          }
+        }
+        if (i === file.length) {
+          return false;
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          return { error: error.response.data.error };
+        }
+        return {
+          error: "Unable to retrieve file!",
+        };
+      });
+    return axiosResponse;
+  }
+  return axiosResponse;
+};
+
+const deleteUserFileById = async (params) => {
   const user = (await getCurrentUser()).data;
   let result = false;
   if (user) {
@@ -175,19 +317,19 @@ const deleteUserFileById = async params => {
       data: {
         fileName: params.fileName,
         userID: user._id,
-        folder: params.folder
-      }
+        folder: params.folder,
+      },
     })
-      .then(res => {
+      .then((res) => {
         if (res.data.success) {
           const deleteFromDB = async () => {
             const res = await API.delete(`/files/${params.id}`, {
-              headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+              headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
             })
-              .then(response => {
+              .then((response) => {
                 return response.data.ok;
               })
-              .catch(error => {
+              .catch((error) => {
                 if (error && error.response)
                   console.log("ERROR! " + error.response);
               });
@@ -196,7 +338,7 @@ const deleteUserFileById = async params => {
           return deleteFromDB();
         }
       })
-      .catch(error => {
+      .catch((error) => {
         if (error && error.response) {
           console.log("File failed to delete!");
           console.log(error.response);
@@ -208,19 +350,19 @@ const deleteUserFileById = async params => {
   return result;
 };
 
-const updateUserData = async data => {
+const updateUserData = async (data) => {
   let axiosResponse = await API.put("/user", data, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error !== null && error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to update user information!"
+        error: "Unable to update user information!",
       };
     });
 
@@ -229,17 +371,17 @@ const updateUserData = async data => {
 
 const getEvents = async () => {
   let axiosResponse = await API.get("/user/events", {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve events!"
+        error: "Unable to retrieve events!",
       };
     });
   return axiosResponse;
@@ -250,9 +392,16 @@ export {
   uploadUserProfilePicture,
   getCurrentUser,
   updateUserData,
+  sendEmail,
   getAllUserFiles,
   deleteUserFileById,
+  updatePassword,
+  getUserByEmail,
+  updatePasswordAtLogin,
   getAllLawyersWorkingOnUserCase,
   checkIfUserUploadingFileExist,
-  getUserById
+  getUserByIdAdmin,
+  getUserByIdUser,
+  checkIfCodeExistOrHasNotExpired,
+  sendMessageToTeam
 };

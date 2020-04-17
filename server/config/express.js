@@ -10,6 +10,7 @@ const caseRoutes = require("../routes/CaseRoutes.js");
 const authRoutes = require("../routes/AuthRoutes.js");
 const fileRoutes = require("../routes/FileRoutes");
 const fileAwsRoute = require("../routes/FileAwsRoutes");
+const codeRoute = require("../routes/CodeRoute");
 const paymentsRoute = require("../routes/PaymentRoutes");
 const configUtil = require("./configUtil.js");
 const cors = require("cors");
@@ -36,17 +37,21 @@ module.exports.init = () => {
   app.use("/auth", authRoutes);
   app.use("/files", fileRoutes);
   app.use("/fileAws", fileAwsRoute);
-  app.use("/payments", paymentsRoute);
+  app.use("/codes", codeRoute);
+
 
   if (process.env.NODE_ENV === "production") {
     // Serve any static files
     app.use(express.static(path.join(__dirname, "../../client/build")));
-
+    app.use("/payments", paymentsRoute);
     // Handle React routing, return all requests to React app
     app.get("*", function(req, res) {
       res.sendFile(path.join(__dirname, "../../client/build", "index.html"));
     });
+  } else {
+    app.use("/payments", paymentsRoute);
   }
+
 
   return app;
 };

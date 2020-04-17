@@ -14,12 +14,15 @@ import Popup from "reactjs-popup";
 import "../Admin.css";
 import { getAllClients } from "../../../../src/api/AdminApi";
 
+
+
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
 
 const ClientList = () => {
   const [listOfClients, setClientList] = useState([]);
   const [clients, setClients] = useState(false);
+  const [isClientsPopulated, setIsClientsPopulated] = useState(false);
 
   const loadUsers = async () => {
     const lawyerClients = await getAllClients();
@@ -54,11 +57,16 @@ const ClientList = () => {
             modal
             closeOnDocumentClick
           >
-              <ClientCard
-                clientData={client}
-                clientName={client.firstName + " " + client.secondName}
-                clientContact={client.contact}
-              />
+            <ClientCard
+              clientData={client}
+              clientName={client.firstName + " " + client.secondName}
+              clientContact={client.contact}
+              setIsClientsPopulated={setClients}
+              setIsClientsPopulatedPagination={setIsClientsPopulated}
+            />
+            {/* This is kind of poorly named, but setClients, is setClientsPopulated in the client card, while 
+              setIsClientsPopulated is setIsClientsPopulatedPagination in the client card. Fix some naming conventions
+              for readability in the future.*/}
           </Popup>
         </List.Content>
         <Image
@@ -83,7 +91,7 @@ const ClientList = () => {
       <List divided verticalAlign="middle">
         <List.Item className="List-Header">
           <List.Content floated="right">
-            <AddClientForm addClientCallback={addClientCallback} />
+            <AddClientForm addClientCallback={addClientCallback} setClients={setClients} setIsClientsPopulated={setIsClientsPopulated} isClientsPopulated={isClientsPopulated} />
           </List.Content>
           <List.Content id="content">Client List</List.Content>
         </List.Item>
