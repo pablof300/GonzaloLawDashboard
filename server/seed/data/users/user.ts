@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 interface User {
     username: string;
     password: string;
-    cases:  Types.ObjectId[];
+    cases: Types.ObjectId[];
     firstName: string;
     secondName: String;
     middleName: String;

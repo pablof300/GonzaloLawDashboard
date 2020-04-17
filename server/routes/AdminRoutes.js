@@ -34,9 +34,9 @@ router.get(
   adminController.getEvents
 );
 router.post(
-    "/events",
-    passport.authenticate("adminLoggedIn", { session: false }),
-    adminController.addEvent
+  "/events",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.addEvent
 );
 router.put(
   "/",
@@ -57,6 +57,12 @@ router.get(
 );
 
 router.get(
+  "/otherClients",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.getAllOtherClients
+)
+
+router.get(
   "/:clientId",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getClient
@@ -73,6 +79,12 @@ router.post(
   passport.authenticate("adminLoggedIn", { session: false }),
   paymentsController.createCustomer,
   adminController.addClient
+);
+
+router.post(
+  "/add/:clientId",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.addExistingClient
 );
 
 router.get(

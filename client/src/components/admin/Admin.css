@@ -50,6 +50,30 @@
   font-size: 1.28571429rem;
 }
 
+
+/* Below is some CSS for some specific stuff, I can organize the file better if need be though - Tyler*/
+
+.large.negative.left.floated.ui.button.Delete_Yes{
+  position: relative;
+  left: 200px;
+  bottom: 10px;
+  padding-left: 30px;
+  padding-right: 30px; 
+}
+
+.ui.large.right.floated.button.Delete_No{
+  position: relative;
+  right: 200px;
+  bottom: 10px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.ui.small.center.aligned.header.Delete_Header{
+  position: relative;
+  left: 175px;
+}
+
 .header {
   background-color: transparent !important;
 }
