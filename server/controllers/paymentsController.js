@@ -173,13 +173,15 @@ exports.getInvoicePdf = async (req, res) => {
     url: getBaseUrl() + "/invoice/" + req.query.invoiceId + "/pdf",
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/octet-stream"
     },
     responseType: "arraybuffer"
   })
     .then(response => {
       res.contentType("application/pdf;charset=UTF-8");
-      res.send(response.data);
+      console.log("------------------------------------------------------------------------------------");
+      console.log(response);
+      console.log("------------------------------------------------------------------------------------");
+      res.send(response.data); // res.send({data: response.data})
     })
     .catch(error => {
       console.log(error);
