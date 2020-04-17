@@ -136,7 +136,9 @@ const addClient = async (
   workPhone,
   cellPhone,
   email,
-  birthDate
+  birthDate,
+  companyName,
+  website,
 ) => {
   let userData = {
     username: username,
@@ -150,6 +152,11 @@ const addClient = async (
       city: city,
       state: state,
       zip: zip
+    },
+    company: {
+      companyName: companyName,
+      website: website,
+      companyLogoUrl: "",
     },
     contact: {
       homePhone: homePhone,

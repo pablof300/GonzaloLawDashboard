@@ -79,7 +79,7 @@ function MyCompany(props) {
 
         <Grid.Row textAlign="left">
           <Grid.Column floated="left" stretched={true}>
-            <div>
+            <div style={{marginRight:10}}>
               <Grid.Row stretched={true} textAlign="left">
                 <Form widths="equal">
                   <Form.Group inline>
@@ -134,7 +134,8 @@ function MyCompany(props) {
           </Grid.Column>
 
           <Grid.Column floated="right" width={5}>
-            <p>Company Logo</p>
+          <div style={{marginLeft:40, textAlign:'center'}}>
+          <p>Company Logo</p>
             <Image
               src={
                 !(userData && userData.company)
@@ -145,6 +146,8 @@ function MyCompany(props) {
               rounded
               fluid
             />
+          </div>
+           
           </Grid.Column>
         </Grid.Row>
       </Grid>
