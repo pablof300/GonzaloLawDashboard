@@ -22,23 +22,27 @@ const EditCaseForm = (props) => {
   const [stepCount, setStepCount] = useState(0);
   const [firstRender, setFirstRender] = useState(true);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (firstRender && props.caseIndex !== undefined) {
-      const ID = props.clientData.cases[props.caseIndex];
-      const caseToUpdate = (await getCaseById(ID)).data;
-      const caseSteps = caseToUpdate.steps;
-      let newStepDict = [];
-      for (let i = 0; i < caseSteps.length; i++) {
-        newStepDict[(i + 1).toString()] = caseSteps[i];
-      }
-      setStepDict(newStepDict);
-      setStepCount(caseSteps.length);
-      setCaseID(ID);
-      setType(caseToUpdate.type);
-      setStartDate(caseToUpdate.startDate);
-      setCaseCompleted(caseToUpdate.completed);
+      updateStateOnRender()
     }
   }, [firstRender]);
+
+  const updateStateOnRender = async () => {
+    const ID = props.clientData.cases[props.caseIndex];
+    const caseToUpdate = (await getCaseById(ID)).data;
+    const caseSteps = caseToUpdate.steps;
+    let newStepDict = [];
+    for (let i = 0; i < caseSteps.length; i++) {
+      newStepDict[(i + 1).toString()] = caseSteps[i];
+    }
+    setStepDict(newStepDict);
+    setStepCount(caseSteps.length);
+    setCaseID(ID);
+    setType(caseToUpdate.type);
+    setStartDate(caseToUpdate.startDate);
+    setCaseCompleted(caseToUpdate.completed);
+  }
 
   const createOrUpdateCase = async () => {
     if (props.caseIndex !== undefined) {
