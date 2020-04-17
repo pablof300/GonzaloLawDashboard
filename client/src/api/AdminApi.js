@@ -3,17 +3,17 @@ import Cookies from "js-cookie";
 
 const getAllClients = async () => {
   let axiosResponse = await API.get("/admin/clients", {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve clients!"
+        error: "Unable to retrieve clients!",
       };
     });
   return axiosResponse;
@@ -21,17 +21,17 @@ const getAllClients = async () => {
 
 const getAllOtherClients = async () => {
   let axiosResponse = await API.get("/admin/otherClients", {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve clients!"
+        error: "Unable to retrieve clients!",
       };
     });
   return axiosResponse;
@@ -89,15 +89,15 @@ const addEvent = async (title, type, startDate, duration, notes, clientId) => {
       headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
     }
   )
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve events!"
+        error: "Unable to retrieve events!",
       };
     });
   return axiosResponse;
@@ -105,9 +105,9 @@ const addEvent = async (title, type, startDate, duration, notes, clientId) => {
 
 const addExistingClient = async (id) => {
   let axiosResponse = await API.post(`/admin/add/${id}`, id, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
     .catch(error => {
@@ -115,7 +115,7 @@ const addExistingClient = async (id) => {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve client!"
+        error: "Unable to retrieve client!",
       };
     });
   return axiosResponse;
@@ -169,14 +169,12 @@ const addClient = async (
     files: [],
     cases: []
   };
-  console.log("Adding the user")
-  console.log(userData)
-  let axiosResponse = await API.post(
-    "/admin/client",
-    userData,
-    { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
-  )
-    .then(response => {
+  console.log("Adding the user");
+  console.log(userData);
+  let axiosResponse = await API.post("/admin/client", userData, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((response) => {
       return response.data;
     })
     .catch(error => {
@@ -190,27 +188,45 @@ const addClient = async (
   return axiosResponse;
 };
 
-const addCase = async (
-  type,
-  startDate,
-  completed,
-  steps,
-  userID
-) => {
+const addCase = async (type, startDate, completed, steps, userID) => {
   let caseData = {
     type: type,
     startDate: startDate,
     caseCompleted: completed,
-    steps: steps
+    steps: steps,
   };
-  console.log("Adding the user")
-  console.log(caseData)
-  let axiosResponse = await API.post(
-    `user/${userID}/cases`,
-    caseData,
-    { headers: { Authorization: `Bearer ${Cookies.get("jwt")}` } }
-  )
-    .then(response => {
+  console.log("Adding the user");
+  console.log(caseData);
+  let axiosResponse = await API.post(`user/${userID}/cases`, caseData, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve events!",
+      };
+    });
+  return axiosResponse;
+};
+
+const updateCase = async (type, startDate, completed, steps, caseID) => {
+  let caseData = {
+    type: type,
+    startDate: startDate,
+    caseCompleted: completed,
+    steps: steps,
+  };
+  console.log("Updating the case");
+  console.log(caseData);
+  let axiosResponse = await API.put(`/case/${caseID}`, caseData, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((response) => {
       return response.data;
     })
     .catch(error => {
@@ -221,12 +237,48 @@ const addCase = async (
         error: "Unable to retrieve events!"
       };
     });
+  return axiosResponse;
+};
+
+const getAdminByIdAdmin = async (id) => {
+  let axiosResponse = await API.get(`/admin/getAdminCalendarAdmin/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        if (error.response) {
+          return { error: error.response.data.error };
+        }
+        return {
+          error: "Unable to retrieve case!"
+        };
+      });
+  return axiosResponse;
+};
+
+const getAdminByIdUser = async (id) => {
+  let axiosResponse = await API.get(`/admin/getAdminCalendarUser/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        if (error.response) {
+          return { error: error.response.data.error };
+        }
+        return {
+          error: "Unable to retrieve case!"
+        };
+      });
   return axiosResponse;
 };
 
 const getAdminById = async (id) => {
   let axiosResponse = await API.get(`/admin/name/${id}`, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
     .then(response => {
       return response.data;
@@ -263,17 +315,32 @@ const getCurrentAdmin = async () => {
 
 const deleteClient = async (clientId) => {
   let axiosResponse = await API.put("/admin/remove/" + clientId, clientId, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response;
     })
-    .catch(error => {
+    .catch((error) => {
       return {
-        error: "Unable to delete client!"
+        error: "Unable to delete client!",
       };
     });
   return axiosResponse;
 };
 
-export { getEvents, getAllClients, getAllOtherClients, addEvent, addExistingClient, addClient, getCaseById, addCase, getAdminById, deleteClient };
+export {
+  getEvents,
+  getAllClients,
+  getAllOtherClients,
+  addEvent,
+  addExistingClient,
+  addClient,
+  getCaseById,
+  addCase,
+  updateCase,
+  getAdminById,
+  getAdminByIdAdmin,
+  getAdminByIdUser,
+  getCurrentAdmin,
+  deleteClient,
+};

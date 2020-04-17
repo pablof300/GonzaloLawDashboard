@@ -1,19 +1,14 @@
 import React from "react";
 import { Card, Button, Icon, Table } from "semantic-ui-react";
-import EditInvoiceForm from "./EditInvoiceForm.js";
-import InvoiceList from "./InvoiceList.js";
-import { getAllInvoices } from "../../../../../src/api/QBApi";
+import InvoiceList from "../../admin/clients/ClientInvoices/InvoiceList.js";
+import { getURL, getAllInvoices, checkURLStatus } from "../../../../src/api/QBApi";
 
-const InvoiceCard = (props) => {
+const ClientInvoiceCard = (props) => {
   return (
     <Card fluid>
       <Card.Content>
         <Card.Header>
           Invoices
-          <EditInvoiceForm
-            clientData = {props.clientData}
-            clientName = {props.clientName}
-          />
         </Card.Header>
       </Card.Content>
       <Card.Content>
@@ -34,4 +29,4 @@ const InvoiceCard = (props) => {
   );
 };
 
-export default InvoiceCard;
+export default ClientInvoiceCard;
