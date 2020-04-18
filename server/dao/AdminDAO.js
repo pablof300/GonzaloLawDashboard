@@ -20,7 +20,7 @@ exports.get = async (id) => {
   return admin;
 };
 
-exports.getById = async id => {
+exports.getById = async (id) => {
   const admin = await Admin.findById(id);
   if (!admin) {
     console.log("Could not find an admin for the given id!");
@@ -31,11 +31,12 @@ exports.getById = async id => {
 exports.getUserLawyers = async (id) => {
   const userLawyers = await Admin.find(
     { clients: { $in: [id] } },
-    "firstName secondName middleName contact imageUrl");
-    if(userLawyers){
-      return userLawyers
-    }
-    return null;
+    "firstName secondName middleName contact imageUrl"
+  );
+  if (userLawyers) {
+    return userLawyers;
+  }
+  return null;
 };
 
 exports.getByUsername = async (username) => {
@@ -99,11 +100,11 @@ exports.addExistingClient = async (id, clientId) => {
     id,
     { $addToSet: { clients: [user] } },
     { new: true },
-    function (err, data) { }
+    function (err, data) {}
   );
 
   return user;
-}
+};
 
 // TODO:
 // Update with better logic
@@ -137,15 +138,15 @@ exports.getAllClients = async (id) => {
   return users;
 };
 
-exports.getAllOtherClients = async id => {
+exports.getAllOtherClients = async (id) => {
   const admin = await Admin.findById(id);
   if (!admin) throw new NotFoundError();
 
   const users = await User.find({
     _id: {
-      $nin: admin.clients
-    }
+      $nin: admin.clients,
+    },
   });
 
   return users;
-}
+};

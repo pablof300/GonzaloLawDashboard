@@ -17,11 +17,11 @@ const InvoiceList = (props) => {
     loadInvoices();
   }
 
-  if(invoicesLoaded) {
+  if(invoicesLoaded && listOfInvoices) {
     for (let i = 0; i < listOfInvoices.length; i++) {
       arrayOfInvoices.push(listOfInvoices[i]);
     }
-    console.log(arrayOfInvoices);
+    ///console.log(arrayOfInvoices);
   }
 
   const showInvoiceList = arrayOfInvoices.map(invoice => {

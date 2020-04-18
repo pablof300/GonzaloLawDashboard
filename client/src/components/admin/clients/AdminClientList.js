@@ -6,15 +6,13 @@ import {
   Image,
   List,
   Container,
-  Modal
+  Modal,
 } from "semantic-ui-react";
 import AddClientForm from "./AddClientForm";
 import ClientCard from "./ClientCard";
 import Popup from "reactjs-popup";
 import "../Admin.css";
 import { getAllClients } from "../../../../src/api/AdminApi";
-
-
 
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
@@ -23,6 +21,8 @@ const ClientList = () => {
   const [listOfClients, setClientList] = useState([]);
   const [clients, setClients] = useState(false);
   const [isClientsPopulated, setIsClientsPopulated] = useState(false);
+  const [openClient, setOpenClient] = useState(false);
+  const [clientData, setClientData] = useState(null)
 
   const loadUsers = async () => {
     const lawyerClients = await getAllClients();
@@ -32,9 +32,9 @@ const ClientList = () => {
 
   const addClientCallback = (client) => {
     let currentClients = listOfClients;
-    currentClients.push(client)
-    setClientList(currentClients)
-  }
+    currentClients.push(client);
+    setClientList(currentClients);
+  };
 
   if (!clients) {
     loadUsers();
@@ -46,28 +46,26 @@ const ClientList = () => {
       myClientList.push(listOfClients[i]);
     }
   }
+ 
 
-  const showClientList = myClientList.map(client => {
+  const showClientList = myClientList.map((client) => {
     return (
       <List.Item>
         <List.Content floated="right">
-          <Popup
-            trigger={<Button onClick={e => ViewClient(e)}>View</Button>}
-            position="right center"
-            modal
-            closeOnDocumentClick
-          >
-            <ClientCard
-              clientData={client}
-              clientName={client.firstName + " " + client.secondName}
-              clientContact={client.contact}
-              setIsClientsPopulated={setClients}
-              setIsClientsPopulatedPagination={setIsClientsPopulated}
-            />
-            {/* This is kind of poorly named, but setClients, is setClientsPopulated in the client card, while 
-              setIsClientsPopulated is setIsClientsPopulatedPagination in the client card. Fix some naming conventions
-              for readability in the future.*/}
+        
+          <Popup open={openClient} modal trigger={<Button onClick={() => ViewClient()}>View</Button>} 
+          centered >
+          <ClientCard
+            openClient={openClient}
+            setOpenClient={setOpenClient}
+            clientData={client}
+            clientName={client.firstName + " " + client.secondName}
+            clientContact={client.contact}
+            setIsClientsPopulated={setClients}
+            setIsClientsPopulatedPagination={setIsClientsPopulated}
+          />
           </Popup>
+         
         </List.Content>
         <Image
           avatar
@@ -82,16 +80,22 @@ const ClientList = () => {
     );
   });
 
-  function ViewClient(e) {
+  function ViewClient() {
+    setOpenClient(true);
     console.log("view client happening.");
   }
 
   return (
     <Card className="Card">
-      <List divided verticalAlign="middle">
+      <List items divided verticalAlign="middle">
         <List.Item className="List-Header">
           <List.Content floated="right">
-            <AddClientForm addClientCallback={addClientCallback} setClients={setClients} setIsClientsPopulated={setIsClientsPopulated} isClientsPopulated={isClientsPopulated} />
+            <AddClientForm
+              addClientCallback={addClientCallback}
+              setClients={setClients}
+              setIsClientsPopulated={setIsClientsPopulated}
+              isClientsPopulated={isClientsPopulated}
+            />
           </List.Content>
           <List.Content id="content">Client List</List.Content>
         </List.Item>

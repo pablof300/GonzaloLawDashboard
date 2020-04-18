@@ -238,7 +238,6 @@ const MyAccount = (props) => {
               }
               size="huge"
               rounded
-              fluid
             />
             <Popup
               content="Click to Change Profile Picture"

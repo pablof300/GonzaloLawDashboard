@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 const checkURLStatus = async () => {
   let axiosResponse = await API.get("/payments/status")
     .then(response => {
-      console.log(response);
       return response.data;
     })
     .catch(error => {
@@ -22,7 +21,6 @@ const checkURLStatus = async () => {
 const getAllInvoices = async (customerName) => {
   let axiosResponse = await API.get(`/payments/invoices/?customerName=${customerName}`)
     .then(response => {
-      console.log(response);
       return response.data;
     })
     .catch(error => {
@@ -40,7 +38,6 @@ const getAllInvoices = async (customerName) => {
 const getURL = async () => {
   let axiosResponse = await API.get("/payments/oauth")
     .then(response => {
-      console.log(response);
       return response.data;
     })
     .catch(error => {

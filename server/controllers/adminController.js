@@ -1,4 +1,6 @@
 const adminDAO = require("../dao/AdminDAO");
+const userDAO = require("../dao/UserDAO");
+const fileDAO = require("../dao/FileDAO");
 const eventDAO = require("../dao/EventDAO");
 const catchErrors = require("../util/catchErrors.js");
 
@@ -14,7 +16,7 @@ exports.getUserLawyers = async (req, res) => {
     const law = await adminDAO.getUserLawyers(userID);
     return law;
   });
-}
+};
 
 exports.get = async (req, res) => {
   catchErrors(res, async () => {
@@ -59,6 +61,16 @@ exports.addClient = async (req, res) =>
     return adminDAO.addClient(req.adminId, req.body);
   });
 
+exports.updateClientById = async (req, res) =>
+  catchErrors(res, async () => {
+    return userDAO.update(req.params.userID, req.body);
+  });
+
+exports.getClientFilesById = async (req, res) =>
+  catchErrors(res, async () => {
+    return fileDAO.getAllFilesByUser(req.params.userID);
+  });
+
 exports.addExistingClient = async (req, res) =>
   catchErrors(res, async () => {
     return adminDAO.addExistingClient(req.adminId, req.params.clientId);
@@ -71,7 +83,7 @@ exports.getAllClients = async (req, res) =>
 
 exports.getAllOtherClients = async (req, res) =>
   catchErrors(res, async () => {
-    return adminDAO.getAllOtherClients(req.adminId)
+    return adminDAO.getAllOtherClients(req.adminId);
   });
 
 exports.getEvents = async (req, res) =>
@@ -83,9 +95,17 @@ exports.addEvent = async (req, res) =>
   catchErrors(res, async () => {
     let startDate = new Date(req.query.startDate);
     let endDateTime = new Date(req.query.startDate).getTime();
-    endDateTime += (req.query.duration * 60 * 1000);
+    endDateTime += req.query.duration * 60 * 1000;
 
-    let event = { title: req.query.title, type: req.query.type, startDate: startDate, endDate: new Date(endDateTime), notes: req.query.notes, admins: [req.adminId], users: [req.query.clientId] }
-    console.log(event)
-    return eventDAO.addEvent(event)
+    let event = {
+      title: req.query.title,
+      type: req.query.type,
+      startDate: startDate,
+      endDate: new Date(endDateTime),
+      notes: req.query.notes,
+      admins: [req.adminId],
+      users: [req.query.clientId],
+    };
+    console.log(event);
+    return eventDAO.addEvent(event);
   });
