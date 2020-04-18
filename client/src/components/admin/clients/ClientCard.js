@@ -3,9 +3,7 @@ import {
   Image,
   Item,
   Segment,
-  Card,
-  Popup,
-  Container,
+  Loader,
   Modal,
   Tab,
   Button,
@@ -45,35 +43,36 @@ const ClientCard = (props) => {
     {
       menuItem: "Cases",
       render: () => (
-        <Tab.Pane style={{ height: 430 }} attached={false} loading={isLoading}>
+        <div style={{ height: 400 }} >
           <ClientCaseCard
             clientData={props.clientData}
             setIsLoading={setIsLoading}
           />
-        </Tab.Pane>
+        </div>
       ),
     },
     {
       menuItem: "Invoices",
       render: () => (
-        <Tab.Pane style={{ height: 430 }} attached={false} loading={isLoading}>
+        <div style={{ height: 400 }}>
           <InvoiceCard
             clientData={props.clientData}
             clientName={props.clientName}
             setIsLoading={setIsLoading}
           />
-        </Tab.Pane>
+        </div>
       ),
     },
     {
       menuItem: "Files",
       render: () => (
-        <Tab.Pane style={{ height: 430 }} attached={false} loading={isLoading}>
+        <div style={{ height: 400 }} >
+        <Loader active={isLoading}/>
           <ClientFiles
             clientData={props.clientData}
             setIsLoading={setIsLoading}
           />
-        </Tab.Pane>
+        </div>
       ),
     },
   ];
@@ -121,13 +120,12 @@ const ClientCard = (props) => {
         </Item>
       </Item.Group>
       <Tab
-        style={{ marginBottom: 10 }}
+        style={{ marginTop:30}}
         renderActiveOnly={true}
         menu={{ pointing: true }}
         panes={panes}
       />
       <EditClient
-        clientData={clientData}
         editClient={editClient}
         setEditClient={setEditClient}
       />

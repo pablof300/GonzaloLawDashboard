@@ -6,19 +6,33 @@ import FooterComponent from "../../util/FooterComponent/FooterComponent";
 import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
-import PaymentCard from "../PaymentComponent/PaymentCard";
+import QBButton from "../../admin/dashboard/QBButton";
 import {verifyAdmin, verifyUser} from "../../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
 import CaseDetailsComponent from "./CaseDetailsComponent";
+import ClientInvoiceCard from "./ClientInvoiceCard";
 import Calendar from "../../calendar/Calendar";
-import { getEvents } from "../../../api/UserApi";
+import { getEvents, getCurrentUser } from "../../../api/UserApi";
+import { getURL, checkURLStatus } from "../../../api/QBApi";
 
 
-const ClientDashboard = () => {
+const ClientDashboard = (props) => {
   const [loading, setLoading] = useState(true);
   const [isVerified, setIsVerified] = useState(true);
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const [qbAuth, setQbAuth] = useState(false);
   const [events, setEvents] = useState([]);
+  const [userData, setUserData] = useState([]);
+
+  useEffect(async () => {
+    let urlStatus = await checkURLStatus();
+    if(urlStatus)
+    {
+      setQbAuth(true);
+      console.log("WERE ACTUALLY ONLINE.");
+    }
+  }, []);
 
   useEffect(() => {
     verifyUser().then(verified => {
@@ -29,6 +43,31 @@ const ClientDashboard = () => {
       setLoading(false);
     })
   }, []);
+
+  const loadUserData = async () => {
+    const user = (await getCurrentUser()).data;
+    if (user) {
+      setUserData(user);
+      setIsUserLoaded(true);
+    }
+  };
+  if (!isUserLoaded) {
+    loadUserData();
+  }
+
+  const startOAuth = async () => {
+    let urlStatus = await checkURLStatus();
+
+    if(urlStatus)
+    {
+      setQbAuth(true);
+      console.log("WERE ACTUALLY ONLINE.");
+    }
+  };
+
+  if (!qbAuth) {
+    setQbAuth(true);
+  }
 
   const setEventData = async () => {
     if (events.length > 0) {
@@ -45,7 +84,6 @@ const ClientDashboard = () => {
       console.log("Unable to fetch event data");
     }
   };
-
   if (loading) {
     return <></>
   }
@@ -76,7 +114,7 @@ const ClientDashboard = () => {
               <Calendar adminView={false} events={events} />
             </Grid.Column>
             <Grid.Column width={8}>
-              <PaymentCard />
+              <ClientInvoiceCard clientData={userData} clientName={userData.firstName + " " + userData.secondName} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>

@@ -250,6 +250,68 @@ const addCase = async (type, startDate, completed, steps, userID) => {
   return axiosResponse;
 };
 
+const updateCase = async (type, startDate, completed, steps, caseID) => {
+  let caseData = {
+    type: type,
+    startDate: startDate,
+    caseCompleted: completed,
+    steps: steps,
+  };
+  console.log("Updating the case");
+  console.log(caseData);
+  let axiosResponse = await API.put(`/case/${caseID}`, caseData, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve events!",
+      };
+    });
+  return axiosResponse;
+};
+
+const getAdminByIdAdmin = async (id) => {
+  let axiosResponse = await API.get(`/admin/getAdminCalendarAdmin/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        if (error.response) {
+          return { error: error.response.data.error };
+        }
+        return {
+          error: "Unable to retrieve case!"
+        };
+      });
+  return axiosResponse;
+};
+
+const getAdminByIdUser = async (id) => {
+  let axiosResponse = await API.get(`/admin/getAdminCalendarUser/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+  })
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        if (error.response) {
+          return { error: error.response.data.error };
+        }
+        return {
+          error: "Unable to retrieve case!"
+        };
+      });
+  return axiosResponse;
+};
+
 const getAdminById = async (id) => {
   let axiosResponse = await API.get(`/admin/name/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
@@ -315,4 +377,8 @@ export {
   deleteClient,
   updateClientInfoById,
   getClientFilesById,
+  updateCase,
+  getAdminByIdAdmin,
+  getAdminByIdUser,
+  getCurrentAdmin,
 };

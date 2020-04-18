@@ -3,7 +3,7 @@ import { Card } from "semantic-ui-react";
 import ProgBar from "./ProgBar.js";
 import { getCurrentUser } from "../../../../src/api/UserApi";
 
-const ProgCard = props => {
+const ProgCard = (props) => {
   const [userData, setUserData] = useState([]);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
 

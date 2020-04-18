@@ -1,35 +1,65 @@
-import React, { useState } from "react";
-import { Form, Card, Input, Button } from "semantic-ui-react";
+import React, { useState, useEffect } from "react";
+import { Form, Card, Input, Button, Radio } from "semantic-ui-react";
 
-const EditStepCard = props => {
-  const [stepNum, setStepNum] = useState(props.stepNum);
+const EditStepCard = (props) => {
+  const [stepTitle, setStepTitle] = useState(props.step);
+  const [stepDate, setStepDate] = useState(props.date);
+  const [stepDescription, setStepDescription] = useState(props.stepDescription);
+  const [completed, setCompleted] = useState(props.completed);
+
+  useEffect(() => {
+    props.updateStep({
+      step: stepTitle,
+      date: stepDate,
+      completed: completed,
+      stepDescription: stepDescription,
+      stepNumber: props.stepNumber,
+    });
+  });
+
+  const clearStep = () => {
+    setStepTitle(props.step);
+    setStepDate(props.date);
+    setStepDescription(props.stepDescription);
+    setCompleted(props.completed);
+  };
+
   return (
     <Card>
       <Card.Content>
-        <Card.Header>Step #{stepNum}</Card.Header>
+        <Card.Header>Step #{props.stepNumber}</Card.Header>
         <Form.Field
-          control = {Input}
-          labe = "Title"
-          placeholder="Title"
-          onChange={event => props.setStepTitle(event.target.value)}
-          />
-        <Form.Field
-          control = {Input}
-          label = "Date"
-          placeholder="Date"
-          onChange={event => props.setStepDate(event.target.value)}
+          control={Input}
+          label="Title"
+          value={stepTitle}
+          onChange={(event) => {
+            setStepTitle(event.target.value);
+          }}
         />
-        <Form.TextArea 
-        label="Description"
-        placeholder="Description"
-        onChange={event => props.setStepDescription(event.target.value)}
+        <Form.Field
+          control={Input}
+          label="Date"
+          value={stepDate}
+          onChange={(event) => {
+            setStepDate(event.target.value);
+          }}
+        />
+        <Form.TextArea
+          label="Description"
+          value={stepDescription}
+          onChange={(event) => {
+            setStepDescription(event.target.value);
+          }}
+        />
+        <Radio
+          toggle
+          label="Completed"
+          defaultChecked={completed}
+          onClick={() => {
+            setCompleted(!completed);
+          }}
         />
       </Card.Content>
-      <Button
-          size="small"
-          onClick={() => props.addToStepArray()}>
-          Add Step 
-        </Button>
     </Card>
   );
 };
