@@ -80,7 +80,7 @@ function AdminLogin() {
                   type="password"
                   onChange={event => setPassword(event.target.value)}
                 />
-                <Button color="orange" onClick={login}>
+                <Button className="loginButton" fluid onClick={login}>
                   Login
                 </Button>
               </Form>

@@ -9,5 +9,18 @@
   text-align: center;
 }
 .IconColor {
-  background-color: #ee8c3a !important;
+  background-color: #ee8b3adb !important;
+}
+
+.button.ui.fluid.button.loginButton{
+  background-color: #ee8b3adb;
+  color: white;
+}
+
+.ui.orange.segment:not(.inverted) {
+  border-top: 2px solid #ee8b3adb!important;
+}
+
+.ui.form input[type=text]:focus, .ui.form input[type=password]:focus{
+  border-color: #ee8b3adb;
 }

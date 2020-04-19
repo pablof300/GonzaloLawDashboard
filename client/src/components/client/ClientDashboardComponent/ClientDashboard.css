@@ -11,3 +11,129 @@
 .main_container{
     height: 100%;
 }
+
+.clientDashboard{
+    /* The image used */
+    background-image: url("https://www.gonzalolaw.com/newsite/wp-content/uploads/2015/04/testbg1.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.ui.grid>.column:not(.row){
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.ui.vertical.tabular.menu .item{
+    background-color: rgba(0,0,0,.05);
+}
+
+.ui.steps .step.active .title{
+    color: #ee8b3adb;
+}
+
+button.ui.primary.button.changePasswordButton{
+    background-color: #2b2147;
+    color: white;
+}
+
+button.ui.primary.button.changePasswordButton:hover{
+    background-color: #2b2147;
+    color: white;
+    opacity: 90%;
+}
+
+button.ui.green.small.icon.inverted.left.floated.left.labeled.button.contactLawyersButton{
+    color: #2b2147;
+    border-color: #2b2147;
+}
+
+button.ui.green.small.icon.inverted.left.floated.left.labeled.button.contactLawyersButton:hover{
+    color: white;
+    background-color: #2b2147;
+}
+
+button.ui.green.small.icon.inverted.left.floated.left.labeled.button.contactLawyersButton:focus{
+    color: white;
+    background-color: #2b2147;
+}
+
+button.ui.green.small.icon.inverted.left.floated.left.labeled.button.contactLawyersButton:active{
+    color: white;
+    background-color: #2b2147;
+    opacity: 90%;
+}
+
+.ui.inverted.green.button, .ui.inverted.green.buttons .button{
+    -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
+}
+
+.ui.inverted.purple.button, .ui.inverted.purple.buttons .button {
+    background-color: transparent;
+    -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
+    box-shadow: 0 0 0 2px #2b2147 inset!important;
+    color: #2b2147;
+}
+
+.ui.inverted.purple.button:hover, .ui.inverted.purple.buttons:hover .button:hover {
+    background-color: #2b2147;
+    -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
+    box-shadow: 0 0 0 2px #2b2147 inset!important;
+    color: white;
+}
+
+button.ui.primary.button.sendMessageButton, button.ui.primary.button.cancelMessageButton {
+    background-color: #ee8b3adb;
+}
+
+button.ui.primary.button.sendMessageButton:hover, button.ui.primary.button.cancelMessageButton:hover {
+    background-color: #ee8b3adb;
+    opacity: 90%;
+}
+
+.ui.inverted.blue.button, .ui.inverted.blue.buttons .button {
+    background-color: transparent;
+    -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
+    box-shadow: 0 0 0 2px #2b2147 inset!important;
+    color: #2b2147;
+}
+
+.ui.inverted.blue.button:hover, .ui.inverted.blue.buttons:hover .button:hover {
+    background-color: #2b2147;
+    -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
+    box-shadow: 0 0 0 2px #2b2147 inset!important;
+    color: white;
+}
+
+.ui.inverted.blue.button:focus, .ui.inverted.blue.buttons:focus .button:focus {
+    background-color: #2b2147;
+    -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
+    box-shadow: 0 0 0 2px #2b2147 inset!important;
+    color: white;
+}
+
+.ui.inverted.violet.button, .ui.inverted.violet.buttons .button {
+    background-color: transparent;
+    -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
+    box-shadow: 0 0 0 2px #2b2147 inset!important;
+    color: #2b2147;
+}
+
+.ui.inverted.violet.button:hover, .ui.inverted.violet.buttons:hover .button:hover {
+    background-color: #2b2147;
+    -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
+    box-shadow: 0 0 0 2px #2b2147 inset!important;
+    color: white;
+}
+
+.ui.inverted.violet.button:focus, .ui.inverted.violet.buttons:focus .button:focus {
+    background-color: #2b2147;
+    -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
+    box-shadow: 0 0 0 2px #2b2147 inset!important;
+    color: white;
+}
+

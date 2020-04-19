@@ -60,7 +60,7 @@ const AdminDashboard = () => {
   console.log("Events");
   console.log(events);
   return (
-    <div>
+    <div className="adminDashboard">
       <AdminNav />
       <Container className="ContainerPaddingCorrection1">
         <Grid divided>

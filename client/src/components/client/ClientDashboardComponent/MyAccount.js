@@ -365,10 +365,10 @@ const MyAccount = (props) => {
           <h3>Address</h3>
         </Grid.Row>
 
-       
-          <Grid.Row stretched={true} textAlign="left">
+
+        <Grid.Row stretched={true} textAlign="left">
           <Grid.Column textAlign="left">
-          <Form widths="equal">
+            <Form widths="equal">
               <Form.Group className="wrap" unstackable>
                 <Form.Input
                   label="Street"
@@ -415,17 +415,17 @@ const MyAccount = (props) => {
               </Form.Group>
             </Form>
           </Grid.Column>
-            
-          </Grid.Row>
-     
+
+        </Grid.Row>
+
 
         <Grid.Row>
           <h3>Email</h3>
         </Grid.Row>
-        
-          <Grid.Row stretched={true} textAlign="left">
+
+        <Grid.Row stretched={true} textAlign="left">
           <Grid.Column textAlign="left">
-          <Form widths="equal">
+            <Form widths="equal">
               <Form.Input
                 className="wrap"
                 label="Email"
@@ -438,9 +438,9 @@ const MyAccount = (props) => {
               />
             </Form>
           </Grid.Column>
-           
-          </Grid.Row>
-       
+
+        </Grid.Row>
+
 
         <Grid.Row>
           <h3>Account Password</h3>
@@ -455,6 +455,7 @@ const MyAccount = (props) => {
                 onClick={() => setChangePass(true)}
                 content="Change Password"
                 primary
+                className="changePasswordButton"
               />
             }
           />

@@ -21,7 +21,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successfulLogin, setSuccessfulLogin] = useState(false);
-  const [forgotPassword,  setForgotPassword] = useState(false)
+  const [forgotPassword, setForgotPassword] = useState(false)
 
 
   useEffect(() => {
@@ -54,7 +54,7 @@ function Login() {
     return <Redirect to="/dashboard" />;
   }
 
-  if(forgotPassword) {
+  if (forgotPassword) {
     return <Redirect to="/passwordreset" />;
   }
 
@@ -89,10 +89,10 @@ function Login() {
                 type="password"
                 onChange={event => setPassword(event.target.value)}
               />
-              <Button color="orange" fluid onClick={login}>
+              <Button className="loginButton" fluid onClick={login}>
                 Login
               </Button>
-              <Button style={{marginTop:10}} color="purple" fluid onClick={() => setForgotPassword(true)}>
+              <Button className="forgotButton" style={{ marginTop: 10 }} fluid onClick={() => setForgotPassword(true)}>
                 Forgot Password?
               </Button>
             </Form>
