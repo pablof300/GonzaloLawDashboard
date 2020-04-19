@@ -9,13 +9,13 @@ const FooterComponent = () => {
         <MenuItem>
           <Button>
             <Icon name="envelope" />
-            ngonzalo@gonzalolaw.com
+            <a href="mailto:ngonzalo@gonzalolaw.com">ngonzalo@gonzalolaw.com </a>
           </Button>
         </MenuItem>
         <MenuItem>
           <Button>
             <Icon name="phone" />
-            +1(216)527-7777
+            <a href= "tel:+1-216-527-7777">+1(216)527-7777</a>
           </Button>
         </MenuItem>
       </Menu.Menu>
