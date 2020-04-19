@@ -1,5 +1,6 @@
 const userController = require("../controllers/userController");
 const caseController = require("../controllers/caseController");
+const paymentsController = require("../controllers/paymentsController");
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
@@ -100,6 +101,12 @@ router.delete(
   "/:id/:caseid",
   passport.authenticate("adminLoggedIn", { session: false }),
   userController.deleteCase
+);
+//for clients to register themselves
+router.post(
+  "/client",
+  paymentsController.createCustomer,
+  userController.registerClient
 );
 
 

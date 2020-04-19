@@ -387,6 +387,70 @@ const getEvents = async () => {
   return axiosResponse;
 };
 
+const registerClient = async (
+  username,
+  password,
+  firstName,
+  secondName,
+  middleName,
+  otherName,
+  street,
+  city,
+  state,
+  zip,
+  homePhone,
+  workPhone,
+  cellPhone,
+  email,
+  birthDate,
+  companyName,
+  website,
+) => {
+  let userData = {
+    username: username,
+    password: password,
+    firstName: firstName,
+    secondName: secondName,
+    middleName: middleName,
+    otherName: otherName,
+    address: {
+      street: street,
+      city: city,
+      state: state,
+      zip: zip
+    },
+    company: {
+      companyName: companyName,
+      website: website,
+      companyLogoUrl: "",
+    },
+    contact: {
+      homePhone: homePhone,
+      workPhone: workPhone,
+      cellPhone: cellPhone,
+      email: email
+    },
+    birthDate: birthDate,
+    imageUrl: "https://react.semantic-ui.com/images/avatar/large/matthew.png",
+    files: [],
+    cases: []
+  };
+  console.log("Adding the user");
+  let axiosResponse = await API.post("/user/client", userData)
+    .then((response) => {
+      return response.data;
+    })
+    .catch(error => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve events!"
+      };
+    });
+  return axiosResponse;
+};
+
 export {
   getEvents,
   uploadUserProfilePicture,
@@ -403,5 +467,6 @@ export {
   getUserByIdAdmin,
   getUserByIdUser,
   checkIfCodeExistOrHasNotExpired,
+  registerClient,
   sendMessageToTeam
 };
