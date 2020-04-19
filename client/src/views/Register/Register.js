@@ -3,6 +3,7 @@ import {
   Button,
   Form,
   Input,
+  Label,
   Modal,
 } from "semantic-ui-react";
 import {registerClient} from '../../api/UserApi'
@@ -29,6 +30,7 @@ const Register = (props) =>{
     const [passwordError, setPasswordError] = useState(null);
     
   const createAccount = async () => {
+    console.log("ok this function triggd")
     if (password.length <= 8) {
         setPasswordError("Password must have at least 8 characters");
     }
@@ -36,6 +38,7 @@ const Register = (props) =>{
         setPasswordError("Password must have at least 1 number");
     }
     else {
+    setPasswordError(null);
     let addClientResponse = await registerClient(
         username,
         password,
@@ -114,10 +117,17 @@ const Register = (props) =>{
             type='password'
             placeholder="Password"
             value={password}
-            error ={passwordError}
             onChange={(event) => setPassword(event.target.value)}
             
           />
+          <Label
+            className={!passwordError ? "invisible" : ""}
+            basic
+            color="red"
+            pointing="left"
+            >
+            {passwordError}
+            </Label>
         </Form.Group>
         <Form.Group widths="equal">
           <Form.Field
