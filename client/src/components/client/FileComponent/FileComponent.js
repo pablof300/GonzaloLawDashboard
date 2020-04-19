@@ -29,6 +29,7 @@ const FileComponent = () => {
     fileName: null
   });
   const [isFilesPopulated, setIsFilesPopulated] = useState(false);
+  const [deletedFile, setDeletedFile] = useState(false)
 
   let itemsPerPage = 5,
     totalPages,
@@ -87,6 +88,10 @@ const FileComponent = () => {
       for (let i = startIndex; i < endIndex; i++) {
         allFileListInPagination.push(listOfFiles[i]);
       }
+      if(deletedFile && !allFileListInPagination[0]){
+        setCurrentPage(currentPage - 1)
+        setDeletedFile(false)
+      }
     }
     
   };
@@ -107,6 +112,7 @@ const FileComponent = () => {
     const fileIsDeleted = await deleteUserFileById(params);
     if (fileIsDeleted) {
       setIsFilesPopulated(false);
+      setDeletedFile(true)
       setConfirmDeletion({
         enabled: false,
         fileID: null,
