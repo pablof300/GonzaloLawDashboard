@@ -3,11 +3,12 @@ import {
   Icon,
   Item,
   Segment,
-  Loader,
   Modal,
   Tab,
   Button,
   Label,
+  Loader,
+  Dimmer,
 } from "semantic-ui-react";
 import ClientCaseCard from "./ClientCases/ClientCaseCard.js";
 import InvoiceCard from "./ClientInvoices/InvoiceCard";
@@ -15,6 +16,7 @@ import "../Admin.css";
 import ClientFiles from "./ClientFiles/ClientFiles";
 import EditClient from "./EditClient";
 import { deleteClient } from "../../../api/AdminApi";
+import Popup from "reactjs-popup";
 
 const defaultImage = "https://react.semantic-ui.com/images/wireframe/image.png";
 const ClientCard = (props) => {
@@ -47,7 +49,6 @@ const ClientCard = (props) => {
         <div style={{ height: 400 }}>
           <ClientCaseCard
             clientData={props.clientData}
-            setIsLoading={setIsLoading}
           />
         </div>
       ),
@@ -59,7 +60,6 @@ const ClientCard = (props) => {
           <InvoiceCard
             clientData={props.clientData}
             clientName={props.clientName}
-            setIsLoading={setIsLoading}
           />
         </div>
       ),
@@ -68,7 +68,8 @@ const ClientCard = (props) => {
       menuItem: "Files",
       render: () => (
         <div style={{ height: 400 }}>
-          <Loader active={isLoading} />
+        
+        <Loader active={isLoading} style={{marginTop:75}} />
           <ClientFiles
             clientData={props.clientData}
             setIsLoading={setIsLoading}
@@ -87,8 +88,8 @@ const ClientCard = (props) => {
 
   return (
     <div>
-      <Modal open={props.openClient} size="small">
-        <Segment>
+      <Popup open={props.openClient} modal size="small">
+      <Segment>
           <Item.Group unstackable>
             <Item>
               <Item.Image
@@ -210,7 +211,7 @@ const ClientCard = (props) => {
             </Modal.Content>
           </Modal>
         </Segment>
-      </Modal>
+      </Popup>
     </div>
   );
 };

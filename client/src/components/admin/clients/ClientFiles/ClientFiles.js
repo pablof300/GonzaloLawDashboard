@@ -107,7 +107,7 @@ function ClientFiles(props) {
   });
 
   return (
-    <div style={{ alignContent: "center", justifyContent: "center" }}>
+    <div>
       <Table attached="top" size="small" basic unstackable singleLine fixed>
         <Table.Header>
           <Table.Row>

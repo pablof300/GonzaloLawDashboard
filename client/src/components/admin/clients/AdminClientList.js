@@ -11,7 +11,6 @@ import {
 } from "semantic-ui-react";
 import AddClientForm from "./AddClientForm";
 import ClientCard from "./ClientCard";
-import Popup from "reactjs-popup";
 import "../Admin.css";
 import { getAllClients } from "../../../../src/api/AdminApi";
 
