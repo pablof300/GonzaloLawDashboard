@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Button,
   Form,
-  Icon,
   Input,
   Modal,
 } from "semantic-ui-react";
@@ -27,9 +26,16 @@ const Register = (props) =>{
     const [dob, setDob] = useState("")
     const [companyName, setCompanyName] = useState("");
     const [website, setWebsite] = useState("");
-     
-  const createAccount = async () => {
+    const [passwordError, setPasswordError] = useState(null);
     
+  const createAccount = async () => {
+    if (password.length <= 8) {
+        setPasswordError("Password must have at least 8 characters");
+    }
+    else if (!hasNumber(password)) {
+        setPasswordError("Password must have at least 1 number");
+    }
+    else {
     let addClientResponse = await registerClient(
         username,
         password,
@@ -58,7 +64,7 @@ const Register = (props) =>{
       console.log("Unable to add client");
     }
    
-    
+}
   };
 
   function handleCancel(){
@@ -82,6 +88,9 @@ const Register = (props) =>{
     setWebsite("");
   }
 
+  function hasNumber(pass) {
+    return /\d/.test(pass);
+  }
   
   
 
@@ -94,24 +103,26 @@ const Register = (props) =>{
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
-            label="Username"
+            label="Username *"
             placeholder="Username"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
           />
           <Form.Field
             control={Input}
-            label="Password"
+            label="Password *"
             type='password'
             placeholder="Password"
             value={password}
+            error ={passwordError}
             onChange={(event) => setPassword(event.target.value)}
+            
           />
         </Form.Group>
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
-            label="First name"
+            label="First name *"
             placeholder="First name"
             value={firstName}
             onChange={(event) => setFirstName(event.target.value)}
@@ -125,7 +136,7 @@ const Register = (props) =>{
           />
           <Form.Field
             control={Input}
-            label="Last name"
+            label="Last name *"
             placeholder="Last name"
             value={lastName}
             onChange={(event) => setLastName(event.target.value)}
@@ -217,7 +228,9 @@ const Register = (props) =>{
             onChange={(e) => setWebsite(e.target.value)}
           />
         </Form.Group>
-        <Button onClick={() => createAccount()}>Create Account</Button>
+        <Button onClick={() => createAccount()}
+            disabled={!username || !password || !firstName || !lastName}
+            >Create Account</Button>
         <Button onClick={handleCancel}>Cancel</Button>
       </Form>
     </Modal.Content>
