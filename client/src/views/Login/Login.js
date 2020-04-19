@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import logo from "../../assets/HorizontalLogo.png";
 import MessageComponent from "../../components/util/MessageComponent/MessageComponent";
 import { authenticateUser, verifyUser } from "../../api/AuthApi";
+import RegisterPage from '../Register/Register'
 import { Redirect } from "react-router-dom";
 import "./Login.css";
 import {
@@ -22,6 +23,7 @@ function Login() {
   const [error, setError] = useState("");
   const [successfulLogin, setSuccessfulLogin] = useState(false);
   const [forgotPassword,  setForgotPassword] = useState(false)
+  const [register, setRegister] = useState(false)
 
 
   useEffect(() => {
@@ -58,6 +60,10 @@ function Login() {
     return <Redirect to="/passwordreset" />;
   }
 
+  function Register(){
+    setRegister(true)
+  }
+
   return (
     <Grid stackable className="container">
       <Grid.Column width={4} />
@@ -77,7 +83,7 @@ function Login() {
           </Header>
           <Divider hidden />
           <Segment raised color="orange">
-            <Form>
+            <Form widths='equal'>
               <Form.Field
                 label="Username"
                 control={Input}
@@ -89,13 +95,17 @@ function Login() {
                 type="password"
                 onChange={event => setPassword(event.target.value)}
               />
-              <Button color="orange" fluid onClick={login}>
+              <Button  style={{width:"48%"}} color="orange" onClick={login}>
                 Login
               </Button>
-              <Button style={{marginTop:10}} color="purple" fluid onClick={() => setForgotPassword(true)}>
+              <Button floated='right' style={{width:"48%"}} color="orange" onClick={Register}>
+                Register
+              </Button>
+              <Button  style={{marginTop:10}} color="purple" fluid onClick={() => setForgotPassword(true)}>
                 Forgot Password?
               </Button>
             </Form>
+            <RegisterPage setRegister={setRegister} register={register} />
           </Segment>
         </Segment>
       </Grid.Column>
