@@ -31,7 +31,7 @@ const Register = (props) =>{
     
   const createAccount = async () => {
     console.log("ok this function triggd")
-    if (password.length <= 8) {
+    if (password.length < 8) {
         setPasswordError("Password must have at least 8 characters");
     }
     else if (!hasNumber(password)) {
