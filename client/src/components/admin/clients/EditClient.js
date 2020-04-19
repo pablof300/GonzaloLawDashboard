@@ -93,42 +93,42 @@ function EditClient(props) {
   const updateClientInfo = async () => {
     const data = {
       username: username,
-    firstName: firstName,
-    secondName: lastName,
-    middleName: middleName,
-    otherName: otherName,
-    address: {
-      street: street,
-      city: city,
-      state: state,
-      zip: zipCode,
-    },
-    company: {
-      companyName: companyName,
-      website: website,
-      companyLogoUrl: !(props.clientData && props.clientData.company)
-      ? ""
-      : props.clientData.company.companyLogoUrl,
-    },
-    contact: {
-      homePhone: homePhone,
-      workPhone: workPhone,
-      cellPhone: cellPhone,
-      email: email,
-    },
-    birthDate: dob,
-    }
-    const updated = await updateClientInfoById(props.clientData._id, data)
-    if(updated.ok){
-      alert("Client's Information updated successfully")
-      props.setEditClient(false)
-      RefreshPage()
+      firstName: firstName,
+      secondName: lastName,
+      middleName: middleName,
+      otherName: otherName,
+      address: {
+        street: street,
+        city: city,
+        state: state,
+        zip: zipCode,
+      },
+      company: {
+        companyName: companyName,
+        website: website,
+        companyLogoUrl: !(props.clientData && props.clientData.company)
+          ? ""
+          : props.clientData.company.companyLogoUrl,
+      },
+      contact: {
+        homePhone: homePhone,
+        workPhone: workPhone,
+        cellPhone: cellPhone,
+        email: email,
+      },
+      birthDate: dob,
+    };
+    const updated = await updateClientInfoById(props.clientData._id, data);
+    if (updated.ok) {
+      alert("Client's Information updated successfully");
+      props.setEditClient(false);
+      RefreshPage();
     }
   };
 
   const RefreshPage = () => {
-    window.location.reload(false)
-  }
+    window.location.reload(false);
+  };
   function handleCancel() {
     props.setEditClient(false);
   }

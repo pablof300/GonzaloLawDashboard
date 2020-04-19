@@ -25,11 +25,11 @@ function ClientFiles(props) {
       setListOfFiles(data.reverse());
     }
     setIsFilesPopulated(true);
-    props.setIsLoading(false)
+    props.setIsLoading(false);
   };
 
   if (!isFilesPopulated) {
-      props.setIsLoading(true)
+    props.setIsLoading(true);
     loadFiles();
   }
 
@@ -71,7 +71,7 @@ function ClientFiles(props) {
   performFilesPagination();
 
   function downloadFile(url, name) {
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.download = name + ".pdf";
     link.href = url;
     document.body.appendChild(link);
@@ -114,13 +114,13 @@ function ClientFiles(props) {
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Size</Table.HeaderCell>
             <Table.HeaderCell>
-            <Search
-                  size="mini"
-                  input="text"
-                  showNoResults={false}
-                  placeholder="Search..."
-                  onSearchChange={filterFilesByText}
-                ></Search>
+              <Search
+                size="tiny"
+                input="text"
+                showNoResults={false}
+                placeholder="Search..."
+                onSearchChange={filterFilesByText}
+              ></Search>
             </Table.HeaderCell>
           </Table.Row>
         </Table.Header>

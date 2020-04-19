@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import {
-  Image,
+  Icon,
   Item,
   Segment,
   Loader,
   Modal,
   Tab,
   Button,
+  Label,
 } from "semantic-ui-react";
 import ClientCaseCard from "./ClientCases/ClientCaseCard.js";
 import InvoiceCard from "./ClientInvoices/InvoiceCard";
@@ -43,7 +44,7 @@ const ClientCard = (props) => {
     {
       menuItem: "Cases",
       render: () => (
-        <div style={{ height: 400 }} >
+        <div style={{ height: 400 }}>
           <ClientCaseCard
             clientData={props.clientData}
             setIsLoading={setIsLoading}
@@ -66,8 +67,8 @@ const ClientCard = (props) => {
     {
       menuItem: "Files",
       render: () => (
-        <div style={{ height: 400 }} >
-        <Loader active={isLoading}/>
+        <div style={{ height: 400 }}>
+          <Loader active={isLoading} />
           <ClientFiles
             clientData={props.clientData}
             setIsLoading={setIsLoading}
@@ -77,99 +78,140 @@ const ClientCard = (props) => {
     },
   ];
 
-  return (
-    <Segment>
-      <Item.Group unstackable>
-        <Item>
-          <Item.Image
-            style={{ width: 70, height: 70 }}
-            size="small"
-            src={
-              !(props.clientData && props.clientData.imageUrl)
-                ? defaultImage
-                : props.clientData.imageUrl
-            }
-          />
-          <Item.Content>
-            <Item.Header>
-              {props.clientData.firstName + " " + props.clientData.secondName}
-            </Item.Header>
-            <Item.Description>
-              <p>
-                <b>Address: </b>
-                {props.clientData.address.street +
-                  ", " +
-                  props.clientData.address.city +
-                  ", " +
-                  props.clientData.address.state}
-              </p>
-              <p>
-                <b>Birthday: </b>
-                {!(props.clientData && props.clientData.birthDate)
-                  ? "N/A"
-                  : props.clientData.birthDate}
-              </p>
-              <p>
-                <b>Email: </b> {props.clientData.contact.email}
-              </p>
-              <p>
-                <b>Phone number: </b> {props.clientData.contact.cellPhone}
-              </p>
-            </Item.Description>
-          </Item.Content>
-        </Item>
-      </Item.Group>
-      <Tab
-        style={{ marginTop:30}}
-        renderActiveOnly={true}
-        menu={{ pointing: true }}
-        panes={panes}
-      />
-      <EditClient
-        editClient={editClient}
-        setEditClient={setEditClient}
-      />
+  function callNum() {
+    if(props.clientData.contact && props.clientData.contact.cellPhone){
+      const number = "tel:" + props.clientData.contact.cellPhone;
+      window.open(number);
+    }
+  }
 
-      <button class="positive ui button" onClick={() => setEditClient(true)}>
-        Edit Client Information
-      </button>
-      <button class="negative ui button" onClick={() => removeClient()}>
-        Remove
-      </button>
-     
-      <Modal
-        className="ui small modal"
-        position="bottom left"
-        closeOnDocumentClick
-        open={isOpen}
-        onOpen={handleOpen}
-        onClose={handleClose}
-      >
-        <Modal.Header>
-          <div className="ui small center aligned header Delete_Header">
-            Are you sure you want to remove {props.clientName} as a client?
-          </div>
-        </Modal.Header>
-        <Modal.Content className="ui center aligned">
+  return (
+    <div>
+      <Modal open={props.openClient} size="small">
+        <Segment>
+          <Item.Group unstackable>
+            <Item>
+              <Item.Image
+                style={{ width: 70, height: 70 }}
+                size="small"
+                src={
+                  !(props.clientData && props.clientData.imageUrl)
+                    ? defaultImage
+                    : props.clientData.imageUrl
+                }
+              />
+              <Item.Content>
+                <Item.Header>
+                  {!props.clientData
+                    ? ""
+                    : props.clientData.firstName +
+                      " " +
+                      props.clientData.secondName}
+                </Item.Header>
+                <Item.Description>
+                  <p>
+                    <b> Address: </b>
+                    {!props.clientData
+                      ? ""
+                      : props.clientData.address.street +
+                        ", " +
+                        props.clientData.address.city +
+                        ", " +
+                        props.clientData.address.state}
+                  </p>
+                  <p>
+                    <b> Birthday: </b>
+                    {!(props.clientData && props.clientData.birthDate)
+                      ? "N/A"
+                      : props.clientData.birthDate}
+                  </p>
+                  <p>
+                    <b> Email: </b>{" "}
+                    {!(props.clientData && props.clientData.contact)
+                      ? ""
+                      : props.clientData.contact.email}
+                  </p>
+                  <p>
+                    <b> Phone number: </b>
+                    {
+                      <Label onClick={callNum}>
+                      <Icon name="call" />
+                      {!(props.clientData && props.clientData.contact)
+                          ? ""
+                          : props.clientData.contact.cellPhone}
+                       
+                       
+                      </Label>
+                    }
+                  </p>
+                </Item.Description>
+              </Item.Content>
+            </Item>
+          </Item.Group>
+          <Tab
+            style={{ marginTop: 30 }}
+            renderActiveOnly={true}
+            menu={{ pointing: true }}
+            panes={panes}
+          />
+          <EditClient
+            editClient={editClient}
+            setEditClient={setEditClient}
+            clientData={props.clientData}
+          />
+
           <button
-            class="large negative left floated ui button Delete_Yes"
-            onClick={() => {
-              handleCloseAndDelete(props.clientData._id);
-            }}
+            class="positive ui button"
+            onClick={() => setEditClient(true)}
           >
-            Yes
+            Edit Client Information
           </button>
-          <button
-            class="ui large right floated button Delete_No"
-            onClick={() => {
-              handleClose();
-            }}
+          <button class="negative ui button" onClick={() => removeClient()}>
+            Remove
+          </button>
+
+          <Button
+            floated="right"
+            onClick={() => props.setOpenClient(false)}
           >
-            No
-          </button>
-        </Modal.Content>
+            Done
+          </Button>
+
+          <Modal
+            className="ui small modal"
+            position="bottom left"
+            closeOnDocumentClick
+            open={isOpen}
+            onOpen={handleOpen}
+            onClose={handleClose}
+          >
+            <Modal.Header>
+              <div className="ui small center aligned header Delete_Header">
+                Are you sure you want to remove {props.clientName} as a client?
+              </div>
+            </Modal.Header>
+            <Modal.Content className="ui center aligned">
+              <button
+                class="large negative left floated ui button Delete_Yes"
+                onClick={() => {
+                  handleCloseAndDelete(props.clientData._id);
+                }}
+              >
+                Yes
+              </button>
+              <button
+                class="ui large right floated button Delete_No"
+                onClick={() => {
+                  handleClose();
+                }}
+              >
+                No
+              </button>
+            </Modal.Content>
+          </Modal>
+        </Segment>
       </Modal>
-    </Segment>
+    </div>
   );
 };
 

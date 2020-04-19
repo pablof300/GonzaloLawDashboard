@@ -5,6 +5,7 @@ import {
   Icon,
   Image,
   List,
+  Table,
   Container,
   Modal,
 } from "semantic-ui-react";
@@ -22,7 +23,7 @@ const ClientList = () => {
   const [clients, setClients] = useState(false);
   const [isClientsPopulated, setIsClientsPopulated] = useState(false);
   const [openClient, setOpenClient] = useState(false);
-  const [clientData, setClientData] = useState(null)
+  const [clientData, setClientData] = useState(null);
 
   const loadUsers = async () => {
     const lawyerClients = await getAllClients();
@@ -46,28 +47,18 @@ const ClientList = () => {
       myClientList.push(listOfClients[i]);
     }
   }
- 
+
+  function ViewClient(client) {
+    setOpenClient(true);
+    console.log("view client happening.");
+    setClientData(client);
+  }
 
   const showClientList = myClientList.map((client) => {
     return (
-      <List.Item>
-        <List.Content floated="right">
-        
-          <Popup open={openClient} modal trigger={<Button onClick={() => ViewClient()}>View</Button>} 
-          centered >
-          <ClientCard
-            openClient={openClient}
-            setOpenClient={setOpenClient}
-            clientData={client}
-            clientName={client.firstName + " " + client.secondName}
-            clientContact={client.contact}
-            setIsClientsPopulated={setClients}
-            setIsClientsPopulatedPagination={setIsClientsPopulated}
-          />
-          </Popup>
-         
-        </List.Content>
+      <List.Item key={client._id}>
         <Image
+        style={{width:40, height:40}}
           avatar
           src={!(client && client.imageUrl) ? defaultProfile : client.imageUrl}
         />
@@ -76,18 +67,16 @@ const ClientList = () => {
             ? "nuttin loaded"
             : client.firstName + " " + client.secondName}
         </List.Content>
+        <List.Content floated="right">
+          <Button onClick={() => ViewClient(client)}>View</Button>
+        </List.Content>
       </List.Item>
     );
   });
 
-  function ViewClient() {
-    setOpenClient(true);
-    console.log("view client happening.");
-  }
-
   return (
     <Card className="Card">
-      <List items divided verticalAlign="middle">
+      <List verticalAlign='middle' divided verticalAlign="middle">
         <List.Item className="List-Header">
           <List.Content floated="right">
             <AddClientForm
@@ -101,6 +90,14 @@ const ClientList = () => {
         </List.Item>
         {showClientList}
       </List>
+
+      <ClientCard
+        openClient={openClient}
+        setOpenClient={setOpenClient}
+        clientData={clientData}
+        setIsClientsPopulated={setClients}
+        setIsClientsPopulatedPagination={setIsClientsPopulated}
+      />
     </Card>
   );
 };
