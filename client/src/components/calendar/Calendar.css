@@ -15,7 +15,7 @@
   color: white;
 }
 
-.ui.primary.button.monthlyViewButton:hover {
+/*.ui.primary.button.monthlyViewButton:hover {
   background-color: #2b2147;
   opacity: 90%;
 }
@@ -24,7 +24,7 @@
   background-color: #2b2147;
   color: white;
   opacity: 90%;
-}
+}*/
 
 button.fc-today-button.fc-button.fc-button-primary{
   background-color: #2b2147;
@@ -40,14 +40,14 @@ button.fc-prev-button.fc-button.fc-button-primary {
 button.fc-next-button.fc-button.fc-button-primary {
   background-color: #2b2147;
 }
-button.fc-prev-button.fc-button.fc-button-primary:hover {
+/*button.fc-prev-button.fc-button.fc-button-primary:hover {
   background-color: #2b2147;
   opacity: 90%;
 }
 button.fc-next-button.fc-button.fc-button-primary:hover {
   background-color: #2b2147;
   opacity: 90%;
-}
+}*/
 
 .fc-unthemed td.fc-today{
   background: #ee8b3a50;
