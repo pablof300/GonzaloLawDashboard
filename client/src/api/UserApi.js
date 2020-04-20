@@ -3,17 +3,17 @@ import Cookies from "js-cookie";
 
 const getCurrentUser = async () => {
   let axiosResponse = await API.get("/user/", {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error !== null && error.response) {
         return { error: error.response };
       }
       return {
-        error: "Unable to retrieve user!"
+        error: "Unable to retrieve user!",
       };
     });
 
@@ -33,6 +33,30 @@ const sendMessageToTeam = async (params) => {
   return true;
 };
 
+const sendEmailWithoutAuth = async (params, id, name) => {
+  let result = null;
+  result = await API.post(`/codes/postCode/${id}`, params)
+    .then((res) => {
+      if (res.data && res.data.data) {
+        const data = res.data.data;
+        const code = data.code;
+        const message = `<h3>Hi ${name},</h3> <p>Use the code below to help reset your password.</p> <p><h2><b>${code}</b></h2></p>`;
+        const from = "GonzaloLaw <no-reply@mail.gonzalolaw.com>";
+        params.from = from;
+        params.html = message;
+       const resultR =  API.post("codes/email/emailCode", params)
+       console.log(resultR)
+       return resultR;
+      }
+    })
+    .catch((error) => {
+      if (error && error.response) {
+        console.log(error.response);
+        return false;
+      }
+    });
+};
+
 const sendEmail = async (params, id, name) => {
   let result = null;
   result = await API.post(`/codes/${id}`, params, {
@@ -43,7 +67,7 @@ const sendEmail = async (params, id, name) => {
         const data = res.data.data;
         const code = data.code;
         const message = `<h3>Hi ${name},</h3> <p>Use the code below to help reset your password.</p> <p><h2><b>${code}</b></h2></p>`;
-        const from = "GonzaloLaw <no-eply@mail.gonzalolaw.com>";
+        const from = "GonzaloLaw <no-reply@mail.gonzalolaw.com>";
         params.from = from;
         params.html = message;
         const sEmail = async () => {
@@ -75,8 +99,8 @@ const sendEmail = async (params, id, name) => {
   return result;
 };
 
- const updatePasswordAtLogin = async (params, id) =>{
-  let axiosResponse = await API.put(`/user/password/${id}`,params)
+const updatePasswordAtLogin = async (params, id) => {
+  let axiosResponse = await API.put(`/user/password/${id}`, params)
     .then((response) => {
       return response.data;
     })
@@ -90,7 +114,7 @@ const sendEmail = async (params, id, name) => {
     });
 
   return axiosResponse;
-}
+};
 
 const updatePassword = async (params) => {
   const success = await updateUserData(params).then((res) => {
@@ -104,38 +128,38 @@ const updatePassword = async (params) => {
   return success;
 };
 
-const getUserByIdUser = async id => {
+const getUserByIdUser = async (id) => {
   let axiosResponse = await API.get(`/user/getUserCalendarUser/${id}`, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error !== null && error.response) {
         return { error: error.response };
       }
       return {
-        error: "Unable to retrieve user!"
+        error: "Unable to retrieve user!",
       };
     });
 
   return axiosResponse;
 };
 
-const getUserByIdAdmin = async id => {
+const getUserByIdAdmin = async (id) => {
   let axiosResponse = await API.get(`/user/getUserCalendarAdmin/${id}`, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error !== null && error.response) {
         return { error: error.response };
       }
       return {
-        error: "Unable to retrieve user!"
+        error: "Unable to retrieve user!",
       };
     });
 
@@ -157,6 +181,30 @@ const getAllUserFiles = async () => {
       }
       return {
         error: "Unable to retrieve all user's files!",
+      };
+    });
+
+  return axiosResponse;
+};
+
+const checkIfCodeExistOrHasNotExpiredWithoutAuth = async (code, id) => {
+  let axiosResponse = await API.get(`/codes/getCode/${code}/${id}`)
+    .then((response) => {
+      // console.log(response)
+      console.log(response)
+      if (response && response.data && response.data.ok) {
+        //edwarddubi400@gmail.com
+        return true;
+      }
+      return false;
+    })
+    .catch((error) => {
+      if (error !== null && error.response) {
+        // console.log( error.response)
+        return false;
+      }
+      return {
+        error: "Unable to retrieve user!",
       };
     });
 
@@ -211,9 +259,9 @@ const getAllLawyersWorkingOnUserCase = async () => {
   return result;
 };
 
-const uploadUserProfilePicture = (params) => {
+const uploadUserProfilePicture = async (params, callRes) => {
   console.log("Preparing to upload Profile Picture");
-  API.post("/fileAws", {
+  let axiosResponse = await API.post("/fileAws", {
     fileName: params.fileName,
     fileType: params.fileType,
     userID: params.userID,
@@ -229,32 +277,26 @@ const uploadUserProfilePicture = (params) => {
         },
       };
 
-      API.put(signedRequest, params.file[0], options)
+      return API.put(signedRequest, params.file[0], options)
         .then((result) => {
           console.log("We got response from s3");
 
           const userData = {
             imageUrl: url,
           };
-          updateUserData(userData).then((res) => {
-            if (res) {
-              alert("Profile Picture updated successfully");
-              console.log("Profile Picture updated successfully");
-              RefreshPage();
-            }
-          });
+          const res = updateUserData(userData);
+          return res;
         })
         .catch((error) => {
           alert(JSON.stringify(error));
+          return error;
         });
     })
     .catch((error) => {
       alert(JSON.stringify(error));
+      return error;
     });
-};
-
-const RefreshPage = () => {
-  window.location.reload(false);
+  return axiosResponse;
 };
 
 const getUserByEmail = async (email) => {
@@ -466,7 +508,9 @@ export {
   checkIfUserUploadingFileExist,
   getUserByIdAdmin,
   getUserByIdUser,
+  sendEmailWithoutAuth,
   checkIfCodeExistOrHasNotExpired,
   registerClient,
-  sendMessageToTeam
+  sendMessageToTeam,
+  checkIfCodeExistOrHasNotExpiredWithoutAuth,
 };

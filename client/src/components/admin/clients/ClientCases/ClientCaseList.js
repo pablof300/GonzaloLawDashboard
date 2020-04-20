@@ -8,6 +8,7 @@ const ClientCaseList = (props) => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [userCaseData, setUserCaseData] = useState([]);
   const [cases, setCases] = useState(false);
+  const [editCase, setEditCase] = useState(false)
 
   const loadCases = async () => {
     if (props.clientData) {
@@ -50,11 +51,21 @@ const ClientCaseList = (props) => {
             {curCase.startDate + ": " + curCase.type}
           </Accordion.Title>
           <Accordion.Content active={activeIndex === i}>
+            <Button
+              style={{ marginBottom: 8 }}
+              size="small"
+              floated="right"
+              color="yellow"
+              onClick={() => setEditCase(true)}
+            >
+              <Icon name="plus" size="small" />
+              Edit Case
+            </Button>
             <EditCaseForm
               caseIndex={i}
               clientData={props.clientData}
-              triggerButtonColor={"yellow"}
-              triggerButtonText={"Edit Case"}
+              setEditCase={setEditCase}
+              editCase={editCase}
             />
             <ProgCard
               case={userCaseData[i]}

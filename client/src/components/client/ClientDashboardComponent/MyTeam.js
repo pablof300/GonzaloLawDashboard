@@ -14,9 +14,21 @@ import {
   Checkbox,
   Dropdown,
   TextArea,
+  Transition,
+  TransitionablePortal,
+  Dimmer,
+  Segment,
+  List,
+  Label,
 } from "semantic-ui-react";
 import "../FileComponent/FileComponent.css";
-import { getAllLawyersWorkingOnUserCase, getCurrentUser, sendMessageToTeam } from "../../../../src/api/UserApi";
+import {
+  getAllLawyersWorkingOnUserCase,
+  getCurrentUser,
+  sendMessageToTeam,
+} from "../../../../src/api/UserApi";
+import Snackbar from "../../../Snackbar";
+import "../../../Snackbar.css";
 
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
@@ -32,6 +44,12 @@ const MyTeam = (props) => {
   const [disableDone, setDisableDone] = useState(true);
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
+  const [snackbar, setSnackBar] = useState({
+    enable: false,
+    message: "Success",
+    type: "success",
+    color: "green",
+  });
 
   let itemsPerPage = 3,
     totalPages,
@@ -44,6 +62,7 @@ const MyTeam = (props) => {
     if (userLawyers) {
       setListOfLawyers(userLawyers);
       setUserLawyers(true);
+
       props.setIsLoading(false);
     }
   };
@@ -87,54 +106,62 @@ const MyTeam = (props) => {
   };
 
   const sendMessage = async () => {
-    const user = (await getCurrentUser()).data
+    const user = (await getCurrentUser()).data;
     if (user) {
       if (message && subject) {
         let to = "";
         const from = user.secondName + " <" + user.contact.email + "> ";
         let c = 0;
-        emailThisTeam.map(lawyer => {
+        emailThisTeam.map((lawyer) => {
           if (c === 0) {
-            to = lawyer.email
+            to = lawyer.email;
           } else {
-            to = to.concat(', ').concat(lawyer.email)
+            to = to.concat(", ").concat(lawyer.email);
           }
           c++;
-
-        })
+        });
         const mailOptions = {
           from: from,
           to: to,
           subject: subject,
-          text: message
-        }
-        const res = await sendMessageToTeam(mailOptions)
+          text: message,
+        };
+        const res = await sendMessageToTeam(mailOptions);
         if (res) {
-          alert("Message has been sent successfully")
           handleMessageCancel();
+          setEmailThisTeam([]);
+          setDisableDone(true);
+          setContactTeam(false);
+          setSnackBar({
+            enable: true,
+            message: "Message sent successfully. Please wait...",
+            type: "checkmark",
+            color: "green",
+          });
+          setTimeout(() => {
+            RefreshPage();
+          }, 1900);
         }
-
-
       }
     } else {
-      alert("User logged out or user session has expired")
+      setSnackBar({
+        enable: true,
+        message: "User logged out or user session has expired",
+        type: "warning",
+        color: "red",
+      });
     }
-
   };
 
   const RefreshPage = () => {
-    window.location.reload(false)
-  }
+    window.location.reload(false);
+  };
 
   const handleMessageCancel = () => {
     setOpenEmailBox(false);
-    setContactTeam(false)
-    setMessage("")
-    setSubject("")
-    setEmailThisTeam([])
-    setDisableDone(true)
-    setUserLawyers(false)
-    RefreshPage()
+    setMessage("");
+    setSubject("");
+    //setUserLawyers(false);
   };
 
   const addLawyer = (lawyer) => {
@@ -256,62 +283,64 @@ const MyTeam = (props) => {
   });
 
   return (
-    <Table.HeaderCell>
-      <div className="center">
-        <h1>My Team</h1>
-      </div>
+    <div>
+      <Table.HeaderCell>
+        <div className="center">
+          <h1>My Team</h1>
+        </div>
 
-      <Table
-        attached="bottom"
-        size="small"
-        unstackable={true}
-        singleLine
-        fixed
-        padded="very"
-      >
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Profile Picture</Table.HeaderCell>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>
-              <Search
-                loading={isLoading}
-                input="text"
-                showNoResults={false}
-                placeholder="Search Lawyer..."
-                onSearchChange={filterTeamByText}
-              ></Search>
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        {myLawyersList}
-        <Table.Footer>
-          <Table.Row>
-            <Table.HeaderCell colSpan="3">
-              <Menu floated="right" pagination>
-                <Pagination
-                  pointing
-                  secondary
-                  activePage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setPageChange}
-                ></Pagination>
-              </Menu>
-              <div>
-                <Popup
-                  content="Contact the team handling your case"
-                  trigger={
-                    <Button
-                      className={listOfLawyers.length > 0 ? "contactLawyersButton" : "invisible"}
-                      floated="left"
-                      icon
-                      inverted
-                      labelPosition="left"
-                      color="green"
-                      size="small"
-                      onClick={userContactTeam}
-                    >
-                      <Icon name="chat" /> Contact My Team
+        <Table
+          attached="bottom"
+          size="small"
+          unstackable={true}
+          singleLine
+          fixed
+          padded="very"
+        >
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Profile Picture</Table.HeaderCell>
+              <Table.HeaderCell>Name</Table.HeaderCell>
+              <Table.HeaderCell>
+                <Search
+                  loading={isLoading}
+                  input="text"
+                  disabled={contactTeam}
+                  showNoResults={false}
+                  placeholder="Search Lawyer..."
+                  onSearchChange={filterTeamByText}
+                ></Search>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          {myLawyersList}
+          <Table.Footer>
+            <Table.Row>
+              <Table.HeaderCell colSpan="3">
+                <Menu floated="right" pagination>
+                  <Pagination
+                    pointing
+                    secondary
+                    activePage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setPageChange}
+                  ></Pagination>
+                </Menu>
+                <div>
+                  <Popup
+                    content="Contact the team handling your case"
+                    trigger={
+                      <Button
+                        className={listOfLawyers.length > 0 ? "contactLawyersButton" : "invisible"}
+                        floated="left"
+                        icon
+                        inverted
+                        labelPosition="left"
+                        color="green"
+                        size="small"
+                        onClick={userContactTeam}
+                      >
+                        <Icon name="chat" /> Contact My Team
                       </Button>
                   }
                 />
@@ -329,40 +358,67 @@ const MyTeam = (props) => {
                 >
                   <Icon name="check" /> Done
                   </Button>
-              </div>
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Footer>
-      </Table>
-      <Modal open={openEmailBox} size="small">
-        <Modal.Header>Send a message to your Team</Modal.Header>
-        <Modal.Content>
+                </div>
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Footer>
+        </Table>
+        <div></div>
+      </Table.HeaderCell>
 
-          <Form widths="equal">
-            <Dropdown selection={false} style={{ marginBottom: 10 }} placeholder="To" selection options={emailThisTeam} />
-            <Form.Input
-              className="wrap"
-              label="Subject"
-              type='text'
-              onChange={(e) => setSubject(e.target.value)}
-              placeholder="Subject"
-              labelPosition="left"
-              value={subject}
-            />
-            <TextArea
-              className="wrap"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              style={{ minHeight: 200, marginBottom: 20 }}
-              placeholder="Type message here..."
-            />
-            <Button className="sendMessageButton" onClick={sendMessage} content="Send Message" primary />
-            <Button className="cancelMessageButton" onClick={handleMessageCancel} content="Cancel" primary />
-          </Form>
-        </Modal.Content>
-      </Modal>
+      <div className="center2">
+        <Transition visible={openEmailBox} animation="fade" duration={200}>
+          <Dimmer.Inner active={openEmailBox} page />
+        </Transition>
+        <TransitionablePortal
+          closeOnDocumentClick={false}
+          transition={{ animation: "scale", duration: 200 }}
+          open={openEmailBox}
+          size="small"
+        >
+          <Segment
+            className="center2"
+            style={{
+              left: "25%",
+              position: "fixed",
+              top: "20%",
+              zIndex: 1000,
+            }}
+          >
+            <Modal.Header>Send a message to your Team</Modal.Header>
+            <Form widths="equal">
+              <Dropdown
+                selection={false}
+                style={{ marginBottom: 10 }}
+                placeholder="To"
+                selection
+                options={emailThisTeam}
+              />
+              <Form.Input
+                className="wrap"
+                label="Subject"
+                type="text"
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Subject"
+                labelPosition="left"
+                value={subject}
+              />
+              <TextArea
+                className="wrap"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                style={{ minHeight: 200, marginBottom: 20 }}
+                placeholder="Type message here..."
+              />
+              <Button className="sendMessageButton" onClick={sendMessage} content="Send Message" primary />
+              <Button className="cancelMessageButton" onClick={handleMessageCancel} content="Cancel" primary />
+            </Form>
+          </Segment>
+        </TransitionablePortal>
+      </div>
 
-    </Table.HeaderCell>
+      <Snackbar snackbar={snackbar} setSnackBar={setSnackBar} />
+    </div>
   );
 };
 

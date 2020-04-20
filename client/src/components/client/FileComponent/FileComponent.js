@@ -9,14 +9,15 @@ import {
   Card,
   Search,
   TransitionablePortal,
-  Segment
+  Segment,
 } from "semantic-ui-react";
 import "./FileComponent.css";
 import FileUploadComponent from "./FileUploadComponent";
 import {
   getAllUserFiles,
-  deleteUserFileById
+  deleteUserFileById,
 } from "../../../../src/api/UserApi";
+import Snackbar from "../../../Snackbar";
 
 const FileComponent = () => {
   const [listOfFiles, setListOfFiles] = useState([]);
@@ -26,9 +27,16 @@ const FileComponent = () => {
   const [confirmDeletion, setConfirmDeletion] = useState({
     enabled: false,
     fileID: null,
-    fileName: null
+    fileName: null,
+  });
+  const [snackbar, setSnackBar] = useState({
+    enable: false,
+    message: "Success",
+    type: "checkmark",
+    color: "green",
   });
   const [isFilesPopulated, setIsFilesPopulated] = useState(false);
+  const [deletedFile, setDeletedFile] = useState(false);
 
   let itemsPerPage = 5,
     totalPages,
@@ -38,11 +46,10 @@ const FileComponent = () => {
 
   const loadFiles = async () => {
     const data = (await getAllUserFiles()).data;
-    if(data){
+    if (data) {
       setListOfFiles(data.reverse());
       setIsFilesPopulated(true);
     }
-    
   };
 
   if (!isFilesPopulated) {
@@ -52,7 +59,7 @@ const FileComponent = () => {
   const filterFilesByText = (e, { value }) => {
     setIsLoading(true);
 
-    const results = listOfFiles.filter(file => {
+    const results = listOfFiles.filter((file) => {
       return (
         value.length > 0 &&
         file.name.toLowerCase().indexOf(value.toLowerCase().trim()) !== -1
@@ -75,7 +82,7 @@ const FileComponent = () => {
   };
 
   const performFilesPagination = () => {
-    if(listOfFiles){
+    if (listOfFiles) {
       if (listOfFiles.length % itemsPerPage === 0) {
         totalPages = listOfFiles.length / itemsPerPage;
       } else {
@@ -83,12 +90,15 @@ const FileComponent = () => {
       }
       startIndex = (currentPage - 1) * itemsPerPage;
       endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
-  
+
       for (let i = startIndex; i < endIndex; i++) {
         allFileListInPagination.push(listOfFiles[i]);
       }
+      if (deletedFile && !allFileListInPagination[0]) {
+        setCurrentPage(currentPage - 1);
+        setDeletedFile(false);
+      }
     }
-    
   };
 
   performFilesPagination();
@@ -101,21 +111,35 @@ const FileComponent = () => {
     const params = {
       id: confirmDeletion["fileID"],
       fileName: confirmDeletion["fileName"],
-      folder: "caseFiles"
-    }
+      folder: "caseFiles",
+    };
 
     const fileIsDeleted = await deleteUserFileById(params);
     if (fileIsDeleted) {
       setIsFilesPopulated(false);
+      setDeletedFile(true);
       setConfirmDeletion({
         enabled: false,
         fileID: null,
-        fileName: null
+        fileName: null,
+      });
+      setSnackBar({
+        enable: true,
+        message: "File deleted successfully",
+        type: "checkmark",
+        color: "green",
+      });
+    }else{
+      setSnackBar({
+        enable: true,
+        message: "An unknown error has occurred",
+        type: "warning",
+        color: "red",
       });
     }
   };
 
-  const openFile = url => {
+  const openFile = (url) => {
     window.open(url, "_blank");
     // win.focus();
   };
@@ -123,7 +147,7 @@ const FileComponent = () => {
   let deleteWarning =
     'Are you sure you want to delete "' + confirmDeletion["fileName"] + '"?';
 
-  const fileLists = allFileListInPagination.map(file => {
+  const fileLists = allFileListInPagination.map((file) => {
     return (
       <Table.Body>
         <Table.Row
@@ -139,7 +163,7 @@ const FileComponent = () => {
                 setConfirmDeletion({
                   enabled: true,
                   fileID: file._id,
-                  fileName: file.name
+                  fileName: file.name,
                 })
               }
               icon
@@ -155,21 +179,23 @@ const FileComponent = () => {
               open={confirmDeletion["enabled"]}
             >
               <Segment
+                className="center"
+                raised
                 style={{
-                  left: "30%",
+                  left: "25%",
                   position: "fixed",
                   top: "50%",
-                  zIndex: 1000
+                  zIndex: 1000,
                 }}
               >
-                <div style={{ width: 500 }}>
+                <div>
                   <div className="center">
                     <h3 align="center">Delete File</h3>
                   </div>
 
-                  <div className="center">{deleteWarning}</div>
+                  <div>{deleteWarning}</div>
 
-                  <div>
+                  <div style={{ marginTop: 18 }}>
                     <Button color="green" floated="right" onClick={deleteFile}>
                       Yes
                     </Button>
@@ -278,6 +304,7 @@ const FileComponent = () => {
             </Table.Footer>
           </Table>
         </Card>
+        <Snackbar snackbar={snackbar} setSnackBar={setSnackBar} />
       </div>
     </div>
   );

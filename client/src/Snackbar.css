@@ -1,0 +1,22 @@
+.center1 {
+  top: 10%;
+  position: absolute;
+  left: 20%;
+}
+
+.snackbar {
+  min-width: 350px;
+  margin-left: -175px;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  z-index: 1000;
+  left: 50%;
+  bottom: 30px;
+}
+
+.center2 {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}

@@ -122,9 +122,9 @@ const EditCaseForm = (props) => {
   };
 
   const clearSteps = () => {
-
     setStepDict([]);
     setStepCount(0);
+    props.setEditCase(false)
   };
 
   const getStepCards = () => {
@@ -148,12 +148,7 @@ const EditCaseForm = (props) => {
 
   return (
     <Modal
-      trigger={
-        <Button size="small" floated="right" color={props.triggerButtonColor} onClick={() => setOpen(true)}>
-          <Icon name="plus" size="small" />
-          {props.triggerButtonText}
-        </Button>
-      }
+      open={props.editCase}
       onClose={() => {
         clearSteps();
       }}
@@ -198,10 +193,10 @@ const EditCaseForm = (props) => {
             </Button>
             <Button
               size="small"
-              color={props.triggerButtonColor}
+              color='yellow'
               onClick={() => createOrUpdateCase()}
             >
-              {props.triggerButtonText}
+              Edit Case
             </Button>
           </Form.Field>
         </Form>
