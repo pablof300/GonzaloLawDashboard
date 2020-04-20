@@ -95,12 +95,13 @@ function Login() {
                 type="password"
                 onChange={event => setPassword(event.target.value)}
               />
-              <Button style={{width:"48%"}} className="loginButton" fluid onClick={login}>
+              <Button floated='left' style={{width:"48%"}} className="loginButton" fluid onClick={login}>
                 Login
               </Button>
-                <Button floated='right' style={{width:"48%"}} color="orange" onClick={Register}>
+                <Button floated='right' style={{width:"48%"}} className="loginButton" fluid onClick={Register}>
                     Register
                 </Button>
+              <div style={{padding: '3vh'}} />
               <Button className="forgotButton" style={{ marginTop: 10 }} fluid onClick={() => setForgotPassword(true)}>
                 Forgot Password?
               </Button>
