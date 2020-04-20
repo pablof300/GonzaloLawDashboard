@@ -58,13 +58,12 @@ const Register = (props) =>{
         companyName,
         website,
       );
-      console.log(addClientResponse);
+      
     if (addClientResponse.data) {
       alert("Successfully added new client!");
       handleCancel();
     } else {
       alert("Failed to add client, please try again!");
-      console.log("Unable to add client");
     }
    
 }
