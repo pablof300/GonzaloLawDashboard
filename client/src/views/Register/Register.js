@@ -105,15 +105,17 @@ const Register = (props) =>{
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
-            label="Username *"
+            label="Username"
             placeholder="Username"
             value={username}
+            required = {true}
             onChange={(event) => setUsername(event.target.value)}
           />
           <Form.Field
             control={Input}
-            label="Password *"
+            label="Password"
             type='password'
+            required = {true}
             placeholder="Password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
@@ -131,8 +133,9 @@ const Register = (props) =>{
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
-            label="First name *"
+            label="First name"
             placeholder="First name"
+            required = {true}
             value={firstName}
             onChange={(event) => setFirstName(event.target.value)}
           />
@@ -145,9 +148,10 @@ const Register = (props) =>{
           />
           <Form.Field
             control={Input}
-            label="Last name *"
+            label="Last name"
             placeholder="Last name"
             value={lastName}
+            required = {true}
             onChange={(event) => setLastName(event.target.value)}
           />
         </Form.Group>
