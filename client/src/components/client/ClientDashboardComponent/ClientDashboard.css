@@ -41,18 +41,18 @@ button.ui.primary.button.changePasswordButton{
     color: white;
 }
 
-button.ui.primary.button.changePasswordButton:hover{
+/*button.ui.primary.button.changePasswordButton:hover{
     background-color: #2b2147;
     color: white;
     opacity: 90%;
-}
+}*/
 
 button.ui.green.small.icon.inverted.left.floated.left.labeled.button.contactLawyersButton{
     color: #2b2147;
     border-color: #2b2147;
 }
 
-button.ui.green.small.icon.inverted.left.floated.left.labeled.button.contactLawyersButton:hover{
+/*button.ui.green.small.icon.inverted.left.floated.left.labeled.button.contactLawyersButton:hover{
     color: white;
     background-color: #2b2147;
 }
@@ -66,7 +66,7 @@ button.ui.green.small.icon.inverted.left.floated.left.labeled.button.contactLawy
     color: white;
     background-color: #2b2147;
     opacity: 90%;
-}
+}*/
 
 .ui.inverted.green.button, .ui.inverted.green.buttons .button{
     -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
@@ -79,21 +79,21 @@ button.ui.green.small.icon.inverted.left.floated.left.labeled.button.contactLawy
     color: #2b2147;
 }
 
-.ui.inverted.purple.button:hover, .ui.inverted.purple.buttons:hover .button:hover {
+/*.ui.inverted.purple.button:hover, .ui.inverted.purple.buttons:hover .button:hover {
     background-color: #2b2147;
     -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
     box-shadow: 0 0 0 2px #2b2147 inset!important;
     color: white;
-}
+}*/
 
 button.ui.primary.button.sendMessageButton, button.ui.primary.button.cancelMessageButton {
     background-color: #ee8b3adb;
 }
 
-button.ui.primary.button.sendMessageButton:hover, button.ui.primary.button.cancelMessageButton:hover {
+/*button.ui.primary.button.sendMessageButton:hover, button.ui.primary.button.cancelMessageButton:hover {
     background-color: #ee8b3adb;
     opacity: 90%;
-}
+}*/
 
 .ui.inverted.blue.button, .ui.inverted.blue.buttons .button {
     background-color: transparent;
@@ -102,7 +102,7 @@ button.ui.primary.button.sendMessageButton:hover, button.ui.primary.button.cance
     color: #2b2147;
 }
 
-.ui.inverted.blue.button:hover, .ui.inverted.blue.buttons:hover .button:hover {
+/*.ui.inverted.blue.button:hover, .ui.inverted.blue.buttons:hover .button:hover {
     background-color: #2b2147;
     -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
     box-shadow: 0 0 0 2px #2b2147 inset!important;
@@ -114,7 +114,7 @@ button.ui.primary.button.sendMessageButton:hover, button.ui.primary.button.cance
     -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
     box-shadow: 0 0 0 2px #2b2147 inset!important;
     color: white;
-}
+}*/
 
 .ui.inverted.violet.button, .ui.inverted.violet.buttons .button {
     background-color: transparent;
@@ -123,7 +123,7 @@ button.ui.primary.button.sendMessageButton:hover, button.ui.primary.button.cance
     color: #2b2147;
 }
 
-.ui.inverted.violet.button:hover, .ui.inverted.violet.buttons:hover .button:hover {
+/*.ui.inverted.violet.button:hover, .ui.inverted.violet.buttons:hover .button:hover {
     background-color: #2b2147;
     -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
     box-shadow: 0 0 0 2px #2b2147 inset!important;
@@ -135,5 +135,5 @@ button.ui.primary.button.sendMessageButton:hover, button.ui.primary.button.cance
     -webkit-box-shadow: 0 0 0 2px #2b2147 inset!important;
     box-shadow: 0 0 0 2px #2b2147 inset!important;
     color: white;
-}
+}*/
 
