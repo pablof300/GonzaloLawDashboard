@@ -12,7 +12,7 @@ const ClientInvoiceCard = (props) => {
         </Card.Header>
       </Card.Content>
       <Card.Content>
-        <Table singleLine compact>
+        <Table compact>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Date Created</Table.HeaderCell>
