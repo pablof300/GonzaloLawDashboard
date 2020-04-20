@@ -39,6 +39,7 @@ const ProgCard = (props) => {
     );
   } else {
     //if user is admin
+   // console.log(props.case);
     return (
       <Card fluid>
         <Card.Content>

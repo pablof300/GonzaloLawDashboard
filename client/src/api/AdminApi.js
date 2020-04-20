@@ -37,19 +37,55 @@ const getAllOtherClients = async () => {
   return axiosResponse;
 };
 
-const getCaseById = async (id) => {
-  let axiosResponse = await API.get(`/case/admin/${id}`, {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+const updateClientInfoById = async (id, data) => {
+  let axiosResponse = await API.put(`/admin/client/${id}`, data, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve case!"
+        error: "Unable to retrieve case!",
+      };
+    });
+  return axiosResponse;
+};
+
+const getClientFilesById = async (id) => {
+  let axiosResponse = await API.get(`/admin/files/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve case!",
+      };
+    });
+  return axiosResponse;
+}
+
+const getCaseById = async (id) => {
+  let axiosResponse = await API.get(`/case/admin/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
+  })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        return { error: error.response.data.error };
+      }
+      return {
+        error: "Unable to retrieve case!",
       };
     });
   return axiosResponse;
@@ -57,17 +93,17 @@ const getCaseById = async (id) => {
 
 const getEvents = async () => {
   let axiosResponse = await API.get("/admin/events", {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response };
       }
       return {
-        error: "Unable to retrieve events!"
+        error: "Unable to retrieve events!",
       };
     });
   return axiosResponse;
@@ -84,9 +120,9 @@ const addEvent = async (title, type, startDate, duration, notes, clientId) => {
         startDate: startDate,
         duration: duration,
         clientId: clientId,
-        notes: notes
+        notes: notes,
       },
-      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+      headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
     }
   )
     .then((response) => {
@@ -110,7 +146,7 @@ const addExistingClient = async (id) => {
     .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response.data.error };
       }
@@ -138,7 +174,7 @@ const addClient = async (
   email,
   birthDate,
   companyName,
-  website,
+  website
 ) => {
   let userData = {
     username: username,
@@ -151,7 +187,7 @@ const addClient = async (
       street: street,
       city: city,
       state: state,
-      zip: zip
+      zip: zip,
     },
     company: {
       companyName: companyName,
@@ -162,27 +198,27 @@ const addClient = async (
       homePhone: homePhone,
       workPhone: workPhone,
       cellPhone: cellPhone,
-      email: email
+      email: email,
     },
     birthDate: birthDate,
     imageUrl: "https://react.semantic-ui.com/images/avatar/large/matthew.png",
     files: [],
-    cases: []
+    cases: [],
   };
   console.log("Adding the user");
-  console.log(userData);
+  //console.log(userData)
   let axiosResponse = await API.post("/admin/client", userData, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
     .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve events!"
+        error: "Unable to retrieve events!",
       };
     });
   return axiosResponse;
@@ -196,7 +232,7 @@ const addCase = async (type, startDate, completed, steps, userID) => {
     steps: steps,
   };
   console.log("Adding the user");
-  console.log(caseData);
+  //console.log(caseData);
   let axiosResponse = await API.post(`user/${userID}/cases`, caseData, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
@@ -229,12 +265,12 @@ const updateCase = async (type, startDate, completed, steps, caseID) => {
     .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve events!"
+        error: "Unable to retrieve events!",
       };
     });
   return axiosResponse;
@@ -280,15 +316,15 @@ const getAdminById = async (id) => {
   let axiosResponse = await API.get(`/admin/name/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error.response) {
         return { error: error.response.data.error };
       }
       return {
-        error: "Unable to retrieve case!"
+        error: "Unable to retrieve case!",
       };
     });
   return axiosResponse;
@@ -296,17 +332,17 @@ const getAdminById = async (id) => {
 
 const getCurrentAdmin = async () => {
   let axiosResponse = await API.get("/admin/", {
-    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` }
+    headers: { Authorization: `Bearer ${Cookies.get("jwt")}` },
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
+    .catch((error) => {
       if (error !== null && error.response) {
         return { error: error.response };
       }
       return {
-        error: "Unable to retrieve user!"
+        error: "Unable to retrieve user!",
       };
     });
 
@@ -337,10 +373,12 @@ export {
   addClient,
   getCaseById,
   addCase,
-  updateCase,
   getAdminById,
+  deleteClient,
+  updateClientInfoById,
+  getClientFilesById,
+  updateCase,
   getAdminByIdAdmin,
   getAdminByIdUser,
   getCurrentAdmin,
-  deleteClient,
 };

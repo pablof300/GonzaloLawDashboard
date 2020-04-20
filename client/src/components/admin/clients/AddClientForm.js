@@ -97,17 +97,20 @@ const AddClientForm = (props) => {
   };
 
   const performFilesPagination = () => {
-    if (listOfClients.length % itemsPerPage === 0) {
-      totalPages = listOfClients.length / itemsPerPage;
-    } else {
-      totalPages = parseInt(listOfClients.length / itemsPerPage) + 1;
+    if(listOfClients){
+      if (listOfClients.length % itemsPerPage === 0) {
+        totalPages = listOfClients.length / itemsPerPage;
+      } else {
+        totalPages = parseInt(listOfClients.length / itemsPerPage) + 1;
+      }
+      startIndex = (currentPage - 1) * itemsPerPage;
+      endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
+  
+      for (let i = startIndex; i < endIndex; i++) {
+        allClientListInPagination.push(listOfClients[i]);
+      }
     }
-    startIndex = (currentPage - 1) * itemsPerPage;
-    endIndex = (currentPage - 1) * itemsPerPage + itemsPerPage;
-
-    for (let i = startIndex; i < endIndex; i++) {
-      allClientListInPagination.push(listOfClients[i]);
-    }
+    
   };
 
   const handleCancel = () => {
@@ -137,7 +140,7 @@ const AddClientForm = (props) => {
             <Image
               size="tiny"
               rounded
-              style={{ width: 70, height: 70 }}
+              style={{ width: 40, height: 40 }}
               src={!client ? "" : client.imageUrl}
             />
           </Table.Cell>
@@ -238,7 +241,6 @@ const AddClientForm = (props) => {
       companyName,
       website,
     );
-    console.log(addClientResponse);
     if (addClientResponse.data) {
       props.addClientCallback(addClientResponse.data);
       setOpen(false);

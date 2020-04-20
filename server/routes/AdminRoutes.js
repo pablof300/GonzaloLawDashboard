@@ -5,10 +5,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-router.get(
-  "/getAll",
-  adminController.getAll
-);
+router.get("/getAll", adminController.getAll);
 
 router.get(
   "/userLawyers/:id",
@@ -43,6 +40,18 @@ router.put(
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.update
 );
+router.put(
+  "/client/:userID",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.updateClientById
+);
+
+router.get(
+  "/files/:userID",
+  passport.authenticate("adminLoggedIn", { session: false }),
+  adminController.getClientFilesById
+);
+
 router.post("/", adminController.create); //add some sort of key admins need to create a new admin account so users cannot
 router.delete(
   "/",
@@ -60,7 +69,7 @@ router.get(
   "/otherClients",
   passport.authenticate("adminLoggedIn", { session: false }),
   adminController.getAllOtherClients
-)
+);
 
 router.get(
   "/:clientId",

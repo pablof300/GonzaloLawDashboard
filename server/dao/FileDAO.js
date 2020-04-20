@@ -22,11 +22,11 @@ exports.getAllFilesByUser = async (id) => {
   const userFiles = await LocalFile.find({ _id: { $in: files } })
     .exec()
     .then((data) => {
-      return data
-    })
-    if(!userFiles){
-      console.log("User has no files")
-    }
+      return data;
+    });
+  if (!userFiles) {
+    console.log("User has no files");
+  }
   return userFiles;
 };
 

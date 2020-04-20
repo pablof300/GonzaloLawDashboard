@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Grid, Image, Form, Icon } from "semantic-ui-react";
 import { getCurrentUser, updateUserData } from "../../../../src/api/UserApi";
+import Snackbar from '../../../Snackbar'
 
 const defaultImage = "https://react.semantic-ui.com/images/wireframe/image.png";
 function MyCompany(props) {
@@ -8,6 +9,12 @@ function MyCompany(props) {
   const [userData, setUserData] = useState([]);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
   const [hasCompany, setHasCompany] = useState(false)
+  const [snackbar, setSnackBar] = useState({
+    enable: false,
+    message: "Success",
+    type: "success",
+    color: "green",
+  });
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -54,8 +61,23 @@ function MyCompany(props) {
   
       const res = await updateUserData(data)
       if(res){
-        alert("Your company logo has been updated successfully");
-        RefreshPage()
+        setSnackBar({
+          enable: true,
+          message: "Logo updated successfully. Please wait...",
+          type: "checkmark",
+          color: "green",
+        });
+        setTimeout(() => {
+          RefreshPage()
+        }, 1200)
+        
+      }else{
+        setSnackBar({
+          enable: true,
+          message: "An unknown has error occurred",
+          type: "warning",
+          color: "red",
+        });
       }
     }
   }
@@ -151,6 +173,7 @@ function MyCompany(props) {
           </Grid.Column>
         </Grid.Row>
       </Grid>
+      <Snackbar snackbar={snackbar} setSnackBar={setSnackBar} />
     </div>
   );
 }

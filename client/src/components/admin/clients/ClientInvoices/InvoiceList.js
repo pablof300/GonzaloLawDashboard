@@ -30,24 +30,25 @@ const InvoiceList = (props) => {
   if(!invoicesLoaded) {
     loadInvoices();
   }
-
+ 
   const showInvoiceList = listOfInvoices.map(invoice => {
-      return (
-        <Table.Row>
-          <Table.Cell>{invoice.TxnDate}</Table.Cell>
-          <Table.Cell>{invoice.Line[0].Description}</Table.Cell>
-          <Table.Cell>${invoice.Balance}</Table.Cell>
-          <Table.Cell>${invoice.TotalAmt}</Table.Cell>
-          <Table.Cell>
-            <Button compact size="tiny" onClick={() => callAPIGetPDF(invoice.Id)}>
-              <Button.Content>
-                <Icon name="file pdf" />
-              </Button.Content>
-            </Button>
-          </Table.Cell>
-        </Table.Row>
-      );
-  });
+    return (
+      <Table.Row>
+        <Table.Cell>{invoice.TxnDate}</Table.Cell>
+        <Table.Cell>{invoice.Line[0].Description}</Table.Cell>
+        <Table.Cell>${invoice.Balance}</Table.Cell>
+        <Table.Cell>${invoice.TotalAmt}</Table.Cell>
+        <Table.Cell>
+          <Button compact size="tiny" onClick={() => callAPIGetPDF(invoice.Id)}>
+            <Button.Content>
+              <Icon name="file pdf" />
+            </Button.Content>
+          </Button>
+        </Table.Cell>
+      </Table.Row>
+    );
+});
+ 
 
   return (
     <Table.Body>

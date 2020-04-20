@@ -5,16 +5,14 @@ import {
   Icon,
   Image,
   List,
+  Table,
   Container,
-  Modal
+  Modal,
 } from "semantic-ui-react";
 import AddClientForm from "./AddClientForm";
 import ClientCard from "./ClientCard";
-import Popup from "reactjs-popup";
 import "../Admin.css";
 import { getAllClients } from "../../../../src/api/AdminApi";
-
-
 
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
@@ -23,6 +21,8 @@ const ClientList = () => {
   const [listOfClients, setClientList] = useState([]);
   const [clients, setClients] = useState(false);
   const [isClientsPopulated, setIsClientsPopulated] = useState(false);
+  const [openClient, setOpenClient] = useState(false);
+  const [clientData, setClientData] = useState(null);
 
   const loadUsers = async () => {
     const lawyerClients = await getAllClients();
@@ -32,9 +32,9 @@ const ClientList = () => {
 
   const addClientCallback = (client) => {
     let currentClients = listOfClients;
-    currentClients.push(client)
-    setClientList(currentClients)
-  }
+    currentClients.push(client);
+    setClientList(currentClients);
+  };
 
   if (!clients) {
     loadUsers();
@@ -47,29 +47,17 @@ const ClientList = () => {
     }
   }
 
-  const showClientList = myClientList.map(client => {
+  function ViewClient(client) {
+    setOpenClient(true);
+    console.log("view client happening.");
+    setClientData(client);
+  }
+
+  const showClientList = myClientList.map((client) => {
     return (
-      <List.Item>
-        <List.Content floated="right">
-          <Popup
-            trigger={<Button className="viewClientButton" onClick={e => ViewClient(e)}>View</Button>}
-            position="right center"
-            modal
-            closeOnDocumentClick
-          >
-            <ClientCard
-              clientData={client}
-              clientName={client.firstName + " " + client.secondName}
-              clientContact={client.contact}
-              setIsClientsPopulated={setClients}
-              setIsClientsPopulatedPagination={setIsClientsPopulated}
-            />
-            {/* This is kind of poorly named, but setClients, is setClientsPopulated in the client card, while 
-              setIsClientsPopulated is setIsClientsPopulatedPagination in the client card. Fix some naming conventions
-              for readability in the future.*/}
-          </Popup>
-        </List.Content>
+      <List.Item key={client._id}>
         <Image
+        style={{width:40, height:40}}
           avatar
           src={!(client && client.imageUrl) ? defaultProfile : client.imageUrl}
         />
@@ -78,25 +66,37 @@ const ClientList = () => {
             ? "nuttin loaded"
             : client.firstName + " " + client.secondName}
         </List.Content>
+        <List.Content floated="right">
+          <Button onClick={() => ViewClient(client)}>View</Button>
+        </List.Content>
       </List.Item>
     );
   });
 
-  function ViewClient(e) {
-    console.log("view client happening.");
-  }
-
   return (
     <Card className="Card">
-      <List divided verticalAlign="middle">
+      <List verticalAlign='middle' divided verticalAlign="middle">
         <List.Item className="List-Header">
           <List.Content floated="right">
-            <AddClientForm addClientCallback={addClientCallback} setClients={setClients} setIsClientsPopulated={setIsClientsPopulated} isClientsPopulated={isClientsPopulated} />
+            <AddClientForm
+              addClientCallback={addClientCallback}
+              setClients={setClients}
+              setIsClientsPopulated={setIsClientsPopulated}
+              isClientsPopulated={isClientsPopulated}
+            />
           </List.Content>
           <List.Content id="content">Client List</List.Content>
         </List.Item>
         {showClientList}
       </List>
+
+      <ClientCard
+        openClient={openClient}
+        setOpenClient={setOpenClient}
+        clientData={clientData}
+        setIsClientsPopulated={setClients}
+        setIsClientsPopulatedPagination={setIsClientsPopulated}
+      />
     </Card>
   );
 };

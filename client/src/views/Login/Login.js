@@ -95,7 +95,7 @@ function Login() {
                 type="password"
                 onChange={event => setPassword(event.target.value)}
               />
-              <Button floated='left' style={{width:"48%"}} className="loginButton" fluid onClick={login}>
+             <Button floated='left' style={{width:"48%"}} className="loginButton" fluid onClick={login}>
                 Login
               </Button>
                 <Button floated='right' style={{width:"48%"}} className="loginButton" fluid onClick={Register}>
