@@ -91,3 +91,8 @@ exports.deleteCase = async (req, res) =>
   catchErrors(res, async () => {
     return userDAO.deleteCaseById(req.params.id, req.params.caseid);
   });
+
+  exports.registerClient = async (req, res) =>
+  catchErrors(res, async () => {
+    return userDAO.create(req.body);
+  });
