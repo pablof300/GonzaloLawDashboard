@@ -14,9 +14,21 @@ import {
   Checkbox,
   Dropdown,
   TextArea,
+  Transition,
+  TransitionablePortal,
+  Dimmer,
+  Segment,
+  List,
+  Label,
 } from "semantic-ui-react";
 import "../FileComponent/FileComponent.css";
-import { getAllLawyersWorkingOnUserCase, getCurrentUser, sendMessageToTeam } from "../../../../src/api/UserApi";
+import {
+  getAllLawyersWorkingOnUserCase,
+  getCurrentUser,
+  sendMessageToTeam,
+} from "../../../../src/api/UserApi";
+import Snackbar from "../../../Snackbar";
+import "../../../Snackbar.css";
 
 const defaultProfile =
   "https://react.semantic-ui.com/images/wireframe/square-image.png";
@@ -32,6 +44,12 @@ const MyTeam = (props) => {
   const [disableDone, setDisableDone] = useState(true);
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
+  const [snackbar, setSnackBar] = useState({
+    enable: false,
+    message: "Success",
+    type: "success",
+    color: "green",
+  });
 
   let itemsPerPage = 3,
     totalPages,
@@ -44,6 +62,7 @@ const MyTeam = (props) => {
     if (userLawyers) {
       setListOfLawyers(userLawyers);
       setUserLawyers(true);
+
       props.setIsLoading(false);
     }
   };
@@ -87,54 +106,62 @@ const MyTeam = (props) => {
   };
 
   const sendMessage = async () => {
-    const user = (await getCurrentUser()).data
-    if(user){
-      if(message && subject){
+    const user = (await getCurrentUser()).data;
+    if (user) {
+      if (message && subject) {
         let to = "";
-       const from = user.secondName + " <" + user.contact.email + "> ";
-       let c = 0;
-       emailThisTeam.map(lawyer => {
-         if(c === 0){
-           to = lawyer.email
-         }else{
-          to = to.concat(', ').concat(lawyer.email)
-         }
-         c++;
-         
-       })
-       const mailOptions = {
-         from: from, 
-         to: to,
-         subject: subject,
-         text: message
-       }
-       const res = await sendMessageToTeam(mailOptions)
-       if(res){
-        alert("Message has been sent successfully")
-        handleMessageCancel();
-       }
-      
-      
+        const from = user.secondName + " <" + user.contact.email + "> ";
+        let c = 0;
+        emailThisTeam.map((lawyer) => {
+          if (c === 0) {
+            to = lawyer.email;
+          } else {
+            to = to.concat(", ").concat(lawyer.email);
+          }
+          c++;
+        });
+        const mailOptions = {
+          from: from,
+          to: to,
+          subject: subject,
+          text: message,
+        };
+        const res = await sendMessageToTeam(mailOptions);
+        if (res) {
+          handleMessageCancel();
+          setEmailThisTeam([]);
+          setDisableDone(true);
+          setContactTeam(false);
+          setSnackBar({
+            enable: true,
+            message: "Message sent successfully. Please wait...",
+            type: "checkmark",
+            color: "green",
+          });
+          setTimeout(() => {
+            RefreshPage();
+          }, 1500);
+        }
       }
-    }else{
-      alert("User logged out or user session has expired")
+    } else {
+      setSnackBar({
+        enable: true,
+        message: "User logged out or user session has expired",
+        type: "warning",
+        color: "red",
+      });
     }
-    
   };
 
   const RefreshPage = () => {
-    window.location.reload(false)
-  }
+    window.location.reload(false);
+  };
 
   const handleMessageCancel = () => {
     setOpenEmailBox(false);
-    setContactTeam(false)
-    setMessage("")
-    setSubject("")
-    setEmailThisTeam([])
-    setDisableDone(true)
-    setUserLawyers(false)
-    RefreshPage()
+    setMessage("");
+    setSubject("");
+    //setUserLawyers(false);
   };
 
   const addLawyer = (lawyer) => {
@@ -256,7 +283,8 @@ const MyTeam = (props) => {
   });
 
   return (
-    <Table.HeaderCell>
+    <div>
+      <Table.HeaderCell>
         <div className="center">
           <h1>My Team</h1>
         </div>
@@ -277,6 +305,7 @@ const MyTeam = (props) => {
                 <Search
                   loading={isLoading}
                   input="text"
+                  disabled={contactTeam}
                   showNoResults={false}
                   placeholder="Search Lawyer..."
                   onSearchChange={filterTeamByText}
@@ -334,16 +363,41 @@ const MyTeam = (props) => {
             </Table.Row>
           </Table.Footer>
         </Table>
-        <Modal open={openEmailBox} size="small">
-          <Modal.Header>Send a message to your Team</Modal.Header>
-          <Modal.Content>
-            
+        <div></div>
+      </Table.HeaderCell>
+
+      <div className="center2">
+        <Transition visible={openEmailBox} animation="fade" duration={200}>
+          <Dimmer.Inner active={openEmailBox} page />
+        </Transition>
+        <TransitionablePortal
+          closeOnDocumentClick={false}
+          transition={{ animation: "scale", duration: 200 }}
+          open={openEmailBox}
+          size="small"
+        >
+          <Segment
+            className="center2"
+            style={{
+              left: "25%",
+              position: "fixed",
+              top: "20%",
+              zIndex: 1000,
+            }}
+          >
+            <Modal.Header>Send a message to your Team</Modal.Header>
             <Form widths="equal">
-            <Dropdown selection={false} style={{marginBottom:10}} placeholder="To" selection options={emailThisTeam} />
+              <Dropdown
+                selection={false}
+                style={{ marginBottom: 10 }}
+                placeholder="To"
+                selection
+                options={emailThisTeam}
+              />
               <Form.Input
                 className="wrap"
                 label="Subject"
-                type='text'
+                type="text"
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="Subject"
                 labelPosition="left"
@@ -353,16 +407,18 @@ const MyTeam = (props) => {
                 className="wrap"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                style={{minHeight:200, marginBottom:20}}
+                style={{ minHeight: 200, marginBottom: 20 }}
                 placeholder="Type message here..."
               />
               <Button onClick={sendMessage} content="Send Message" primary />
               <Button onClick={handleMessageCancel} content="Cancel" primary />
             </Form>
-          </Modal.Content>
-        </Modal>
-     
-    </Table.HeaderCell>
+          </Segment>
+        </TransitionablePortal>
+      </div>
+
+      <Snackbar snackbar={snackbar} setSnackBar={setSnackBar} />
+    </div>
   );
 };
 

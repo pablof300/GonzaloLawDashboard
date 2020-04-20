@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Form, Input, Modal, Divider } from "semantic-ui-react";
 import { updateClientInfoById } from "../../../api/AdminApi";
 import "../../client/FileComponent/FileComponent.css";
+import Snackbar from "../../../Snackbar";
 
 function EditClient(props) {
   const [username, setUsername] = useState(
@@ -89,6 +90,12 @@ function EditClient(props) {
       ? null
       : props.clientData.birthDate
   );
+  const [snackbar, setSnackBar] = useState({
+    enable: false,
+    message: "Success",
+    type: "success",
+    color: "green",
+  });
 
   const updateClientInfo = async () => {
     const data = {
@@ -120,9 +127,24 @@ function EditClient(props) {
     };
     const updated = await updateClientInfoById(props.clientData._id, data);
     if (updated.ok) {
-      alert("Client's Information updated successfully");
       props.setEditClient(false);
-      RefreshPage();
+      setSnackBar({
+        enable: true,
+        message: "Client's Information updated successfully. Please wait...",
+        type: "checkmark",
+        color: "green",
+      });
+      setTimeout(() => {
+        RefreshPage();
+      },1900)
+      
+    }else{
+      setSnackBar({
+        enable: true,
+        message: "Failed to update Client Information",
+        type: "warning",
+        color: "red",
+      });
     }
   };
 
@@ -289,6 +311,7 @@ function EditClient(props) {
           </Form>
         </Modal.Content>
       </Modal>
+      <Snackbar snackbar={snackbar} setSnackBar={setSnackBar} />
     </div>
   );
 }

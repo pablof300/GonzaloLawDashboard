@@ -9,6 +9,8 @@ import {
   Label,
   Loader,
   Dimmer,
+  Transition,
+  TransitionablePortal,
 } from "semantic-ui-react";
 import ClientCaseCard from "./ClientCases/ClientCaseCard.js";
 import InvoiceCard from "./ClientInvoices/InvoiceCard";
@@ -17,6 +19,7 @@ import ClientFiles from "./ClientFiles/ClientFiles";
 import EditClient from "./EditClient";
 import { deleteClient } from "../../../api/AdminApi";
 import Popup from "reactjs-popup";
+import "./ClientCard.css";
 
 const defaultImage = "https://react.semantic-ui.com/images/wireframe/image.png";
 const ClientCard = (props) => {
@@ -47,9 +50,7 @@ const ClientCard = (props) => {
       menuItem: "Cases",
       render: () => (
         <div style={{ height: 400 }}>
-          <ClientCaseCard
-            clientData={props.clientData}
-          />
+          <ClientCaseCard clientData={props.clientData} />
         </div>
       ),
     },
@@ -68,8 +69,7 @@ const ClientCard = (props) => {
       menuItem: "Files",
       render: () => (
         <div style={{ height: 400 }}>
-        
-        <Loader active={isLoading} style={{marginTop:75}} />
+          <Loader active={isLoading} style={{ marginTop: 75 }} />
           <ClientFiles
             clientData={props.clientData}
             setIsLoading={setIsLoading}
@@ -80,16 +80,41 @@ const ClientCard = (props) => {
   ];
 
   function callNum() {
-    if(props.clientData.contact && props.clientData.contact.cellPhone){
+    if (props.clientData.contact && props.clientData.contact.cellPhone) {
       const number = "tel:" + props.clientData.contact.cellPhone;
       window.open(number);
     }
   }
+  /**
+   *   <Transition visible={props.openClient} animation="fade" duration={200}>
+        <Dimmer.Inner active page />
+      </Transition>
+   */
 
   return (
-    <div>
-      <Popup open={props.openClient} modal size="small">
-      <Segment>
+    <div className="center1">
+     <Transition visible={props.openClient} animation="fade" duration={200}>
+        <Dimmer.Inner active={props.openClient} page />
+      </Transition>
+
+      <TransitionablePortal
+        closeOnDocumentClick={false}
+        closeOnPortalMouseLeave={false}
+        transition={{ animation: "scale", duration: 200 }}
+        open={props.openClient}
+        size="large"
+      >
+      
+        <Segment
+          className="center1"
+          raised
+          style={{
+            left: "25%",
+            position: "fixed",
+            top: "2%",
+            zIndex: 1000,
+          }}
+        >
           <Item.Group unstackable>
             <Item>
               <Item.Image
@@ -136,12 +161,10 @@ const ClientCard = (props) => {
                     <b> Phone number: </b>
                     {
                       <Label onClick={callNum}>
-                      <Icon name="call" />
-                      {!(props.clientData && props.clientData.contact)
+                        <Icon name="call" />
+                        {!(props.clientData && props.clientData.contact)
                           ? ""
                           : props.clientData.contact.cellPhone}
-                       
-                       
                       </Label>
                     }
                   </p>
@@ -171,10 +194,7 @@ const ClientCard = (props) => {
             Remove
           </button>
 
-          <Button
-            floated="right"
-            onClick={() => props.setOpenClient(false)}
-          >
+          <Button floated="right" onClick={() => props.setOpenClient(false)}>
             Done
           </Button>
 
@@ -211,7 +231,7 @@ const ClientCard = (props) => {
             </Modal.Content>
           </Modal>
         </Segment>
-      </Popup>
+      </TransitionablePortal>
     </div>
   );
 };

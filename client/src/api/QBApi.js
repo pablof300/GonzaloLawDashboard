@@ -7,7 +7,7 @@ const checkURLStatus = async () => {
       return response.data;
     })
     .catch(error => {
-      if (error.response) {
+      if (error && error.response) {
         return { error: error.response.data.error };
       }
       return {
@@ -43,7 +43,7 @@ const getAllInvoices = async (customerName) => {
       return response.data;
     })
     .catch(error => {
-      if (error.response) {
+      if (error && error.response) {
         return { error: error.response.data.error };
       }
       return {

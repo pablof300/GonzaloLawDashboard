@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Grid,
@@ -8,6 +8,10 @@ import {
   Button,
   Modal,
   Label,
+  Transition,
+  TransitionablePortal,
+  Dimmer,
+  Segment,
 } from "semantic-ui-react";
 import "../FileComponent/FileComponent.css";
 import {
@@ -17,6 +21,8 @@ import {
   sendEmail,
   checkIfCodeExistOrHasNotExpired,
 } from "../../../../src/api/UserApi";
+import Snackbar from "../../../Snackbar";
+import "../../../Snackbar.css";
 
 const defaultImage = "https://react.semantic-ui.com/images/wireframe/image.png";
 
@@ -36,6 +42,12 @@ const MyAccount = (props) => {
   const [verifyCode, setVerifyCode] = useState(false);
   const [verifyError, setVerifyError] = useState(false);
   const [code, setCode] = useState(null);
+  const [snackbar, setSnackBar] = useState({
+    enable: false,
+    message: "Success",
+    type: "success",
+    color: "green",
+  });
 
   const loadUserData = async () => {
     const user = (await getCurrentUser()).data;
@@ -87,8 +99,20 @@ const MyAccount = (props) => {
               };
               const changed = await updatePassword(params);
               if (changed) {
-                handlePassCancel()
-                alert("Password changed successfully");
+                handlePassCancel();
+                setSnackBar({
+                  enable: true,
+                  message: "Password changed successfully",
+                  type: "checkmark",
+                  color: "green",
+                });
+              } else {
+                setSnackBar({
+                  enable: true,
+                  message: "An error occurred. Try again.",
+                  type: "warning",
+                  color: "red",
+                });
               }
             } else {
               setClearErrors(false);
@@ -111,7 +135,12 @@ const MyAccount = (props) => {
         );
       }
     } else {
-      alert("All fields are mandatory");
+      setSnackBar({
+        enable: true,
+        message: "All fields are mandatory",
+        type: "warning sign",
+        color: "red",
+      });
     }
   };
 
@@ -182,7 +211,7 @@ const MyAccount = (props) => {
     const file = e.target.files;
     if (file && userData) {
       let fileParts;
-      if (file[0].name) {
+      if (file[0] && file[0].name) {
         fileParts = file[0].name.split(".");
       }
       const fileName = fileParts[0];
@@ -194,18 +223,53 @@ const MyAccount = (props) => {
           file: file,
           userID: userData._id,
         };
-        uploadUserProfilePicture(params);
+        let callRes;
+        const done = await uploadUserProfilePicture(params, callRes);
+        if (done && done.ok) {
+          setSnackBar({
+            enable: true,
+            message: "Profile Picture updated successfully. Please wait...",
+            type: "checkmark",
+            color: "green",
+          });
+          setTimeout(() => {
+            RefreshPage();
+          }, 1200);
+        } else {
+          setSnackBar({
+            enable: true,
+            message: "An unknown error occurred",
+            type: "warning",
+            color: "red",
+          });
+        }
       } else {
-        alert("ERROR: Please upload a valid image");
+        //alert("ERROR: Please upload a valid image");
+        setSnackBar({
+          enable: true,
+          message: "Please upload a valid image",
+          type: "warning",
+          color: "red",
+        });
       }
     } else {
-      alert("ERROR: Either the file is corrupted or no user is logged in.");
+      //alert("ERROR: Either the file is corrupted or no user is logged in.");
+      setSnackBar({
+        enable: true,
+        message: "Either the file is corrupted or no user is logged in",
+        type: "warning",
+        color: "red",
+      });
     }
+  };
+
+  const RefreshPage = () => {
+    window.location.reload(false);
   };
 
   const handleDialogCancel = () => {
     setOpenCodeDialog(false);
-    setVerifyError(true);
+    setVerifyError(false);
     setCode("");
   };
 
@@ -364,10 +428,9 @@ const MyAccount = (props) => {
           <h3>Address</h3>
         </Grid.Row>
 
-       
-          <Grid.Row stretched={true} textAlign="left">
+        <Grid.Row stretched={true} textAlign="left">
           <Grid.Column textAlign="left">
-          <Form widths="equal">
+            <Form widths="equal">
               <Form.Group className="wrap" unstackable>
                 <Form.Input
                   label="Street"
@@ -414,17 +477,15 @@ const MyAccount = (props) => {
               </Form.Group>
             </Form>
           </Grid.Column>
-            
-          </Grid.Row>
-     
+        </Grid.Row>
 
         <Grid.Row>
           <h3>Email</h3>
         </Grid.Row>
-        
-          <Grid.Row stretched={true} textAlign="left">
+
+        <Grid.Row stretched={true} textAlign="left">
           <Grid.Column textAlign="left">
-          <Form widths="equal">
+            <Form widths="equal">
               <Form.Input
                 className="wrap"
                 label="Email"
@@ -437,9 +498,7 @@ const MyAccount = (props) => {
               />
             </Form>
           </Grid.Column>
-           
-          </Grid.Row>
-       
+        </Grid.Row>
 
         <Grid.Row>
           <h3>Account Password</h3>
@@ -459,10 +518,27 @@ const MyAccount = (props) => {
           />
         </Grid.Row>
 
-        <div>
-          <Modal open={changePass} size="large">
-            <Modal.Header>Change Password</Modal.Header>
-            <Modal.Content>
+        <div className="center2">
+          <Transition visible={changePass} animation="fade" duration={200}>
+            <Dimmer.Inner active={changePass} page />
+          </Transition>
+
+          <TransitionablePortal
+            closeOnDocumentClick={false}
+            transition={{ animation: "scale", duration: 300 }}
+            open={changePass}
+            size="large"
+          >
+            <Segment
+              className="center2"
+              style={{
+                left: "25%",
+                position: "fixed",
+                top: "15%",
+                zIndex: 1000,
+              }}
+            >
+              <Modal.Header>Change Password</Modal.Header>
               <Form widths="equal">
                 <Form.Group className="wrap" unstackable>
                   <Form.Field>
@@ -551,58 +627,69 @@ const MyAccount = (props) => {
                   }
                 />
               </Form>
+            </Segment>
+          </TransitionablePortal>
+        </div>
+
+        <div>
+          <TransitionablePortal
+            closeOnDocumentClick={false}
+            transition={{ animation: "fade", duration: 300 }}
+            open={openCodeDialog}
+            size="small"
+          >
+            <Segment
+              className="center2"
+              style={{
+                left: "25%",
+                position: "fixed",
+                top: "15%",
+                zIndex: 1000,
+              }}
+            >
+              <Modal.Header>Verify Code</Modal.Header>
+              <p>A verification Code has been sent to your email.</p>
+              <Form widths="equal">
+                <Form.Field>
+                  <Form.Input
+                    label="Code"
+                    placeholder="Code"
+                    labelPosition="left"
+                    focus={true}
+                    type="text"
+                    value={code}
+                    error={verifyError}
+                    onChange={getCode}
+                  />
+                  <Label
+                    className={!verifyError ? "invisible" : ""}
+                   style={{marginBottom:10}}
+                   basic
+                    color="red"
+                    pointing
+                  >
+                    Either the code has expired or does not exist
+                  </Label>
+                </Form.Field>
+              </Form>
+
               <Modal.Actions>
-                <div>
-                  <Modal open={openCodeDialog} size="small">
-                    <Modal.Header>Verify Code</Modal.Header>
-                    <Modal.Content>
-                      <p>A verification Code has been sent to your email.</p>
-                      <Form widths="equal">
-                        <Form.Field>
-                          <Form.Input
-                            label="Code"
-                            placeholder="Code"
-                            labelPosition="left"
-                            focus={true}
-                            type="text"
-                            value={code}
-                            error={verifyError}
-                            onChange={getCode}
-                          />
-                          <Label
-                            className={!verifyError ? "invisible" : ""}
-                            basic
-                            color="red"
-                            pointing
-                          >
-                            Either the code has expired or does not exist
-                          </Label>
-                        </Form.Field>
-                      </Form>
-                    </Modal.Content>
-                    <Modal.Actions>
-                      <Form widths="equal">
-                        <Button onClick={checkCode} content="Confirm" primary />
-                        <Button
-                          onClick={resetPass}
-                          content="Resend Code"
-                          primary
-                        />
-                      </Form>
-                      <Button
-                        floated="right"
-                        onClick={handleDialogCancel}
-                        content="Cancel"
-                        primary
-                      />
-                    </Modal.Actions>
-                  </Modal>
-                </div>
+                <Form widths="equal">
+                  <Button onClick={checkCode} content="Confirm" primary />
+                  <Button onClick={resetPass} content="Resend Code" primary />
+                </Form>
+                <Button
+                  floated="right"
+                  onClick={handleDialogCancel}
+                  content="Cancel"
+                  primary
+                />
               </Modal.Actions>
-            </Modal.Content>
-          </Modal>
+            </Segment>
+          </TransitionablePortal>
         </div>
       </Grid>
+      <Snackbar snackbar={snackbar} setSnackBar={setSnackBar} />
     </div>
   );
 };

@@ -16,6 +16,7 @@ import {
   checkIfUserUploadingFileExist
 } from "../../../api/UserApi";
 import Cookies from "js-cookie";
+import Snackbar from "../../../Snackbar";
 
 const FileUploadComponent = props => {
   const [file, setFile] = useState(null);
@@ -27,6 +28,12 @@ const FileUploadComponent = props => {
     color: "red",
     buttonText: "Cancel",
     text: "Uploading File. Please wait..."
+  });
+  const [snackbar, setSnackBar] = useState({
+    enable: false,
+    message: "Success",
+    type: "checkmark",
+    color: "green",
   });
 
   const getFile = e => {
@@ -140,10 +147,22 @@ const FileUploadComponent = props => {
             alert(JSON.stringify(error));
           });
       } else {
-        alert("ERROR: This file already exist.");
+        //alert("ERROR: This file already exist.");
+        setSnackBar({
+          enable: true,
+          message: "This file already exist",
+          type: "warning",
+          color: "red",
+        });
       }
     } else {
-      alert("ERROR: Either the file is corrupted or no user is logged in.");
+      setSnackBar({
+        enable: true,
+        message: " Either the file is corrupted or no user is logged in",
+        type: "warning",
+        color: "red",
+      });
+      //alert("ERROR: Either the file is corrupted or no user is logged in.");
     }
   };
 
@@ -231,6 +250,7 @@ const FileUploadComponent = props => {
           </TransitionablePortal>
         </Modal.Actions>
       </Modal>
+      <Snackbar snackbar={snackbar} setSnackBar={setSnackBar} />
     </div>
   );
 };
