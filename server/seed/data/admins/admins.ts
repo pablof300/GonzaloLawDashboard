@@ -51,11 +51,11 @@ const adminsData: Admin[] = [
         secondName: "Mingle",
         middleName: "T.",
         contact: {
-            email: "edward@Park.com",
+            email: "edwarddubi400@gmail.com",
             phone: 7271146991
         },
         imageUrl: "https://react.semantic-ui.com/images/wireframe/image.png",
-        clients: [new Types.ObjectId('5e37ac71d0ba8b3dd080516a'), new Types.ObjectId('5e77ac71d0ba8b3dd080516a')],
+            clients: [new Types.ObjectId('5e37ac71d0ba8b3dd080516a'), new Types.ObjectId('5e77ac71d0ba8b3dd080516a')],
         _id: new Types.ObjectId('5e77ac71d0ba8b3dd080516e')
     }
 ];
