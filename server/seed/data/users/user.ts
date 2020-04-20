@@ -53,9 +53,9 @@ const usersData: User[] = [
             workPhone: 345223561
         },
         company: {
-            companyLogoUrl: "" ,
-            companyName: "BoneCracker Social Inc",
-            website: "bonecrakersocial.com",
+            companyLogoUrl: "https://1000logos.net/wp-content/uploads/2017/02/IBM-Logo-768x349.png" ,
+            companyName: "IBM",
+            website: "ibm.com",
         },
         birthDate: "03/08/1998",
         _id: new Types.ObjectId("5e37ac71d0ba8b3dd080516a")

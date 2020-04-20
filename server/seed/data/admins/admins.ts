@@ -1,4 +1,4 @@
-import { Schema, Types, Mongoose } from 'mongoose';
+import { Types } from 'mongoose';
 
 interface Admin {
     username: String;
@@ -51,7 +51,7 @@ const adminsData: Admin[] = [
         secondName: "Mingle",
         middleName: "T.",
         contact: {
-            email: "edwarddubi400@gmail.com",
+            email: "pnin300@gmail.com",
             phone: 7271146991
         },
         imageUrl: "https://react.semantic-ui.com/images/wireframe/image.png",
