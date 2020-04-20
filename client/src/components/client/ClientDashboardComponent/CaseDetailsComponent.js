@@ -20,6 +20,7 @@ const CaseDetailsComponent = (props) => {
   if (isUserLoaded) {
     panes = userData.map(function (userCase) {
       return {
+        className: "caseDetailsTab",
         menuItem: userCase.startDate + ": " + userCase.type,
         render: () => <ProgCard userCase={userCase} isClient={true} />,
       };
@@ -29,8 +30,9 @@ const CaseDetailsComponent = (props) => {
   return (
     <Container style={{ marginBottom: "-15vh" }}>
       <Tab
+        className="test"
         renderActiveOnly={true}
-        menu={{ fluid: true, vertical: true, tabular: true }}
+        menu={{ fluid: true, vertical: true, tabular: true, }}
         panes={panes}
       />
     </Container>

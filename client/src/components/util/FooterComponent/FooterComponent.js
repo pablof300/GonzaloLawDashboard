@@ -3,7 +3,7 @@ import { Button, Icon, Menu, MenuItem } from "semantic-ui-react";
 
 const FooterComponent = () => {
   return (
-    <Menu color="grey" className = "gonzofooter">
+    <Menu color="grey" className="gonzofooter">
       <MenuItem>Gonzalo Law LLC</MenuItem>
       <Menu.Menu position="right">
         <MenuItem>

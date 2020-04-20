@@ -1,13 +1,14 @@
 import React from "react";
 import { Dropdown, Icon, Image, Menu } from "semantic-ui-react";
 import logo from "../../../assets/LogoCropped.png";
+import "../Admin.css"
 
 // TODO: Update <Search> usage after its will be implemented
 
 const AdminNav = () => (
   <div>
     <Menu attached="top">
-      <Dropdown item icon="bars" simple>
+      <Dropdown className="menuBars" item icon="bars" simple>
         <Dropdown.Menu>
           <Dropdown.Item>
             <Icon name="dropdown" />

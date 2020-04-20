@@ -21,6 +21,8 @@ const EditCaseForm = (props) => {
   const [stepDict, setStepDict] = useState([]);
   const [stepCount, setStepCount] = useState(0);
   const [firstRender, setFirstRender] = useState(true);
+  //modal
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (firstRender && props.caseIndex !== undefined) {
@@ -120,7 +122,7 @@ const EditCaseForm = (props) => {
   };
 
   const clearSteps = () => {
-    window.location.reload(true);
+
     setStepDict([]);
     setStepCount(0);
   };
@@ -147,7 +149,7 @@ const EditCaseForm = (props) => {
   return (
     <Modal
       trigger={
-        <Button size="small" floated="right" color={props.triggerButtonColor}>
+        <Button size="small" floated="right" color={props.triggerButtonColor} onClick={() => setOpen(true)}>
           <Icon name="plus" size="small" />
           {props.triggerButtonText}
         </Button>
@@ -155,6 +157,7 @@ const EditCaseForm = (props) => {
       onClose={() => {
         clearSteps();
       }}
+      open={open}
     >
       <Modal.Header>Input Case Information</Modal.Header>
       <Modal.Content>
@@ -188,6 +191,7 @@ const EditCaseForm = (props) => {
               size="small"
               onClick={() => {
                 clearSteps();
+                setOpen(false);
               }}
             >
               Cancel

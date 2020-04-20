@@ -88,38 +88,38 @@ const MyTeam = (props) => {
 
   const sendMessage = async () => {
     const user = (await getCurrentUser()).data
-    if(user){
-      if(message && subject){
+    if (user) {
+      if (message && subject) {
         let to = "";
-       const from = user.secondName + " <" + user.contact.email + "> ";
-       let c = 0;
-       emailThisTeam.map(lawyer => {
-         if(c === 0){
-           to = lawyer.email
-         }else{
-          to = to.concat(', ').concat(lawyer.email)
-         }
-         c++;
-         
-       })
-       const mailOptions = {
-         from: from, 
-         to: to,
-         subject: subject,
-         text: message
-       }
-       const res = await sendMessageToTeam(mailOptions)
-       if(res){
-        alert("Message has been sent successfully")
-        handleMessageCancel();
-       }
-      
-      
+        const from = user.secondName + " <" + user.contact.email + "> ";
+        let c = 0;
+        emailThisTeam.map(lawyer => {
+          if (c === 0) {
+            to = lawyer.email
+          } else {
+            to = to.concat(', ').concat(lawyer.email)
+          }
+          c++;
+
+        })
+        const mailOptions = {
+          from: from,
+          to: to,
+          subject: subject,
+          text: message
+        }
+        const res = await sendMessageToTeam(mailOptions)
+        if (res) {
+          alert("Message has been sent successfully")
+          handleMessageCancel();
+        }
+
+
       }
-    }else{
+    } else {
       alert("User logged out or user session has expired")
     }
-    
+
   };
 
   const RefreshPage = () => {
@@ -257,111 +257,111 @@ const MyTeam = (props) => {
 
   return (
     <Table.HeaderCell>
-        <div className="center">
-          <h1>My Team</h1>
-        </div>
+      <div className="center">
+        <h1>My Team</h1>
+      </div>
 
-        <Table
-          attached="bottom"
-          size="small"
-          unstackable={true}
-          singleLine
-          fixed
-          padded="very"
-        >
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Profile Picture</Table.HeaderCell>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>
-                <Search
-                  loading={isLoading}
-                  input="text"
-                  showNoResults={false}
-                  placeholder="Search Lawyer..."
-                  onSearchChange={filterTeamByText}
-                ></Search>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          {myLawyersList}
-          <Table.Footer>
-            <Table.Row>
-              <Table.HeaderCell colSpan="3">
-                <Menu floated="right" pagination>
-                  <Pagination
-                    pointing
-                    secondary
-                    activePage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setPageChange}
-                  ></Pagination>
-                </Menu>
-                <div>
-                  <Popup
-                    content="Contact the team handling your case"
-                    trigger={
-                      <Button
-                        className={listOfLawyers.length > 0 ? "" : "invisible"}
-                        floated="left"
-                        icon
-                        inverted
-                        labelPosition="left"
-                        color="green"
-                        size="small"
-                        onClick={userContactTeam}
-                      >
-                        <Icon name="chat" /> Contact My Team
+      <Table
+        attached="bottom"
+        size="small"
+        unstackable={true}
+        singleLine
+        fixed
+        padded="very"
+      >
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Profile Picture</Table.HeaderCell>
+            <Table.HeaderCell>Name</Table.HeaderCell>
+            <Table.HeaderCell>
+              <Search
+                loading={isLoading}
+                input="text"
+                showNoResults={false}
+                placeholder="Search Lawyer..."
+                onSearchChange={filterTeamByText}
+              ></Search>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        {myLawyersList}
+        <Table.Footer>
+          <Table.Row>
+            <Table.HeaderCell colSpan="3">
+              <Menu floated="right" pagination>
+                <Pagination
+                  pointing
+                  secondary
+                  activePage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setPageChange}
+                ></Pagination>
+              </Menu>
+              <div>
+                <Popup
+                  content="Contact the team handling your case"
+                  trigger={
+                    <Button
+                      className={listOfLawyers.length > 0 ? "contactLawyersButton" : "invisible"}
+                      floated="left"
+                      icon
+                      inverted
+                      labelPosition="left"
+                      color="green"
+                      size="small"
+                      onClick={userContactTeam}
+                    >
+                      <Icon name="chat" /> Contact My Team
                       </Button>
-                    }
-                  />
+                  }
+                />
 
-                  <Button
-                    className={!contactTeam ? "invisible" : ""}
-                    floated="left"
-                    icon
-                    disabled={disableDone}
-                    inverted
-                    labelPosition="left"
-                    color="purple"
-                    size="small"
-                    onClick={doneSelecting}
-                  >
-                    <Icon name="check" /> Done
+                <Button
+                  className={!contactTeam ? "invisible" : ""}
+                  floated="left"
+                  icon
+                  disabled={disableDone}
+                  inverted
+                  labelPosition="left"
+                  color="purple"
+                  size="small"
+                  onClick={doneSelecting}
+                >
+                  <Icon name="check" /> Done
                   </Button>
-                </div>
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Footer>
-        </Table>
-        <Modal open={openEmailBox} size="small">
-          <Modal.Header>Send a message to your Team</Modal.Header>
-          <Modal.Content>
-            
-            <Form widths="equal">
-            <Dropdown selection={false} style={{marginBottom:10}} placeholder="To" selection options={emailThisTeam} />
-              <Form.Input
-                className="wrap"
-                label="Subject"
-                type='text'
-                onChange={(e) => setSubject(e.target.value)}
-                placeholder="Subject"
-                labelPosition="left"
-                value={subject}
-              />
-              <TextArea
-                className="wrap"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                style={{minHeight:200, marginBottom:20}}
-                placeholder="Type message here..."
-              />
-              <Button onClick={sendMessage} content="Send Message" primary />
-              <Button onClick={handleMessageCancel} content="Cancel" primary />
-            </Form>
-          </Modal.Content>
-        </Modal>
-     
+              </div>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer>
+      </Table>
+      <Modal open={openEmailBox} size="small">
+        <Modal.Header>Send a message to your Team</Modal.Header>
+        <Modal.Content>
+
+          <Form widths="equal">
+            <Dropdown selection={false} style={{ marginBottom: 10 }} placeholder="To" selection options={emailThisTeam} />
+            <Form.Input
+              className="wrap"
+              label="Subject"
+              type='text'
+              onChange={(e) => setSubject(e.target.value)}
+              placeholder="Subject"
+              labelPosition="left"
+              value={subject}
+            />
+            <TextArea
+              className="wrap"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              style={{ minHeight: 200, marginBottom: 20 }}
+              placeholder="Type message here..."
+            />
+            <Button className="sendMessageButton" onClick={sendMessage} content="Send Message" primary />
+            <Button className="cancelMessageButton" onClick={handleMessageCancel} content="Cancel" primary />
+          </Form>
+        </Modal.Content>
+      </Modal>
+
     </Table.HeaderCell>
   );
 };

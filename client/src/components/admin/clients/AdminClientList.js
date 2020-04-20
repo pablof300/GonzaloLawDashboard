@@ -52,7 +52,7 @@ const ClientList = () => {
       <List.Item>
         <List.Content floated="right">
           <Popup
-            trigger={<Button onClick={e => ViewClient(e)}>View</Button>}
+            trigger={<Button className="viewClientButton" onClick={e => ViewClient(e)}>View</Button>}
             position="right center"
             modal
             closeOnDocumentClick
