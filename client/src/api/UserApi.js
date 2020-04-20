@@ -435,7 +435,7 @@ const registerClient = async (
     files: [],
     cases: []
   };
-  console.log("Adding the user");
+
   let axiosResponse = await API.post("/user/client", userData)
     .then((response) => {
       return response.data;
