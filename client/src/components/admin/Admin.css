@@ -111,41 +111,41 @@ button.ui.icon.button.addClientButton{
   color: white;
 }
 
-button.ui.icon.button.addClientButton:hover{
+/*button.ui.icon.button.addClientButton:hover{
   background-color: #2b2147;
   color: white;
   opacity: 90%;
-}
+}*/
 
 button.ui.button.viewClientButton{
   background-color: #2b2147;
   color: white;
 }
 
-button.ui.button.viewClientButton:hover{
+/*button.ui.button.viewClientButton:hover{
   background-color: #2b2147;
   color: white;
   opacity: 90%;
-}
+}*/
 
 button.ui.tiny.compact.right.floated.button.connectButton{
   background-color: #2b2147;
   color: white;
 }
 
-button.ui.tiny.compact.right.floated.button.connectButton:hover{
+/*button.ui.tiny.compact.right.floated.button.connectButton:hover{
   background-color: #2b2147;
   color: white;
   opacity: 90%;
-}
+}*/
 
 button.ui.button.addClientButton{
   background-color: #2b2147;
   color: white;
 }
 
-button.ui.button.addClientButton:hover{
+/*button.ui.button.addClientButton:hover{
   background-color: #2b2147;
   color: white;
   opacity: 90%;
-}
+}*/
