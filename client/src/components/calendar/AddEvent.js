@@ -11,6 +11,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getAllClients, addEvent } from "../../api/AdminApi";
 
+import "./Calendar.css"
+
 const AddEvent = props => {
   const [userData, setUserData] = useState([]);
 
@@ -102,7 +104,7 @@ const AddEvent = props => {
     <Modal
       open={open}
       trigger={
-        <Button onClick={() => setOpen(true)} primary>
+        <Button className="monthlyViewButton" onClick={() => setOpen(true)} primary>
           Add Appointment
         </Button>
       }

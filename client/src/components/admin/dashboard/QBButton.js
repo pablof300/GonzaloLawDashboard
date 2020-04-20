@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Grid, Container, Header, Icon, Card, Button} from "semantic-ui-react";
+import { Grid, Container, Header, Icon, Card, Button } from "semantic-ui-react";
 import { getURL, checkURLStatus } from "../../../../src/api/QBApi";
 
 const QBStatus = props => {
@@ -7,8 +7,7 @@ const QBStatus = props => {
 
   useEffect(async () => {
     let urlStatus = await checkURLStatus();
-    if(urlStatus)
-    {
+    if (urlStatus) {
       setStatus("Online");
       console.log("WERE ACTUALLY ONLINE.");
     }
@@ -17,26 +16,26 @@ const QBStatus = props => {
   const startOAuth = async () => {
     setStatus("Online");
     let oAuthResponse = await getURL();
-    var win = window.open(oAuthResponse.data, '_blank');   win.focus();
+    var win = window.open(oAuthResponse.data, '_blank'); win.focus();
 
     let urlStatus = await checkURLStatus();
-    if(urlStatus)
-    {
+    if (urlStatus) {
       console.log("WERE ACTUALLY ONLINE.");
     }
     else {
-       window.location.reload(true);
+      window.location.reload(true);
     }
   };
 
   function renderButton() {
-    if(status === "Offline") {
+    if (status === "Offline") {
       return (
         <Button
           compact
           floated="right"
           size="tiny"
-          onClick={() => startOAuth()}>
+          onClick={() => startOAuth()}
+          className="connectButton">
           Connect
         </Button>
       )
@@ -49,15 +48,15 @@ const QBStatus = props => {
   }
 
   return (
-  <Card>
-    <Card.Content>
-      <Card.Content> Connect to Quickbooks </Card.Content>
-    </Card.Content>
-    <Card.Content extra>
-      <a> Status: {status} </a>
+    <Card>
+      <Card.Content>
+        <Card.Content> Connect to Quickbooks </Card.Content>
+      </Card.Content>
+      <Card.Content extra>
+        <a> Status: {status} </a>
         {renderButton()}
-    </Card.Content>
-  </Card>
+      </Card.Content>
+    </Card>
   );
 };
 

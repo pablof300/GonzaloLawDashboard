@@ -56,7 +56,7 @@ function Login() {
     return <Redirect to="/dashboard" />;
   }
 
-  if(forgotPassword) {
+  if (forgotPassword) {
     return <Redirect to="/passwordreset" />;
   }
 
@@ -95,13 +95,13 @@ function Login() {
                 type="password"
                 onChange={event => setPassword(event.target.value)}
               />
-              <Button  style={{width:"48%"}} color="orange" onClick={login}>
+              <Button style={{width:"48%"}} className="loginButton" fluid onClick={login}>
                 Login
               </Button>
-              <Button floated='right' style={{width:"48%"}} color="orange" onClick={Register}>
-                Register
-              </Button>
-              <Button  style={{marginTop:10}} color="purple" fluid onClick={() => setForgotPassword(true)}>
+                <Button floated='right' style={{width:"48%"}} color="orange" onClick={Register}>
+                    Register
+                </Button>
+              <Button className="forgotButton" style={{ marginTop: 10 }} fluid onClick={() => setForgotPassword(true)}>
                 Forgot Password?
               </Button>
             </Form>

@@ -7,7 +7,7 @@ import { Container, Grid, Header, Icon, Card } from "semantic-ui-react";
 import ProgBarComponent from "../ProgBarComponent/ProgCard";
 import FileComponent from "../FileComponent/FileComponent";
 import QBButton from "../../admin/dashboard/QBButton";
-import {verifyAdmin, verifyUser} from "../../../api/AuthApi";
+import { verifyAdmin, verifyUser } from "../../../api/AuthApi";
 import { Redirect } from "react-router-dom";
 import UserDetailsComponent from "./UserDetailsComponent";
 import CaseDetailsComponent from "./CaseDetailsComponent";
@@ -27,8 +27,7 @@ const ClientDashboard = (props) => {
 
   useEffect(async () => {
     let urlStatus = await checkURLStatus();
-    if(urlStatus)
-    {
+    if (urlStatus) {
       setQbAuth(true);
       console.log("WERE ACTUALLY ONLINE.");
     }
@@ -58,8 +57,7 @@ const ClientDashboard = (props) => {
   const startOAuth = async () => {
     let urlStatus = await checkURLStatus();
 
-    if(urlStatus)
-    {
+    if (urlStatus) {
       setQbAuth(true);
       console.log("WERE ACTUALLY ONLINE.");
     }
@@ -93,15 +91,11 @@ const ClientDashboard = (props) => {
   }
 
   return (
-    <div>
+    <div className="clientDashboard">
       <NavBar />
-      <Container className={"container"}>
+      <Container className="container">
         <Grid centered>
           <Grid.Row>
-            <Header className={"header"} as="h2" icon textAlign="center">
-              <Icon name="users" circular />
-              <Header.Content>Client Dashboard</Header.Content>
-            </Header>
           </Grid.Row>
           <Grid.Row>
             <CaseDetailsComponent />

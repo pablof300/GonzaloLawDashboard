@@ -5,6 +5,30 @@
   width: auto;
 }
 
+/*Font they asked for*/
+@font-face {
+  font-family: 'league_spartanbold';
+  src: local("../../assets/leaguespartan-bold-webfont.woff2") format('woff2'),
+       local("../../assets/leaguespartan-bold-webfont.woff") format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+/*Don't do parallax if the screen is too small or it might break*/
+@media only screen and (max-device-width: 1366px) {
+  .adminDashboard {
+    background-attachment: scroll;
+  }
+}
+
+.adminDashboard{
+    /* The image used */
+    background-image: url("https://www.gonzalolaw.com/newsite/wp-content/uploads/2015/04/testbg1.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .Test {
   width: 100%;
 }
@@ -76,4 +100,52 @@
 
 .header {
   background-color: transparent !important;
+}
+
+.ui.item.simple.dropdown.menuBars {
+  color: #ee8c3adb;
+}
+
+button.ui.icon.button.addClientButton{
+  background-color: #2b2147;
+  color: white;
+}
+
+button.ui.icon.button.addClientButton:hover{
+  background-color: #2b2147;
+  color: white;
+  opacity: 90%;
+}
+
+button.ui.button.viewClientButton{
+  background-color: #2b2147;
+  color: white;
+}
+
+button.ui.button.viewClientButton:hover{
+  background-color: #2b2147;
+  color: white;
+  opacity: 90%;
+}
+
+button.ui.tiny.compact.right.floated.button.connectButton{
+  background-color: #2b2147;
+  color: white;
+}
+
+button.ui.tiny.compact.right.floated.button.connectButton:hover{
+  background-color: #2b2147;
+  color: white;
+  opacity: 90%;
+}
+
+button.ui.button.addClientButton{
+  background-color: #2b2147;
+  color: white;
+}
+
+button.ui.button.addClientButton:hover{
+  background-color: #2b2147;
+  color: white;
+  opacity: 90%;
 }

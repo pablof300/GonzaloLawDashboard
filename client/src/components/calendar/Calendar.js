@@ -5,8 +5,8 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import AddEvent from "./AddEvent";
 import { Card, Button, Modal, Form } from "semantic-ui-react";
 import interactionPlugin from '@fullcalendar/interaction';
-import {getAdminByIdAdmin, getAdminByIdUser} from '../../api/AdminApi'
-import {getUserByIdUser, getUserByIdAdmin} from '../../api/UserApi'  
+import { getAdminByIdAdmin, getAdminByIdUser } from '../../api/AdminApi'
+import { getUserByIdUser, getUserByIdAdmin } from '../../api/UserApi'
 
 
 import "./Calendar.css";
@@ -15,7 +15,7 @@ const Calendar = props => {
   const [isMonthlyViewEnabled, setIsMonthlyViewEnabled] = useState(true);
   const [events, setEvents] = useState([]);
   const cal = useRef();
-  let  [,setState]=useState();
+  let [, setState] = useState();
   const [eventData, setEventData] = useState([]);
   const [showEventModal, setShowEventModal] = useState(false);
   const [startDate, setStartDate] = useState("n/a");
@@ -34,7 +34,7 @@ const Calendar = props => {
       .changeView(isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek");
   }, [isMonthlyViewEnabled]);
 
-  
+
 
   const addEventCallback = event => {
     let currentEvents = events;
@@ -58,43 +58,43 @@ const Calendar = props => {
 
   if (props.adminView == false) {
 
-  
-  
-  const eventsModalUser = async (info) => {
-    
-    setEventData(info);
-    setShowEventModal(true);
-    let date1 = new Date(info.event._instance.range.start);
-    let startMin = date1.getUTCMinutes();
 
-    if (startMin < 10) {
-      startMin = '0' + startMin;
-    }
 
-    startMin = ':' + startMin + " (EDT)";
-    let start = JSON.stringify(info.event._instance.range.start);
-    start = start.replace(/\"/g, "");
-    start = start.substr(0,10);
-    start =  start + date1.getUTCHours() + startMin;
-    setStartDate(start);
+    const eventsModalUser = async (info) => {
 
-    let date2 = new Date(info.event._instance.range.end);
-    let endMin = date2.getUTCMinutes();
-    if (endMin < 10) {
-      endMin = '0' + endMin;
-    }
+      setEventData(info);
+      setShowEventModal(true);
+      let date1 = new Date(info.event._instance.range.start);
+      let startMin = date1.getUTCMinutes();
 
-    endMin = ':' + endMin + " (EDT)";
-    let end = JSON.stringify(info.event._instance.range.end);
-    end = end.replace(/\"/g, "");
-    end = end.substr(0,10);
-    end = end + date2.getUTCHours() + endMin;
-    setEndDate(end);
-    let title = JSON.stringify(info.event._def.title);
-    title = info.event._def.title.replace(/\"/g, "");
-    setTitle(title);
-    for (var i = 0; i < events.length; i++) {
-      if (events[i].startDate === info.event._instance.range.start.toISOString()) {
+      if (startMin < 10) {
+        startMin = '0' + startMin;
+      }
+
+      startMin = ':' + startMin + " (EDT)";
+      let start = JSON.stringify(info.event._instance.range.start);
+      start = start.replace(/\"/g, "");
+      start = start.substr(0, 10);
+      start = start + date1.getUTCHours() + startMin;
+      setStartDate(start);
+
+      let date2 = new Date(info.event._instance.range.end);
+      let endMin = date2.getUTCMinutes();
+      if (endMin < 10) {
+        endMin = '0' + endMin;
+      }
+
+      endMin = ':' + endMin + " (EDT)";
+      let end = JSON.stringify(info.event._instance.range.end);
+      end = end.replace(/\"/g, "");
+      end = end.substr(0, 10);
+      end = end + date2.getUTCHours() + endMin;
+      setEndDate(end);
+      let title = JSON.stringify(info.event._def.title);
+      title = info.event._def.title.replace(/\"/g, "");
+      setTitle(title);
+      for (var i = 0; i < events.length; i++) {
+        if (events[i].startDate === info.event._instance.range.start.toISOString()) {
           const temp = await getAdminByIdUser(events[i].admins[0]);
           let adminName = JSON.stringify(temp.data.firstName + " " + temp.data.secondName);
           adminName = adminName.replace(/\"/g, "");
@@ -102,129 +102,130 @@ const Calendar = props => {
           const user = await getUserByIdUser(events[i].users[0]);
           let userName = JSON.stringify(user.data.firstName + " " + user.data.secondName);
           userName = userName.replace(/\"/g, "");
-          setEventClient(userName);        
+          setEventClient(userName);
           break;
-      }
-    }
-    
-  }
-
-  const closeEventModalUser = () => {
-    setShowEventModal(false);
-  } 
-
-
-
-  return (
-    <Card fluid>
-      <Card.Content>
-        <FullCalendar
-          timeZone = 'UTC'
-          ref={cal}
-          defaultView={isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek"}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          events={getFormattedEvents(events)}
-          eventClick= {eventsModalUser}
-        />
-      </Card.Content>
-      <Card.Content extra>
-        {props.adminView &&
-          <AddEvent addEventCallback={addEventCallback} />
         }
-        <Button
-          color={"green"}
-          onClick={() => setIsMonthlyViewEnabled(!isMonthlyViewEnabled)}
-        >
-          Switch to {isMonthlyViewEnabled ? "weekly" : "monthly"} view
-        </Button>
-      </Card.Content>
-      <Modal open = {showEventModal}
-      onClose = {closeEventModalUser}
-      closeIcon
-      centered
-      >
-      <Modal.Header>{title} </Modal.Header>  
-        <Modal.Content>
-          <Form>
-          <Form.Input label="Staff"
-                      placeholder="Lawyer"
-                      labelPosition="left"
-                      readOnly
-                      value={!eventAdmin ? "" : eventAdmin}
+      }
+
+    }
+
+    const closeEventModalUser = () => {
+      setShowEventModal(false);
+    }
+
+
+
+    return (
+      <Card fluid>
+        <Card.Content>
+          <FullCalendar
+            timeZone='UTC'
+            ref={cal}
+            defaultView={isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek"}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            events={getFormattedEvents(events)}
+            eventClick={eventsModalUser}
+            className="fullCalendar"
           />
-          <Form.Input label="On"
-                      placeholder="n/a"
-                      labelPosition="left"
-                      readOnly
-                      value={!startDate ? "" : startDate.substr(0, 10) + " at " + startDate.substr(10, 17)}
-          />
-          <Form.Input label="Until"
-                      placeholder="n/a"
-                      labelPosition="left"
-                      readOnly
-                      value={!endDate ? "" : endDate.substr(0, 10) + " at " + endDate.substr(10, 17)}
-          />
-          <Form.Input label="Client"
-                      placeholder="n/a"
-                      labelPosition="left"
-                      readOnly
-                      value={!eventClient ? "" : eventClient}
-          />
-          
-          </Form>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button grey
-          onClick={closeEventModalUser}
+        </Card.Content>
+        <Card.Content extra>
+          {props.adminView &&
+            <AddEvent addEventCallback={addEventCallback} />
+          }
+          <Button
+            className="monthlyViewButton"
+            onClick={() => setIsMonthlyViewEnabled(!isMonthlyViewEnabled)}
           >
-            Ok
+            Switch to {isMonthlyViewEnabled ? "weekly" : "monthly"} view
           </Button>
-        </Modal.Actions>
-      </Modal>
-    </Card>
-  );
-};
+        </Card.Content>
+        <Modal open={showEventModal}
+          onClose={closeEventModalUser}
+          closeIcon
+          centered
+        >
+          <Modal.Header>{title} </Modal.Header>
+          <Modal.Content>
+            <Form>
+              <Form.Input label="Staff"
+                placeholder="Lawyer"
+                labelPosition="left"
+                readOnly
+                value={!eventAdmin ? "" : eventAdmin}
+              />
+              <Form.Input label="On"
+                placeholder="n/a"
+                labelPosition="left"
+                readOnly
+                value={!startDate ? "" : startDate.substr(0, 10) + " at " + startDate.substr(10, 17)}
+              />
+              <Form.Input label="Until"
+                placeholder="n/a"
+                labelPosition="left"
+                readOnly
+                value={!endDate ? "" : endDate.substr(0, 10) + " at " + endDate.substr(10, 17)}
+              />
+              <Form.Input label="Client"
+                placeholder="n/a"
+                labelPosition="left"
+                readOnly
+                value={!eventClient ? "" : eventClient}
+              />
+
+            </Form>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button grey
+              onClick={closeEventModalUser}
+            >
+              Ok
+          </Button>
+          </Modal.Actions>
+        </Modal>
+      </Card>
+    );
+  };
 
 
-if (props.adminView) {
+  if (props.adminView) {
 
-  
-  
-  const eventsModalAdmin = async (info) => {
-    
-    setEventData(info);
-    setShowEventModal(true);
-    let date1 = new Date(info.event._instance.range.start);
-    let startMin = date1.getUTCMinutes();
 
-    if (startMin < 10) {
-      startMin = '0' + startMin;
-    }
 
-    startMin = ':' + startMin + " (EDT)";
-    let start = JSON.stringify(info.event._instance.range.start);
-    start = start.replace(/\"/g, "");
-    start = start.substr(0,10);
-    start =  start + date1.getUTCHours() + startMin;
-    setStartDate(start);
+    const eventsModalAdmin = async (info) => {
 
-    let date2 = new Date(info.event._instance.range.end);
-    let endMin = date2.getUTCMinutes();
-    if (endMin < 10) {
-      endMin = '0' + endMin;
-    }
+      setEventData(info);
+      setShowEventModal(true);
+      let date1 = new Date(info.event._instance.range.start);
+      let startMin = date1.getUTCMinutes();
 
-    endMin = ':' + endMin + " (EDT)";
-    let end = JSON.stringify(info.event._instance.range.end);
-    end = end.replace(/\"/g, "");
-    end = end.substr(0,10);
-    end = end + date2.getUTCHours() + endMin;
-    setEndDate(end);
-    let title = JSON.stringify(info.event._def.title);
-    title = info.event._def.title.replace(/\"/g, "");
-    setTitle(title);
-    for (var i = 0; i < events.length; i++) {
-      if (events[i].startDate === info.event._instance.range.start.toISOString()) {
+      if (startMin < 10) {
+        startMin = '0' + startMin;
+      }
+
+      startMin = ':' + startMin + " (EDT)";
+      let start = JSON.stringify(info.event._instance.range.start);
+      start = start.replace(/\"/g, "");
+      start = start.substr(0, 10);
+      start = start + date1.getUTCHours() + startMin;
+      setStartDate(start);
+
+      let date2 = new Date(info.event._instance.range.end);
+      let endMin = date2.getUTCMinutes();
+      if (endMin < 10) {
+        endMin = '0' + endMin;
+      }
+
+      endMin = ':' + endMin + " (EDT)";
+      let end = JSON.stringify(info.event._instance.range.end);
+      end = end.replace(/\"/g, "");
+      end = end.substr(0, 10);
+      end = end + date2.getUTCHours() + endMin;
+      setEndDate(end);
+      let title = JSON.stringify(info.event._def.title);
+      title = info.event._def.title.replace(/\"/g, "");
+      setTitle(title);
+      for (var i = 0; i < events.length; i++) {
+        if (events[i].startDate === info.event._instance.range.start.toISOString()) {
           const temp = await getAdminByIdAdmin(events[i].admins[0]);
           let adminName = JSON.stringify(temp.data.firstName + " " + temp.data.secondName);
           adminName = adminName.replace(/\"/g, "");
@@ -232,88 +233,88 @@ if (props.adminView) {
           const user = await getUserByIdAdmin(events[i].users[0]);
           let userName = JSON.stringify(user.data.firstName + " " + user.data.secondName);
           userName = userName.replace(/\"/g, "");
-          setEventClient(userName);        
+          setEventClient(userName);
           break;
-      }
-    }
-    
-  }
-
-  const closeEventModalAdmin = () => {
-    setShowEventModal(false);
-  } 
-
-
-
-  return (
-    <Card fluid>
-      <Card.Content>
-        <FullCalendar
-          timeZone = 'UTC'
-          ref={cal}
-          defaultView={isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek"}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          events={getFormattedEvents(events)}
-          eventClick= {eventsModalAdmin}
-        />
-      </Card.Content>
-      <Card.Content extra>
-        {props.adminView &&
-          <AddEvent addEventCallback={addEventCallback} />
         }
-        <Button
-          color={"green"}
-          onClick={() => setIsMonthlyViewEnabled(!isMonthlyViewEnabled)}
-        >
-          Switch to {isMonthlyViewEnabled ? "weekly" : "monthly"} view
-        </Button>
-      </Card.Content>
-      <Modal open = {showEventModal}
-      onClose = {closeEventModalAdmin}
-      closeIcon
-      centered
-      >
-      <Modal.Header>{title} </Modal.Header>  
-        <Modal.Content>
-          <Form>
-          <Form.Input label="Staff"
-                      placeholder="Lawyer"
-                      labelPosition="left"
-                      readOnly
-                      value={!eventAdmin ? "" : eventAdmin}
+      }
+
+    }
+
+    const closeEventModalAdmin = () => {
+      setShowEventModal(false);
+    }
+
+
+
+    return (
+      <Card fluid>
+        <Card.Content>
+          <FullCalendar
+            timeZone='UTC'
+            ref={cal}
+            defaultView={isMonthlyViewEnabled ? "dayGridMonth" : "timeGridWeek"}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            events={getFormattedEvents(events)}
+            eventClick={eventsModalAdmin}
           />
-          <Form.Input label="On"
-                      placeholder="n/a"
-                      labelPosition="left"
-                      readOnly
-                      value={!startDate ? "" : startDate.substr(0, 10) + " at " + startDate.substr(10, 17)}
-          />
-          <Form.Input label="Until"
-                      placeholder="n/a"
-                      labelPosition="left"
-                      readOnly
-                      value={!endDate ? "" : endDate.substr(0, 10) + " at " + endDate.substr(10, 17)}
-          />
-          <Form.Input label="Client"
-                      placeholder="n/a"
-                      labelPosition="left"
-                      readOnly
-                      value={!eventClient ? "" : eventClient}
-          />
-          
-          </Form>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button grey
-          onClick={closeEventModalAdmin}
+        </Card.Content>
+        <Card.Content extra>
+          {props.adminView &&
+            <AddEvent addEventCallback={addEventCallback} />
+          }
+          <Button
+            className="monthlyViewButton"
+            onClick={() => setIsMonthlyViewEnabled(!isMonthlyViewEnabled)}
           >
-            Ok
+            Switch to {isMonthlyViewEnabled ? "weekly" : "monthly"} view
+        </Button>
+        </Card.Content>
+        <Modal open={showEventModal}
+          onClose={closeEventModalAdmin}
+          closeIcon
+          centered
+        >
+          <Modal.Header>{title} </Modal.Header>
+          <Modal.Content>
+            <Form>
+              <Form.Input label="Staff"
+                placeholder="Lawyer"
+                labelPosition="left"
+                readOnly
+                value={!eventAdmin ? "" : eventAdmin}
+              />
+              <Form.Input label="On"
+                placeholder="n/a"
+                labelPosition="left"
+                readOnly
+                value={!startDate ? "" : startDate.substr(0, 10) + " at " + startDate.substr(10, 17)}
+              />
+              <Form.Input label="Until"
+                placeholder="n/a"
+                labelPosition="left"
+                readOnly
+                value={!endDate ? "" : endDate.substr(0, 10) + " at " + endDate.substr(10, 17)}
+              />
+              <Form.Input label="Client"
+                placeholder="n/a"
+                labelPosition="left"
+                readOnly
+                value={!eventClient ? "" : eventClient}
+              />
+
+            </Form>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button grey
+              onClick={closeEventModalAdmin}
+            >
+              Ok
           </Button>
-        </Modal.Actions>
-      </Modal>
-    </Card>
-  );
-};
+          </Modal.Actions>
+        </Modal>
+      </Card>
+    );
+  };
 }
 
 

@@ -148,6 +148,7 @@ const AddClientForm = (props) => {
             <Button
               icon
               floated="left"
+              className="addClientButton"
               onClick={() => handleAddExistingClient(client._id)}
             >
               <Icon name="plus square outline" />
@@ -239,11 +240,9 @@ const AddClientForm = (props) => {
     );
     console.log(addClientResponse);
     if (addClientResponse.data) {
-      alert("Successfully added new client!");
       props.addClientCallback(addClientResponse.data);
       setOpen(false);
     } else {
-      alert("Failed to add client, please try again!");
       console.log("Unable to add client");
     }
     props.setClients(false);
@@ -252,7 +251,7 @@ const AddClientForm = (props) => {
   const createNewClientComponent = (
     <Modal.Content>
       <Form>
-      <p><b>Client's Personal Information</b></p>
+        <p><b>Client's Personal Information</b></p>
         <Form.Group widths="equal">
           <Form.Field
             control={Input}
@@ -260,6 +259,7 @@ const AddClientForm = (props) => {
             placeholder="Username"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
+            required={true}
           />
           <Form.Field
             control={Input}
@@ -268,6 +268,7 @@ const AddClientForm = (props) => {
             placeholder="Password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            required={true}
           />
         </Form.Group>
         <Form.Group widths="equal">
@@ -277,6 +278,7 @@ const AddClientForm = (props) => {
             placeholder="First name"
             value={firstName}
             onChange={(event) => setFirstName(event.target.value)}
+            required={true}
           />
           <Form.Field
             control={Input}
@@ -291,6 +293,7 @@ const AddClientForm = (props) => {
             placeholder="Last name"
             value={lastName}
             onChange={(event) => setLastName(event.target.value)}
+            required={true}
           />
           <Form.Field
             control={Input}
@@ -353,10 +356,9 @@ const AddClientForm = (props) => {
             onChange={(event) => setEmail(event.target.value)}
           />
         </Form.Group>
-        <p><b>Client's Company Information (OPTIONAL)</b></p>
-        <Form.Group  widths="equal">
-        
-        <Form.Field
+        <Form.Group widths="equal">
+
+          <Form.Field
             control={Input}
             label="Company name"
             placeholder="Company name"
@@ -370,7 +372,8 @@ const AddClientForm = (props) => {
             onChange={(e) => setWebsite(e.target.value)}
           />
         </Form.Group>
-        <Button onClick={() => createNewClient()}>Add Client</Button>
+        <p><small>* Required Field</small></p>
+        <Button onClick={() => createNewClient()} className="addClientButton">Add Client</Button>
         <Button onClick={handleCancel}>Cancel</Button>
       </Form>
     </Modal.Content>
@@ -384,21 +387,21 @@ const AddClientForm = (props) => {
     },
     {
       menuItem: "Create a new client",
-      render: () => <Tab.Pane style={{height:525}}>{createNewClientComponent}</Tab.Pane>,
+      render: () => <Tab.Pane style={{ height: 525 }}>{createNewClientComponent}</Tab.Pane>,
     },
   ];
 
   //Final Return
   return (
-    <Modal style={{height:500}}
+    <Modal style={{ height: 500 }}
       trigger={
-        <Button icon onClick={() => setOpen(true)}>
+        <Button className="addClientButton" icon onClick={() => setOpen(true)}>
           <Icon name="plus square outline" />
         </Button>
       }
       open={open}
     >
-      <Tab  panes={panes} />
+      <Tab panes={panes} />
     </Modal>
   );
 };

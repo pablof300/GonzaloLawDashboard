@@ -9,5 +9,54 @@
   text-align: center;
 }
 .IconColor {
-  background-color: #ee8c3a !important;
+  background-color: #ee8b3adb !important;
+}
+ .button.ui.fluid.button.loginButton{
+   background-color: #ee8b3adb;
+   color: white;
+ }
+
+ .button.ui.fluid.button.forgotButton{
+  background-color: #2b2147;
+  color: white;
+}
+
+.ui.orange.segment:not(.inverted) {
+  border-top: 2px solid #ee8b3adb!important;
+}
+
+.ui.form input[type=text]:focus, .ui.form input[type=password]:focus{
+  border-color: #ee8b3adb;
+}
+
+/*Forgot Password Stuff*/
+.ui.purple.segment:not(.inverted) {
+  border-top: 2px solid #2b2147!important;
+}
+
+.ui.purple.button, .ui.purple.buttons .button {
+  background-color: #2b2147;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+
+.ui.purple.button:hover, .ui.purple.buttons:hover .button:hover {
+  background-color: #2b2147;
+  opacity: 90%;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+
+.ui.purple.button:focus, .ui.purple.buttons:focus .button:focus {
+  background-color: #2b2147;
+  opacity: 80%;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+
+.ui.form input[type=email]:focus{
+  border-color: #2b2147;
 }
