@@ -2,6 +2,7 @@ import React from "react";
 import { Dropdown, Icon, Image, Menu } from "semantic-ui-react";
 import logo from "../../../assets/LogoCropped.png";
 import "../Admin.css"
+import Cookies from "js-cookie";
 
 // TODO: Update <Search> usage after its will be implemented
 
@@ -10,19 +11,11 @@ const AdminNav = () => (
     <Menu attached="top">
       <Dropdown className="menuBars" item icon="bars" simple>
         <Dropdown.Menu>
-          <Dropdown.Item>
-            <Icon name="dropdown" />
-            <span className="text">Create New...</span>
-
-            <Dropdown.Menu>
-              <Dropdown.Item>Case</Dropdown.Item>
-              <Dropdown.Item>Client</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown.Item>
-          <Dropdown.Item>Open</Dropdown.Item>
-          <Dropdown.Item>Edit Permissions</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item>Sign Out</Dropdown.Item>
+          <Dropdown.Item onClick={(e) => {window.location = "https://www.gonzalolaw.com/"}}>Go to General Site</Dropdown.Item>
+          <Dropdown.Item onClick={(e) => {
+            window.location = '/adminlogin';
+            Cookies.remove('jwt');
+          }}>Log Out</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
       <div className="Test">
