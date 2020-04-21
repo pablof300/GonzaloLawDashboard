@@ -224,9 +224,7 @@ const Register = (props) =>{
             onChange={(event) => setEmail(event.target.value)}
           />
         </Form.Group>
-        <p><b>Your Company's Information (OPTIONAL)</b></p>
         <Form.Group  widths="equal">
-        
         <Form.Field
             control={Input}
             label="Company name"
