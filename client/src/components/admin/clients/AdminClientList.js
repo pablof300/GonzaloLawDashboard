@@ -67,7 +67,7 @@ const ClientList = () => {
             : client.firstName + " " + client.secondName}
         </List.Content>
         <List.Content floated="right">
-          <Button onClick={() => ViewClient(client)}>View</Button>
+          <Button  className="viewClientButton" onClick={() => ViewClient(client)}>View</Button>
         </List.Content>
       </List.Item>
     );

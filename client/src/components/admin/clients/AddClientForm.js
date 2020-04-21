@@ -62,8 +62,11 @@ const AddClientForm = (props) => {
 
   const loadClients = async () => {
     const data = await getAllOtherClients();
-    setListOfClients(data.data);
-    props.setIsClientsPopulated(true);
+    if(data && data.data){
+      setListOfClients(data.data);
+      props.setIsClientsPopulated(true);
+    }
+    
   };
 
   if (!props.isClientsPopulated) {

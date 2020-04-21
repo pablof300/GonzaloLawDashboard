@@ -137,7 +137,7 @@ const ClientCard = (props) => {
                 <Item.Description>
                   <p>
                     <b> Address: </b>
-                    {!props.clientData
+                    {!(props.clientData && props.clientData.address)
                       ? ""
                       : props.clientData.address.street +
                         ", " +

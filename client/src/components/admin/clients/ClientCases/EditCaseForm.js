@@ -26,7 +26,7 @@ const EditCaseForm = (props) => {
 
   useEffect(() => {
     if (firstRender && props.caseIndex !== undefined) {
-      updateStateOnRender()
+      updateStateOnRender();
     }
   }, [firstRender]);
 
@@ -44,7 +44,7 @@ const EditCaseForm = (props) => {
     setType(caseToUpdate.type);
     setStartDate(caseToUpdate.startDate);
     setCaseCompleted(caseToUpdate.completed);
-  }
+  };
 
   const createOrUpdateCase = async () => {
     if (props.caseIndex !== undefined) {
@@ -124,7 +124,7 @@ const EditCaseForm = (props) => {
   const clearSteps = () => {
     setStepDict([]);
     setStepCount(0);
-    props.setEditCase(false)
+    props.setEditCase(false);
   };
 
   const getStepCards = () => {
@@ -133,11 +133,11 @@ const EditCaseForm = (props) => {
       const curStep = stepDict[i.toString()];
       stepCards.push(
         <EditStepCard
-          step={curStep.step}
-          date={curStep.date}
-          completed={curStep.completed}
-          stepDescription={curStep.stepDescription}
-          stepNumber={curStep.stepNumber}
+          step={!curStep ? null : curStep.step}
+          date={!curStep ? null : curStep.date}
+          completed={!curStep ? null : curStep.completed}
+          stepDescription={!curStep ? null : curStep.stepDescription}
+          stepNumber={!curStep ? null : curStep.stepNumber}
           updateStep={updateStep}
           removeStep={removeStep}
         />
@@ -148,11 +148,11 @@ const EditCaseForm = (props) => {
 
   return (
     <Modal
+      closeOnDocumentClick={false}
       open={props.editCase}
       onClose={() => {
         clearSteps();
       }}
-      open={open}
     >
       <Modal.Header>Input Case Information</Modal.Header>
       <Modal.Content>
@@ -193,7 +193,7 @@ const EditCaseForm = (props) => {
             </Button>
             <Button
               size="small"
-              color='yellow'
+              color="yellow"
               onClick={() => createOrUpdateCase()}
             >
               Edit Case
