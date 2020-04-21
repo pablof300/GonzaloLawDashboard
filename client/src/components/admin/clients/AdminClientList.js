@@ -75,7 +75,7 @@ const ClientList = () => {
         />
         <List.Content>
           {!(client && client.firstName && client.secondName)
-            ? "nuttin loaded"
+            ? "Error: Failed to Load. Please refresh page."
             : client.firstName + " " + client.secondName}
         </List.Content>
       </List.Item>
