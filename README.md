@@ -1,4 +1,9 @@
+# Welcome to StackEdit!
 
+Hi! I'm your first Markdown file in **StackEdit**. If you want to learn about StackEdit, you can read me. If you want to play with Markdown, you can edit me. Once you have finished with me, you can create new files by opening the **file explorer** on the left corner of the navigation bar.
+
+
+# Filesa
 ## _**GonzaloLawDashboard**_
 
 ## About
@@ -80,14 +85,46 @@ Seeding data is dummy data that we can use for testing. Seeding data is a file t
 In order to run the backend, you must have a /server/config/config.js file, like this one:
 
     module.exports = {
-      db: {
-        uri:
-          "mongodb://localhost:27020/dashboard"
-      },
-      jwtSecret: "4688D7A784E4DSAD12DIDSJ7F00D5742225421",
-      AWS: {
-        bucket: "ask_edward_for_this",
-        AWS_accessKeyId: "ask_edward_for_this",
-        AWS_secretKey: "ask_edward_for_this"
-      }
+     db: {
+       uri:
+           <MongoDB URI, ex"mongodb://127.0.0.1:27017/dashboard">
+     },
+     jwtSecret: "<Secure password, ex: "4688D7A784E4176F12DIDSJ7F00D5742225421">,
+     AWS: {
+       bucket: <AWS Bucket Name>,
+       AWS_accessKeyId: <AWS Access Key ID>,
+       AWS_secretKey: <AWS Secret Key>
+     },
+     mailGun:{
+       domain: <MailGun Domain>,
+       apiKey: <MailGun API Key>
+     },
+     QB: {
+       intuitClientID: <Intuit Client ID>,
+       intuitClientSecret: <Intuit Client Secret>,
+       intuitRedirectURI: <Redirect url, ex: "http://localhost:5000/payments/callback"”>,
+       intuitEnvironment: <”Sandbox” or “Production”>,
+       intuitCompany: <Intuit Company id>,
+       intuitItemId: <Intuit Item Id>
+     }
     };
+
+### Design
+
+![enter image description here](https://i.ibb.co/7t2RnDY/Screen-Shot-2020-04-21-at-8-55-14-PM.png)
+
+### Features
+
+-   Users must be able to register accounts and be able to log in
+
+-   Clients must be able to view their case information, its progress, and the lawyers assigned to work on the case
+
+-   Admins must be able to view all their clients and be able to modify who is a client, and the case information for each client
+
+-   Admins and users must be able to see and interact with their appointments/events through the calendar
+
+-   Data must be stored in a central repository or database and accessed through the different APIs provided by the dashboard server.
+
+-   Admins and clients must be able to view and interact with Quickbook invoices.
+
+-   The interface must be intuitive to all types of potential users
